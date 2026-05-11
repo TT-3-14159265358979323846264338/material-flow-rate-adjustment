@@ -24,8 +24,10 @@ React+TypeScript+Javaでシステム開発を勉強するために、新規作�
 │　　　│　　└─ test/　　　　　　　　　　　　　　　　　　　　　　:テストコード (今後作成予定)
 │　　　├─ pom.xml　　　　　　　　　　　　　　　　　　　　　　　 :Mavenの構成
 │　　　└─ Dockerfile　　　　　　　　　　　　　　　　　　　　　　:バックエンド用Docker設計ファイル
+│
 ├─ docker-compose.yml　　　　　　　　　　　　　　　　　　　　　:Dockerコンテナ設定ファイル
 ├─ env.example　　　　　　　　　　　　　　　　　　　　　　　　　:Docker用データベース情報ファイル (必要事項を記載して.envで保存してね)
 ├─ bat/　　　　　　　　　　　　　　　　　　　　　　　　　　　　 :Docker用バッチファイル
+│
 └─ other/　　　　　　　　　　　　　　　　　　　　　　　　　　　 :設計メモなど (なくてもゲーム影響なし)
 ```

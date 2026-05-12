@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -59,7 +61,6 @@ body {
   max-width: 100%;
   margin: 0 auto;
   text-align: center;
-  border-inline: 1px solid var(--border);
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -108,4 +109,22 @@ code {
   line-height: 135%;
   padding: 4px 8px;
   background: var(--code-bg);
+}
+
+@layer base {
+  *{
+    font-family: "Yu Mincho", "Yu Gothic", sans-serif !important;
+  }
+}
+
+@utility default-button {
+  background-color: rgb(240, 240, 185);
+  border: 10px solid;
+  border-color: rgb(255, 255, 200) rgb(192, 192, 192) rgb(192, 192, 192) rgb(255, 255, 200);
+  cursor: pointer;
+  transition: transform 0.05s;
+  &:active {
+    border-color: rgb(192, 192, 192) rgb(255, 255, 200) rgb(255, 255, 200) rgb(192, 192, 192);
+    transform: translate(3px, 3px);
+  }
 }

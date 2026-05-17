@@ -1,11 +1,13 @@
 import { useLogin } from './hooks/useLogin';
+import axios from 'axios';
 import LoginButton from './components/LoginButton';
 import PasswordInput from './components/PasswordInput';
 import UserInput from './components/UserInput';
 
 const LoginForm = () => {
   const {user, setUser, password, setPassword, handleSubmit} = useLogin();
-
+  localStorage.removeItem("token");
+  delete axios.defaults.headers.common['Authorization'];
   return (
     <div className="min-h-screen flex items-start justify-center bg-white text-black">
       <form 

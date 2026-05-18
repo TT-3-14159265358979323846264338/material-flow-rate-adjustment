@@ -1,6 +1,5 @@
 package com.example.material_flow_rate_adjustment.logindata;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,13 +8,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
+@RequiredArgsConstructor
 public class LoginController {
-	@Autowired
-	private AuthenticationManager authenticationManager;
-	
-	@Autowired
-	private TokenProvider tokenProvider;
+	private final AuthenticationManager authenticationManager;
+	private final TokenProvider tokenProvider;
 	
 	@PostMapping("/api/login")
 	public ResponseEntity<?> authenticateUser(@RequestBody Account account) {

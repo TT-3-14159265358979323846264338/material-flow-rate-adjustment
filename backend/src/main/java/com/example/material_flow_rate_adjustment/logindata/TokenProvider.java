@@ -50,20 +50,31 @@ public class TokenProvider {
     }
 	
 	public String getUser(String token) {
-		Claims claims = Jwts.parser()
-				.verifyWith((javax.crypto.SecretKey) key)
-				.build()
-				.parseSignedClaims(token)
-				.getPayload();
-		return claims.getSubject();
+		return getClaims(token).getSubject();
+	}
+	
+	public String getRole(String token) {
+		return getClaims(token).get("auth", String.class);
 	}
 	
 	public boolean validateToken(String token) {
 		try {
-			Jwts.parser().verifyWith((javax.crypto.SecretKey) key).build().parseSignedClaims(token);
+			getJws(token);
 			return true;
 		} catch (JwtException | IllegalArgumentException e) {
 			return false;
 		}
+	}
+	
+	Jws<Claims> getJws(String token) {
+		return Jwts.parser()
+				.verifyWith((javax.crypto.SecretKey) key)
+				.build()
+				.parseSignedClaims(token);
+	}
+	
+	Claims getClaims(String token) {
+		return getJws(token)
+				.getPayload();
 	}
 }

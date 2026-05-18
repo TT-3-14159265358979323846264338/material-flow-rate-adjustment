@@ -1,6 +1,5 @@
 package com.example.material_flow_rate_adjustment.logindata;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,10 +9,12 @@ import org.springframework.stereotype.Service;
 import com.example.material_flow_rate_adjustment.savedata.AccountRepository;
 import com.example.material_flow_rate_adjustment.savedata.AccountSQL;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class FindAccount implements UserDetailsService {
-	@Autowired
-	private AccountRepository accountRepository;
+	private final AccountRepository accountRepository;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

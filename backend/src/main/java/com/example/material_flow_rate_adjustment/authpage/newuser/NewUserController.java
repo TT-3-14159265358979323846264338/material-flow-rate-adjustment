@@ -17,7 +17,7 @@ public class NewUserController {
 	
 	@PostMapping("/api/user/new")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> authenticateUser(@RequestBody NewUser newUser, @AuthenticationPrincipal String loginUser) {
+	public ResponseEntity<?> newUserPostMapping(@RequestBody NewUser newUser, @AuthenticationPrincipal String loginUser) {
 		String password = newUserService.createNewUser(newUser.name, newUser.role);
 		if(password.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("同名のユーザーは登録できません。");

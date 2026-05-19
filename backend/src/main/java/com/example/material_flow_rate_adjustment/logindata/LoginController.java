@@ -20,11 +20,8 @@ public class LoginController {
 	public ResponseEntity<?> authenticateUser(@RequestBody Account account) {
 		UsernamePasswordAuthenticationToken request = new UsernamePasswordAuthenticationToken(account.user(), account.password());
 		Authentication authentication = authenticationManager.authenticate(request);
-		String token = tokenProvider.createToken(authentication);
-		return ResponseEntity.ok(new Token(token, "Bearer"));
+		return ResponseEntity.ok(tokenProvider.createToken(authentication));
 	}
 	
 	record Account(String user, String password) {};
-	
-	record Token(String accessToken, String tokenType) {};
 }

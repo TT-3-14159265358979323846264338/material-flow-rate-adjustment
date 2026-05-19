@@ -36,25 +36,30 @@ public class TokenProvider {
 		key = Keys.hmacShaKeyFor(password.getBytes());
 	}
 	
-	public String createToken(Authentication authentication) {
+	public Token createToken(Authentication authentication) {
 		Date nowDate = new Date();
 		AccountSQL account = accountRepository.findByUser(authentication.getName())
-				.orElseThrow(() -> new UsernameNotFoundException("アカウントはあるのに権限の取り込みに失敗しました。"));
-		return Jwts.builder()
-				.subject(authentication.getName())
-				.claim("auth", account.getRole())
+				.orElseThrow(() -> new UsernameNotFoundException("アカウントはあるのにIDの取り込みに失敗しました。"));
+		String token = Jwts.builder()
+				.subject(account.getId().toString())
 				.issuedAt(nowDate)
 				.expiration(new Date(nowDate.getTime() + period.toMillis()))
 				.signWith(key)
 				.compact();
+		return new Token(token, account.getRole());
     }
 	
+	record Token(String token, String role) {};
+	
 	public String getUser(String token) {
-		return getClaims(token).getSubject();
+		return getJws(token).getPayload().getSubject();
 	}
 	
 	public String getRole(String token) {
-		return getClaims(token).get("auth", String.class);
+		int id = Integer.parseInt(getUser(token));
+		AccountSQL account = accountRepository.findById(id)
+				.orElseThrow(() -> new UsernameNotFoundException("アカウントはあるのにIDの取り込みに失敗しました。"));
+		return account.getRole();
 	}
 	
 	public boolean validateToken(String token) {
@@ -71,10 +76,5 @@ public class TokenProvider {
 				.verifyWith((javax.crypto.SecretKey) key)
 				.build()
 				.parseSignedClaims(token);
-	}
-	
-	Claims getClaims(String token) {
-		return getJws(token)
-				.getPayload();
 	}
 }

@@ -1,13 +1,13 @@
 import { ChangeEvent } from 'react';
 
-type SubmitInputProps = {
+type TextInputProps = {
   children: string;
   value: string;
   maxLength: number;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
-const TextInput = ({children, value, maxLength, onChange}: SubmitInputProps) => (
+const TextInput = ({children, value, maxLength, onChange}: TextInputProps) => (
   <div className="flex flex-col items-stretch">
     <label>{children}</label>
     <input

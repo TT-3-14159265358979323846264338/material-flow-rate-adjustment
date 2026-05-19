@@ -1,6 +1,5 @@
 import { useState, SyntheticEvent, Dispatch, SetStateAction } from 'react';
 import axios from 'axios';
-import { jwtDecode } from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
 import { Role } from '../../types/roleConfig';
 
@@ -13,8 +12,8 @@ type UseLoginReturn = {
 }
 
 type LoginResponse = {
-  accessToken: string;
-  tokenType: string;
+  token: string;
+  role: string;
 }
 
 export const useLogin = (): UseLoginReturn => {
@@ -31,13 +30,12 @@ export const useLogin = (): UseLoginReturn => {
     setIsSubmitting(true);
     try {
       const response = await axios.post<LoginResponse>('http://localhost:8080/api/login', {user, password});
-      const token = response.data.accessToken;
+      const token = response.data.token;
       localStorage.setItem('token', token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      const decoded: any = jwtDecode(token);
       //現状1ユーザー1権限だがいずれなんとかしたい
       //恐らく複数の権限を持っていれば、選択画面に飛ばすことになると思う。ログアウト画面に画面変更ボタン追加して。
-      switch(decoded.auth as Role){
+      switch(response.data.role as Role){
         case "ADMIN":
           navigate('/admin/page');
           break;

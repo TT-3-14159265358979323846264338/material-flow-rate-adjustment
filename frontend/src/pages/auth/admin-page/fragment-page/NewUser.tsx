@@ -1,10 +1,10 @@
-import { useState, SyntheticEvent } from "react";
+import { useState } from "react";
 import axios from 'axios';
-import TextInput from "../../components/TextInput";
-import SubmitButton from "../../components/SubmitButton";
-import DropdownInputProps from "../../components/Dropdown";
+import DefaultButton from "../../components/DefaultButton";
+import RoleDropdown from "../../components/RoleDropDown";
+import UserNameInput from "../../components/UserNameInput";
 import { ROLES, Role } from "../../../types/roleConfig"
-import { onlyHalfWidthAlphanumericCharacters } from '../../../utils/characterLimit';
+import { networkError } from "../../../utils/networkError";
 
 type NewUserResponse = {
   password: string;
@@ -14,8 +14,14 @@ const NewUser = () => {
   const [name, setName] = useState("");
   const [role, setRole] = useState<Role>(ROLES[1]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const handle = async(e: SyntheticEvent) => {
-    e.preventDefault();
+  const handle = async() => {
+    if(name.trim().length === 0){
+      alert("ユーザー名を入力してください。");
+      return;
+    }
+    if(!confirm(name + "に" + role + "権限付与して新規登録しますか。")){
+      return;
+    }
     if(isSubmitting){
       return;
     }
@@ -28,39 +34,31 @@ const NewUser = () => {
         + "早期にパスワードの変更をお願いします。");
       setName("");
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        if (error.response.status === 400) {
+      networkError(error, (axiosError) => {
+        if (axiosError.response.status === 400) {
           alert(name + "の新規登録に失敗しました。\n"
-            + error.response.data);
+            + axiosError.response.data);
         }else{
           alert("システムエラーが発生しました。");
         }
-      }else{
-        alert("ネットワークに接続できません。通信環境を確認してください。");
-      }
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <form
-      onSubmit={handle}
-      className="w-50">
-        <TextInput
-          children="ユーザー名" 
-          value={name}
-          maxLength={20}
-          onChange={(e) => setName(onlyHalfWidthAlphanumericCharacters(e.target.value))}>
-        </TextInput>
-        <DropdownInputProps
-          children="付与権限"
-          value={role}
-          onChange={(e) => setRole(e.target.value as Role)}
-          list={ROLES}>
-        </DropdownInputProps>
-        <SubmitButton>新規登録</SubmitButton>
-    </form>
+    <div className="w-50">
+      <UserNameInput
+        name={name}
+        setName={setName}>
+      </UserNameInput>
+      <RoleDropdown
+        role={role}
+        setRole={setRole}>
+      </RoleDropdown>
+      <DefaultButton onClick={handle}>新規登録</DefaultButton>
+  </div>
   );
 }
 

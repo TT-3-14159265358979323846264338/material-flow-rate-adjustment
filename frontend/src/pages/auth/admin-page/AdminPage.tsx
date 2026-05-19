@@ -2,6 +2,7 @@ import { useState } from 'react';
 import TopPageTab from '../components/TopPageTab';
 import { TabConfig } from '../types/tabConfig';
 import NewUser from './fragment-page/NewUser';
+import CorrectUser from './fragment-page/CorrectUser';
 import Logout from '../common-fragment-page/Logout';
 
 type TabKey = 'check-now-material' | 'check-achievement'| 'new-material' | 'change-material' | 'new-user' | 'change-user' | 'logout';
@@ -35,7 +36,7 @@ const tabData: TabConfig<TabKey>[] = [
   {
     id: 'change-user',
     label: 'ユーザー修正',
-    content: <p>既存のユーザー情報を修正する(全ユーザーの権限と名前、このアカウントのpasswordのみ)</p>,
+    content: <CorrectUser></CorrectUser>,
   },
   {
     id: 'logout',

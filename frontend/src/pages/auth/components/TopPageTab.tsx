@@ -23,7 +23,7 @@ const TopPageTab = <T extends string>({ activeTab, setActiveTab, tabData }: TopP
           </button>
         ))}
       </div>
-      <div className="flex items-start justify-center h-100 pt-5 bg-[#f0aa50] border border-black">
+      <div className="flex items-start justify-center h-100 pt-1.5 bg-[#f0aa50] border border-black">
         {tabData.find((tab) => tab.id === activeTab)?.content}
       </div>
     </div>

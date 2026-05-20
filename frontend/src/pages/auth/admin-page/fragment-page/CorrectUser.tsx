@@ -2,17 +2,21 @@ import { useState, useEffect } from "react";
 import axios from 'axios';
 import DefaultButton from "../../components/DefaultButton";
 import UserNameInput from "../../components/UserNameInput";
-import RoleDropdown from "../../components/RoleDropDown";
+import RoleDropdown from "../../components/RoleDropdown";
 import CheckInput from "../../components/CheckInput";
-import ChangePasswordInput from "../../components/ChangePassWordInput";
+import ChangePasswordInput from "../../components/ChangePasswordInput";
 import { isThisAccountId } from "../../utils/isThisAccountId";
-import { networkError } from "../../../utils/networkError";
+import { errorHandling } from "../../../utils/errorHandling";
 import { ROLES, Role } from "../../../types/roleConfig";
 
 type CorrectUserResponse = {
   id: number;
   username: string;
   role: Role;
+};
+
+type PostResponse = {
+  comment: string;
 };
 
 const CorrectUser = () => {
@@ -24,22 +28,47 @@ const CorrectUser = () => {
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
   const [newPass, setNewPass] = useState("");
   const [oldPass, setOldPass] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const getAccountData = async () => {
+    try{
+      const response = await axios.get<CorrectUserResponse[]>("http://localhost:8080/api/correct/user/admin/get/data");
+      setAccountData(response.data);
+      setSortData(response.data);
+    } catch (error) {
+      errorHandling(error);
+    }
+  };
   useEffect(() => {
-    const getAccountData = async () => {
-      try{
-        const response = await axios.get<CorrectUserResponse[]>("http://localhost:8080/api/correct/user/admin/ver");
-        setAccountData(response.data);
-        setSortData(response.data);
-      } catch (error) {
-        networkError(error, (_) => {
-          alert("データの取得に失敗しました。\n再度やり直してください。");
-        });
-      }
-    };
     getAccountData();
   }, []);
-  const correctHandle = () => {
-    
+  const correctHandle = async() => {
+    if(!selectedAccount){
+      return;
+    }
+    const canCorrect = isDeleted? confirm("対象のアカウント削除を本当に実行してもよいですか。"): confirm("対象のアカウントを修正しますか。");
+    if(!canCorrect){
+      return;
+    }
+    if(isSubmitting){
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      let response;
+      const targetId = selectedAccount.id;
+      if(isThisAccountId(targetId)){
+        response = await axios.post<PostResponse>('http://localhost:8080/api/correct/user/admin/own', {newName, newPass, oldPass});
+      }else{
+        response = await axios.post<PostResponse>('http://localhost:8080/api/correct/user/admin/user', {targetId, newName, newRole});
+      }
+      alert(response.data.comment);
+      setSelectedAccount(undefined);
+      await getAccountData();
+    } catch (error) {
+      errorHandling(error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   const sortHandle = () => {
 
@@ -80,11 +109,12 @@ const CorrectUser = () => {
 
         <div className="w-50 ml-5">
           <h2>修正内容</h2>
+          <h3>※空欄の項目は修正しない</h3>
+          <h3>※パスワード修正時は、以前のパスワードが一致しなければ、修正しない</h3>
           {selectedAccount?
             isThisAccountId(selectedAccount.id)? (
               <div>
                 <UserNameInput name={selectedAccount.username} setName={setNewName}></UserNameInput>
-                <RoleDropdown role={selectedAccount.role} setRole={setNewRole}></RoleDropdown>
                 <ChangePasswordInput setNewPass={setNewPass} setOldPass={setOldPass}></ChangePasswordInput>
               </div>
             ): (

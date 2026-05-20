@@ -1,10 +1,10 @@
 import { useState } from "react";
 import axios from 'axios';
 import DefaultButton from "../../components/DefaultButton";
-import RoleDropdown from "../../components/RoleDropDown";
+import RoleDropdown from "../../components/RoleDropdown";
 import UserNameInput from "../../components/UserNameInput";
 import { ROLES, Role } from "../../../types/roleConfig"
-import { networkError } from "../../../utils/networkError";
+import { errorHandling } from "../../../utils/errorHandling";
 
 type NewUserResponse = {
   password: string;
@@ -34,14 +34,7 @@ const NewUser = () => {
         + "早期にパスワードの変更をお願いします。");
       setName("");
     } catch (error) {
-      networkError(error, (axiosError) => {
-        if (axiosError.response.status === 400) {
-          alert(name + "の新規登録に失敗しました。\n"
-            + axiosError.response.data);
-        }else{
-          alert("システムエラーが発生しました。");
-        }
-      });
+      errorHandling(error);
     } finally {
       setIsSubmitting(false);
     }

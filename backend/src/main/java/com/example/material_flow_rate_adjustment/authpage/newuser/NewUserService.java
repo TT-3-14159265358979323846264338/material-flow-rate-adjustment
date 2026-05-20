@@ -4,6 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.material_flow_rate_adjustment.errorhandling.DataBaseException;
 import com.example.material_flow_rate_adjustment.savedata.AccountRepository;
 import com.example.material_flow_rate_adjustment.savedata.AccountSQL;
 
@@ -16,14 +17,14 @@ public class NewUserService {
 	private final PasswordEncoder passwordEncoder;
 	
 	@Transactional
-	public String createNewUser(String username, String role){
-		if(repository.existsByUser(username)) {
-			return "";
+	public String createNewUser(NewUser data){
+		if(repository.existsByUser(data.name())) {
+			throw new DataBaseException("同名のユーザーは登録できません。");
 		}
 		//初期パスワードはユーザーにしている。
-		AccountSQL newAccount = createNewAccount(username, username, role);
+		AccountSQL newAccount = createNewAccount(data.name(), data.name(), data.role().name());
 		repository.save(newAccount);
-		return username;
+		return data.name();
 	}
 	
 	AccountSQL createNewAccount(String username, String password, String role) {

@@ -29,7 +29,7 @@ React+TypeScript+Javaでシステム開発を勉強するために、新規作�
 │　　　│　　├─ main/
 │　　　│　　│　　├─ java/com/example/　　　　　　　　　　　　　:バックエンド制御
 │　　　│　　│　　└─ resources/
-│　　　│　　│　　　　　└─ application.properties　　　　　　　:アプリケーション設定
+│　　　│　　│　　　　　└─ application.properties　　　　　　　:アプリケーション設定 (初回起動時のみspring.jpa.hibernate.ddl-auto=validateにする)
 │　　　│　　└─ test/　　　　　　　　　　　　　　　　　　　　　　:テストコード (今後作成予定)
 │　　　├─ pom.xml　　　　　　　　　　　　　　　　　　　　　　　 :Mavenの構成
 │　　　└─ Dockerfile　　　　　　　　　　　　　　　　　　　　　　:バックエンド用Docker設計ファイル

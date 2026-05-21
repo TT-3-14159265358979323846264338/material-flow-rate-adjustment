@@ -9,10 +9,11 @@ type RoleDropdownProps = {
 
 const RoleDropdown = ({role, setRole}: RoleDropdownProps) => (
   <Dropdown
-    children="付与権限"
     value={role}
     onChange={(e) => setRole(e.target.value as Role)}
-    list={ROLES}>
+    list={ROLES}
+  >
+  付与権限
   </Dropdown>
 );
 

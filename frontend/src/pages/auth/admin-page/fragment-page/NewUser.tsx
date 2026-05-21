@@ -42,14 +42,8 @@ const NewUser = () => {
 
   return (
     <div className="w-50">
-      <UserNameInput
-        name={name}
-        setName={setName}>
-      </UserNameInput>
-      <RoleDropdown
-        role={role}
-        setRole={setRole}>
-      </RoleDropdown>
+      <UserNameInput name={name} setName={setName}></UserNameInput>
+      <RoleDropdown role={role}   setRole={setRole}></RoleDropdown>
       <DefaultButton onClick={handle}>新規登録</DefaultButton>
   </div>
   );

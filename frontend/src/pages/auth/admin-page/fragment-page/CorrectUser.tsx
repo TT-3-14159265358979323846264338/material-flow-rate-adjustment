@@ -8,6 +8,7 @@ import ChangePasswordInput from "../../components/ChangePasswordInput";
 import { isThisAccountId } from "../../utils/isThisAccountId";
 import { errorHandling } from "../../../utils/errorHandling";
 import { ROLES, Role } from "../../../types/roleConfig";
+import CorrectUserSort from "../../sort-popup/CorrectUserSort";
 
 type CorrectUserResponse = {
   id: number;
@@ -23,12 +24,14 @@ const CorrectUser = () => {
   const [accountData, setAccountData] = useState<CorrectUserResponse[]>([]);
   const [sortData, setSortData] = useState<CorrectUserResponse[]>([]);
   const [selectedAccount, setSelectedAccount] = useState<CorrectUserResponse>();
-  const [newName, setNewName] = useState("");
+  const [newName, setNewName] = useState<string>("");
   const [newRole, setNewRole] = useState<Role>(ROLES[1]);
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
-  const [newPass, setNewPass] = useState("");
-  const [oldPass, setOldPass] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [newPass, setNewPass] = useState<string>("");
+  const [oldPass, setOldPass] = useState<string>("");
+  const [hasDisplaySort, setHasDisplaySort] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
   const getAccountData = async () => {
     try{
       const response = await axios.get<CorrectUserResponse[]>("http://localhost:8080/api/correct/user/admin/get/data");
@@ -41,6 +44,7 @@ const CorrectUser = () => {
   useEffect(() => {
     getAccountData();
   }, []);
+
   const correctHandle = async() => {
     if(!selectedAccount){
       return;
@@ -54,13 +58,10 @@ const CorrectUser = () => {
     }
     setIsSubmitting(true);
     try {
-      let response;
       const targetId = selectedAccount.id;
-      if(isThisAccountId(targetId)){
-        response = await axios.post<PostResponse>('http://localhost:8080/api/correct/user/admin/own', {newName, newPass, oldPass});
-      }else{
-        response = await axios.post<PostResponse>('http://localhost:8080/api/correct/user/admin/user', {targetId, newName, newRole});
-      }
+      const response = isThisAccountId(targetId)? 
+              await axios.post<PostResponse>('http://localhost:8080/api/correct/user/admin/own', {newName, newPass, oldPass}):
+              await axios.post<PostResponse>('http://localhost:8080/api/correct/user/admin/user', {targetId, newName, newRole, isDeleted});
       alert(response.data.comment);
       setSelectedAccount(undefined);
       await getAccountData();
@@ -70,10 +71,16 @@ const CorrectUser = () => {
       setIsSubmitting(false);
     }
   };
-  const sortHandle = () => {
 
+  const sortHandle = () => {
+    setHasDisplaySort(true);
   };
 
+  if(hasDisplaySort){
+    return(
+      <CorrectUserSort accountData={accountData} setSortData={setSortData} setHasDisplay={setHasDisplaySort}></CorrectUserSort>
+    );
+  }
   return(
     <div className="flex flex-col items-stretch">
       <div className="flex">
@@ -109,19 +116,19 @@ const CorrectUser = () => {
 
         <div className="w-50 ml-5">
           <h2>修正内容</h2>
-          <h3>※空欄の項目は修正しない</h3>
-          <h3>※パスワード修正時は、以前のパスワードが一致しなければ、修正しない</h3>
+          <h3 className="text-left pb-2">※空欄及び未変更の項目は修正しない。</h3>
+          <h3 className="text-left pb-2">※パスワード修正時は、以前のパスワードが一致しなければ、修正しない。</h3>
           {selectedAccount?
             isThisAccountId(selectedAccount.id)? (
               <div>
-                <UserNameInput name={selectedAccount.username} setName={setNewName}></UserNameInput>
-                <ChangePasswordInput setNewPass={setNewPass} setOldPass={setOldPass}></ChangePasswordInput>
+                <UserNameInput name={newName} setName={setNewName}></UserNameInput>
+                <ChangePasswordInput newPass={newPass} setNewPass={setNewPass} oldPass={oldPass} setOldPass={setOldPass}></ChangePasswordInput>
               </div>
             ): (
               <div>
-                <div className="mb-10">
-                  <UserNameInput name={selectedAccount.username} setName={setNewName}></UserNameInput>
-                  <RoleDropdown role={selectedAccount.role} setRole={setNewRole}></RoleDropdown>
+                <div className="mb-5">
+                  <UserNameInput name={newName} setName={setNewName}></UserNameInput>
+                  <RoleDropdown role={newRole} setRole={setNewRole}></RoleDropdown>
                 </div>
                 <CheckInput children="アカウント削除" isChecked={isDeleted} setChecked={setIsDeleted}></CheckInput>
               </div>

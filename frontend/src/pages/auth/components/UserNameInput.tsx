@@ -9,10 +9,11 @@ type UserNameInputProps = {
 
 const UserNameInput = ({name, setName}: UserNameInputProps) => (
   <TextInput
-    children="ユーザー名" 
     value={name}
     maxLength={20}
-    onChange={(e) => setName(onlyHalfWidthAlphanumericCharacters(e.target.value))}>
+    onChange={(e) => setName(onlyHalfWidthAlphanumericCharacters(e.target.value))}
+  >
+  ユーザー名
   </TextInput>
 );
 

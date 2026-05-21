@@ -9,8 +9,12 @@ import org.springframework.util.StringUtils;
 
 import com.example.material_flow_rate_adjustment.errorhandling.DataBaseException;
 import com.example.material_flow_rate_adjustment.errorhandling.NotFindException;
-import com.example.material_flow_rate_adjustment.savedata.AccountRepository;
-import com.example.material_flow_rate_adjustment.savedata.AccountSQL;
+import com.example.material_flow_rate_adjustment.savedata.historydata.AccountHistoryRepository;
+import com.example.material_flow_rate_adjustment.savedata.historydata.AccountHistorySQL;
+import com.example.material_flow_rate_adjustment.savedata.historydata.HistoryEnum;
+import com.example.material_flow_rate_adjustment.savedata.maindata.AccountRepository;
+import com.example.material_flow_rate_adjustment.savedata.maindata.AccountRole;
+import com.example.material_flow_rate_adjustment.savedata.maindata.AccountSQL;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CorrectUserService {
 	private final AccountRepository repository;
+	private final AccountHistoryRepository historyRepository;
 	private final PasswordEncoder passwordEncoder;
 	
 	@Transactional(readOnly = true)
@@ -25,25 +30,99 @@ public class CorrectUserService {
 		return repository.findAll().stream().map(this::createAccount).toList();
 	}
 	
-	Account createAccount (AccountSQL account) {
+	Account createAccount(AccountSQL account) {
 		return new Account(account.getId(), account.getUser(), account.getRole());
 	}
 	
 	record Account(int id, String username, String role) {};
 	
 	@Transactional
-	public void correctUser(AdminCorrectOwnData data, String loginUser) {
-		AccountSQL account = repository.findById(Integer.parseInt(loginUser))
-				.orElseThrow(() -> new NotFindException("ユーザーが見つかりません。"));
-		if(StringUtils.hasLength(data.newName())) {
-			account.setUser(data.newName());
+	public void adminCorrectOwnData(AdminCorrectOwnData data, String loginUser) {
+		AccountSQL loginAccount = getAccountSQL(Integer.parseInt(loginUser));
+		AccountHistorySQL newHistory = createHistorySQL();
+		setUsername(loginAccount, newHistory, data.newName());
+		setPassword(loginAccount, data.oldPass(), data.newPass());
+		setHistory(loginAccount, newHistory);
+	}
+	
+	@Transactional
+	public boolean adminCorrectUserData(AdminCorrectUserData data, String loginUser) {
+		AccountSQL targetAccount = getAccountSQL(data.targetId());
+		AccountSQL loginAccount = getAccountSQL(Integer.parseInt(loginUser));
+		AccountHistorySQL newHistory = createHistorySQL();
+		if(hasDeleted(targetAccount, loginAccount, newHistory, data.isDeleted())) {
+			return true;
 		}
-		if(StringUtils.hasLength(data.oldPass()) && StringUtils.hasLength(data.newPass())) {
-			if(passwordEncoder.matches(data.oldPass(), account.getPassword())) {
-				account.setPassword(passwordEncoder.encode(data.newPass()));
+		setUsername(targetAccount, newHistory, data.newName());
+		setRole(targetAccount, newHistory, data.newRole());
+		setHistory(loginAccount, newHistory);
+		return false;
+	}
+	
+	AccountHistorySQL createHistorySQL() {
+		return new AccountHistorySQL();
+	}
+	
+	void setHistory(AccountSQL loginAccount, AccountHistorySQL newHistory) {
+		if(!StringUtils.hasLength(newHistory.getNewUser()) && !StringUtils.hasLength(newHistory.getNewRole())) {
+			return;
+		}
+		saveHistory(loginAccount, newHistory, HistoryEnum.CHANGE);
+	}
+	
+	void saveHistory(AccountSQL loginAccount, AccountHistorySQL newHistory, HistoryEnum code) {
+		newHistory.setAction(code.name());
+		newHistory.setActionId(loginAccount.getId());
+		newHistory.setActionUser(loginAccount.getUser());
+		historyRepository.save(newHistory);
+	}
+	
+	AccountSQL getAccountSQL(int loginUser) {
+		return repository.findById(loginUser)
+				.orElseThrow(() -> new NotFindException("ユーザーが見つかりません。"));
+	}
+	
+	void setUsername(AccountSQL account, AccountHistorySQL newHistory, String newName) {
+		if(!StringUtils.hasLength(newName)) {
+			return;
+		}
+		if(account.getUser().equals(newName)) {
+			return;
+		}
+		if(repository.existsByUser(newName)) {
+			throw new DataBaseException("同名のユーザーは登録できません。");
+		}
+		newHistory.setOldUser(account.getUser());
+		newHistory.setNewUser(newName);
+		account.setUser(newName);
+	}
+	
+	void setPassword(AccountSQL account, String oldPass, String newPass) {
+		if(StringUtils.hasLength(oldPass) && StringUtils.hasLength(newPass)) {
+			if(passwordEncoder.matches(oldPass, account.getPassword())) {
+				account.setPassword(passwordEncoder.encode(newPass));
 			}else {
 				throw new DataBaseException("以前のパスワードが一致しないため、処理を停止しました。");
 			}
 		}
+	}
+	
+	void setRole(AccountSQL account, AccountHistorySQL newHistory, AccountRole role) {
+		if(account.getRole().equals(role.name())) {
+			return;
+		}
+		newHistory.setOldRole(account.getRole());
+		newHistory.setNewRole(role.name());
+		account.setRole(role.name());
+	}
+	
+	boolean hasDeleted(AccountSQL targetAccount, AccountSQL loginAccount, AccountHistorySQL newHistory, boolean isDeleted) {
+		if(isDeleted) {
+			newHistory.setOldUser(targetAccount.getUser());
+			newHistory.setOldRole(targetAccount.getRole());
+			repository.delete(targetAccount);
+			saveHistory(loginAccount, newHistory, HistoryEnum.DELETE);
+		}
+		return isDeleted;
 	}
 }

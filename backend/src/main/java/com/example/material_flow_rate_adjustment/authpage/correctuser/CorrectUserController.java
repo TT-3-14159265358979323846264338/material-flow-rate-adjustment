@@ -26,19 +26,22 @@ public class CorrectUserController {
 	@PostMapping("/api/correct/user/admin/own")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> adminCorrectOwn(@Valid @RequestBody AdminCorrectOwnData data, @AuthenticationPrincipal String loginUser){
-		correctUserService.correctUser(data, loginUser);
-		return ResponseEntity.ok("自身のアカウントを修正しました。");
+		correctUserService.adminCorrectOwnData(data, loginUser);
+		return ResponseEntity.ok(new Comment("自身のアカウントを修正しました。"));
 	}
 	
 	@PostMapping("/api/correct/user/admin/user")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> adminCorrectUser(@Valid @RequestBody AdminCorrectUserData data){
-		return ResponseEntity.ok("対象のアカウントを修正しました。");
+	public ResponseEntity<?> adminCorrectUser(@Valid @RequestBody AdminCorrectUserData data, @AuthenticationPrincipal String loginUser){
+		boolean isDeleted = correctUserService.adminCorrectUserData(data, loginUser);
+		return ResponseEntity.ok(new Comment(isDeleted? "対象のアカウントを削除しました。": "対象のアカウントを修正しました。"));
 	}
 	
 	@PostMapping("/api/correct/user/user/own")
 	@PreAuthorize("hasRole('USER') or hasRole('MANAGER')")
 	public ResponseEntity<?> userCorrectOwn(){
-		return ResponseEntity.ok("自身のアカウントを修正しました。");
+		return ResponseEntity.ok(new Comment("自身のアカウントを修正しました。"));
 	}
+	
+	record Comment (String comment){}
 }

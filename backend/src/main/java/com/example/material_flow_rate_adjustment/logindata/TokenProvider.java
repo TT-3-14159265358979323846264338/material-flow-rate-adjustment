@@ -9,8 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import com.example.material_flow_rate_adjustment.savedata.AccountRepository;
-import com.example.material_flow_rate_adjustment.savedata.AccountSQL;
+import com.example.material_flow_rate_adjustment.savedata.maindata.AccountRepository;
+import com.example.material_flow_rate_adjustment.savedata.maindata.AccountSQL;
 
 import java.security.Key;
 import java.time.Duration;

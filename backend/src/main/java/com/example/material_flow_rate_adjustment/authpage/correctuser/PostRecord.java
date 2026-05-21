@@ -4,7 +4,7 @@ import com.example.material_flow_rate_adjustment.customannotations.ValidId;
 import com.example.material_flow_rate_adjustment.customannotations.ValidPassword;
 import com.example.material_flow_rate_adjustment.customannotations.ValidRole;
 import com.example.material_flow_rate_adjustment.customannotations.ValidUserName;
-import com.example.material_flow_rate_adjustment.savedata.AccountRole;
+import com.example.material_flow_rate_adjustment.savedata.maindata.AccountRole;
 
 record AdminCorrectOwnData(
 		@ValidUserName
@@ -21,5 +21,6 @@ record AdminCorrectUserData(
 		@ValidUserName
 		String newName, 
 		@ValidRole
-		AccountRole newRole
+		AccountRole newRole,
+		boolean isDeleted
 		) {}

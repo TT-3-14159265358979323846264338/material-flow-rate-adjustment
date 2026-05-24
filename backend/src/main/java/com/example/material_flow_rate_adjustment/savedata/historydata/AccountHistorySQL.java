@@ -27,6 +27,9 @@ public class AccountHistorySQL {
 	@Setter(AccessLevel.NONE)
 	private Integer id;
 	
+	@Column(name = "target_id", columnDefinition = "INT UNSIGNED", nullable = false, updatable = false)
+	private Integer targetId;
+	
 	@Column(name = "old_user", length = 20, updatable = false)
 	private String oldUser;
 	

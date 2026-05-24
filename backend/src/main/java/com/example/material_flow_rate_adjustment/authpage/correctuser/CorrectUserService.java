@@ -82,42 +82,45 @@ public class CorrectUserService {
 				.orElseThrow(() -> new NotFindException("ユーザーが見つかりません。"));
 	}
 	
-	void setUsername(AccountSQL account, AccountHistorySQL newHistory, String newName) {
+	void setUsername(AccountSQL targetAccount, AccountHistorySQL newHistory, String newName) {
 		if(!StringUtils.hasLength(newName)) {
 			return;
 		}
-		if(account.getUser().equals(newName)) {
+		if(targetAccount.getUser().equals(newName)) {
 			return;
 		}
 		if(repository.existsByUser(newName)) {
 			throw new DataBaseException("同名のユーザーは登録できません。");
 		}
-		newHistory.setOldUser(account.getUser());
+		newHistory.setTargetId(targetAccount.getId());
+		newHistory.setOldUser(targetAccount.getUser());
 		newHistory.setNewUser(newName);
-		account.setUser(newName);
+		targetAccount.setUser(newName);
 	}
 	
-	void setPassword(AccountSQL account, String oldPass, String newPass) {
+	void setPassword(AccountSQL targetAccount, String oldPass, String newPass) {
 		if(StringUtils.hasLength(oldPass) && StringUtils.hasLength(newPass)) {
-			if(passwordEncoder.matches(oldPass, account.getPassword())) {
-				account.setPassword(passwordEncoder.encode(newPass));
+			if(passwordEncoder.matches(oldPass, targetAccount.getPassword())) {
+				targetAccount.setPassword(passwordEncoder.encode(newPass));
 			}else {
 				throw new DataBaseException("以前のパスワードが一致しないため、処理を停止しました。");
 			}
 		}
 	}
 	
-	void setRole(AccountSQL account, AccountHistorySQL newHistory, AccountRole role) {
-		if(account.getRole().equals(role.name())) {
+	void setRole(AccountSQL targetAccount, AccountHistorySQL newHistory, AccountRole role) {
+		if(targetAccount.getRole().equals(role.name())) {
 			return;
 		}
-		newHistory.setOldRole(account.getRole());
+		newHistory.setTargetId(targetAccount.getId());
+		newHistory.setOldRole(targetAccount.getRole());
 		newHistory.setNewRole(role.name());
-		account.setRole(role.name());
+		targetAccount.setRole(role.name());
 	}
 	
 	boolean hasDeleted(AccountSQL targetAccount, AccountSQL loginAccount, AccountHistorySQL newHistory, boolean isDeleted) {
 		if(isDeleted) {
+			newHistory.setTargetId(targetAccount.getId());
 			newHistory.setOldUser(targetAccount.getUser());
 			newHistory.setOldRole(targetAccount.getRole());
 			repository.delete(targetAccount);

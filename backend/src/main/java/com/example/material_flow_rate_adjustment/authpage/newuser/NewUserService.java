@@ -29,7 +29,7 @@ public class NewUserService {
 		//初期パスワードはユーザーにしている。
 		AccountSQL newAccount = createNewAccount(data.name(), data.name(), data.role().name());
 		repository.save(newAccount);
-		AccountHistorySQL newHistory = createNewHistory(data, loginUser);
+		AccountHistorySQL newHistory = createNewHistory(newAccount, loginUser);
 		historyRepository.save(newHistory);
 		return data.name();
 	}
@@ -42,10 +42,11 @@ public class NewUserService {
 		return newAccount;
 	}
 	
-	AccountHistorySQL createNewHistory(NewUser data, String loginUser) {
+	AccountHistorySQL createNewHistory(AccountSQL newAccount, String loginUser) {
 		AccountHistorySQL newHistory = new AccountHistorySQL();
-		newHistory.setNewUser(data.name());
-		newHistory.setNewRole(data.role().name());
+		newHistory.setTargetId(newAccount.getId());
+		newHistory.setNewUser(newAccount.getUser());
+		newHistory.setNewRole(newAccount.getRole());
 		newHistory.setAction(HistoryEnum.CREATE.name());
 		newHistory.setActionId(Integer.parseInt(loginUser));
 		newHistory.setActionUser(loginUserName(loginUser));

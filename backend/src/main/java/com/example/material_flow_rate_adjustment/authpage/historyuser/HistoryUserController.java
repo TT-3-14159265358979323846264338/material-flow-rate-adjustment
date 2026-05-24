@@ -1,0 +1,20 @@
+package com.example.material_flow_rate_adjustment.authpage.historyuser;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequiredArgsConstructor
+public class HistoryUserController {
+	private final HistoryUserService historyUserService;
+	
+	@GetMapping("/api/history/user/get/data")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<?> adminGetData() {
+		return ResponseEntity.ok(historyUserService.getHistory());
+	}
+}

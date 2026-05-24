@@ -7,7 +7,7 @@ import CheckInput from "../../components/CheckInput";
 import ChangePasswordInput from "../../components/ChangePasswordInput";
 import { isThisAccountId } from "../../utils/isThisAccountId";
 import { errorHandling } from "../../../utils/errorHandling";
-import { ROLES, Role } from "../../../types/roleConfig";
+import { ROLES, type Role } from "../../../types/roleConfig";
 import CorrectUserSort from "../../sort-popup/CorrectUserSort";
 
 type CorrectUserResponse = {
@@ -87,7 +87,7 @@ const CorrectUser = () => {
         <div className="flex flex-col w-120 h-83 mr-5">
           <h2>ユーザー一覧</h2>
           <ul className="border rounded-t-md bg-white">
-            <li className="ml-2 mr-2 gap-2 flex items-center border-b-gray-300">
+            <li className="ml-2 mr-2 gap-2 flex items-centers">
               <span className="block w-80 text-left">ユーザー名</span>
               <span className="flex-1 text-left">権限</span>
             </li>

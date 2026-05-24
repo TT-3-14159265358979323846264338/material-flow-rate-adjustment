@@ -4,8 +4,9 @@ import { TabConfig } from '../types/tabConfig';
 import NewUser from './fragment-page/NewUser';
 import CorrectUser from './fragment-page/CorrectUser';
 import Logout from '../common-fragment-page/Logout';
+import HistoryUser from './fragment-page/HistoryUser';
 
-type TabKey = 'check-now-material' | 'check-achievement'| 'new-material' | 'change-material' | 'new-user' | 'change-user' | 'logout';
+type TabKey = 'check-now-material' | 'check-achievement'| 'new-material' | 'change-material' | 'new-user' | 'change-user' | 'history-user' | 'logout';
 
 const tabData: TabConfig<TabKey>[] = [
   {
@@ -37,6 +38,11 @@ const tabData: TabConfig<TabKey>[] = [
     id: 'change-user',
     label: 'ユーザー修正',
     content: <CorrectUser></CorrectUser>,
+  },
+  {
+    id: 'history-user',
+    label: 'ユーザー履歴',
+    content: <HistoryUser></HistoryUser>
   },
   {
     id: 'logout',

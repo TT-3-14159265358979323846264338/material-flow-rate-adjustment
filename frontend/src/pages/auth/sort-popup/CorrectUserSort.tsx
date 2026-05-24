@@ -1,5 +1,5 @@
 import { useState, useMemo, Dispatch, SetStateAction } from "react";
-import { ROLES, Role } from "../../types/roleConfig";
+import { ROLES, type Role } from "../../types/roleConfig";
 import RadioInput from "../components/RadioInput";
 import CheckInput from "../components/CheckInput";
 import DefaultButton from "../components/DefaultButton";

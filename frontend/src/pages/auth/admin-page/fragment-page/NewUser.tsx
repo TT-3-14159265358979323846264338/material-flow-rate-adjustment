@@ -3,7 +3,7 @@ import axios from 'axios';
 import DefaultButton from "../../components/DefaultButton";
 import RoleDropdown from "../../components/RoleDropdown";
 import UserNameInput from "../../components/UserNameInput";
-import { ROLES, Role } from "../../../types/roleConfig"
+import { ROLES, type Role } from "../../../types/roleConfig"
 import { errorHandling } from "../../../utils/errorHandling";
 
 type NewUserResponse = {

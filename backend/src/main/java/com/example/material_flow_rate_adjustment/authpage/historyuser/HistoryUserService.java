@@ -23,8 +23,10 @@ public class HistoryUserService {
 	
 	History createHistory(AccountHistorySQL history) {
 		return new History(history.getTargetId(),
-				history.getOldUser(),
-				history.getNewUser(),
+				history.getOldLoginUser(),
+				history.getNewLoginUser(),
+				history.getOldDisplayedUser(),
+				history.getNewDisplayedUser(),
 				history.getOldRole(),
 				history.getNewRole(),
 				history.getAction(),
@@ -33,8 +35,10 @@ public class HistoryUserService {
 	}
 	
 	record History(Integer targetId,
-			String oldUser, 
-			String newUser, 
+			String oldLoginUser, 
+			String newLoginUser, 
+			String oldDisplayedUser, 
+			String newDisplayedUser, 
 			String oldRole, 
 			String newRole, 
 			String action, 

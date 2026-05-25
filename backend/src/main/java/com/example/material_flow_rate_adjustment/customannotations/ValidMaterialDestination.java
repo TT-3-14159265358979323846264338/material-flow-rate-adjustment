@@ -8,16 +8,14 @@ import java.lang.annotation.Target;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-@Pattern(regexp = "^[A-Za-z0-9!@#$%^&*()_+\\-=\\[\\]{};':\",./<>?]*$", message = "パスワードは半角英数字と記号のみで入力してください")
-@Size(min = 8, max = 72, message = "パスワードは8文字以上72文字以内で入力してください。")
+@Size(max = 10, message = "向け先は10文字以内で入力してください。")
 @Documented
 @Constraint(validatedBy = {})
 @Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ValidPassword {
+public @interface ValidMaterialDestination {
 	String message() default "";
 	Class<?>[] groups() default {};
 	Class<? extends Payload>[] payload() default {};

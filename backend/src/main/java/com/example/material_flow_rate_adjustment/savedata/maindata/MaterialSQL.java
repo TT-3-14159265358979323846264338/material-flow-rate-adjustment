@@ -25,6 +25,9 @@ public class MaterialSQL {
 	@Setter(AccessLevel.NONE)
 	private Integer id;
 	
-	@Column(length = 30, nullable = false)
+	@Column(length = 10)
 	private String name;
+	
+	@Column(length = 10)
+	private String destination;
 }

@@ -11,13 +11,13 @@ import jakarta.validation.Payload;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-@Pattern(regexp = "^[A-Za-z0-9!@#$%^&*()_+\\-=\\[\\]{};':\",./<>?]*$", message = "パスワードは半角英数字と記号のみで入力してください")
-@Size(min = 8, max = 72, message = "パスワードは8文字以上72文字以内で入力してください。")
+@Pattern(regexp = "^[A-Za-z0-9]*$", message = "ユーザー名は半角英数字のみで入力してください")
+@Size(max = 20, message = "ログイン用ユーザー名は20文字以内で入力してください。")
 @Documented
 @Constraint(validatedBy = {})
 @Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ValidPassword {
+public @interface ValidLoginUserName {
 	String message() default "";
 	Class<?>[] groups() default {};
 	Class<? extends Payload>[] payload() default {};

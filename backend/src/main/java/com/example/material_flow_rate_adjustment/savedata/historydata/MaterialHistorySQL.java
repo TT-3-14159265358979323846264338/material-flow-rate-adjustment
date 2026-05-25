@@ -16,11 +16,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "account_history")
+@Table(name = "material_history")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountHistorySQL {
+public class MaterialHistorySQL {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(columnDefinition = "INT UNSIGNED AUTO_INCREMENT", updatable = false)
@@ -30,23 +30,17 @@ public class AccountHistorySQL {
 	@Column(name = "target_id", columnDefinition = "INT UNSIGNED", nullable = false, updatable = false)
 	private Integer targetId;
 	
-	@Column(name = "old_login_user", length = 20, updatable = false)
-	private String oldLoginUser;
+	@Column(name = "old_material_name", length = 10, updatable = false)
+	private String oldName;
 	
-	@Column(name = "new_login_user", length = 20, updatable = false)
-	private String newLoginUser;
+	@Column(name = "new_material_name", length = 10, updatable = false)
+	private String newName;
 	
-	@Column(name = "old_displayed_user", length = 10, updatable = false)
-	private String oldDisplayedUser;
+	@Column(name = "old_material_destination", length = 10, updatable = false)
+	private String oldDestination;
 	
-	@Column(name = "new_displayed_user", length = 10, updatable = false)
-	private String newDisplayedUser;
-	
-	@Column(name = "old_role", length = 10, updatable = false)
-	private String oldRole;
-	
-	@Column(name = "new_role", length = 10, updatable = false)
-	private String newRole;
+	@Column(name = "new_material_destination", length = 10, updatable = false)
+	private String newDestination;
 	
 	@Column(length = 10, nullable = false, updatable = false)
 	private String action;

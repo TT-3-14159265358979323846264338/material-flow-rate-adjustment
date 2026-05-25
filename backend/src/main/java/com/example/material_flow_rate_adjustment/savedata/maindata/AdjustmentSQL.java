@@ -44,7 +44,7 @@ public class AdjustmentSQL {
 	@Column(columnDefinition = "INT UNSIGNED", nullable = false)
 	private Integer quantity;
 	
-	@Column(length = 20, nullable = false)
+	@Column(length = 10, nullable = false)
 	private String user;
 	
 	@Column(length = 50, nullable = false)

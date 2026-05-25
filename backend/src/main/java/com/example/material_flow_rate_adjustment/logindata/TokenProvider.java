@@ -38,7 +38,7 @@ public class TokenProvider {
 	
 	public Token createToken(Authentication authentication) {
 		Date nowDate = new Date();
-		AccountSQL account = accountRepository.findByUser(authentication.getName())
+		AccountSQL account = accountRepository.findByLoginUser(authentication.getName())
 				.orElseThrow(() -> new UsernameNotFoundException("アカウントはあるのにIDの取り込みに失敗しました。"));
 		String token = Jwts.builder()
 				.subject(account.getId().toString())

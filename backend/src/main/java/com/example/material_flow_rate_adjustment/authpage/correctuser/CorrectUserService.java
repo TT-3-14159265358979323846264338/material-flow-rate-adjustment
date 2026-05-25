@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import com.example.material_flow_rate_adjustment.authpage.UtilityService;
 import com.example.material_flow_rate_adjustment.errorhandling.DataBaseException;
-import com.example.material_flow_rate_adjustment.errorhandling.NotFindException;
 import com.example.material_flow_rate_adjustment.savedata.historydata.AccountHistoryRepository;
 import com.example.material_flow_rate_adjustment.savedata.historydata.AccountHistorySQL;
 import com.example.material_flow_rate_adjustment.savedata.historydata.HistoryEnum;
@@ -24,6 +24,7 @@ public class CorrectUserService {
 	private final AccountRepository repository;
 	private final AccountHistoryRepository historyRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final UtilityService utility;
 	
 	@Transactional(readOnly = true)
 	public List<Account> getUser() {
@@ -31,29 +32,31 @@ public class CorrectUserService {
 	}
 	
 	Account createAccount(AccountSQL account) {
-		return new Account(account.getId(), account.getUser(), account.getRole());
+		return new Account(account.getId(), account.getLoginUser(), account.getDisplayedUser(), account.getRole());
 	}
 	
-	record Account(int id, String username, String role) {};
+	record Account(int id, String loginName, String displayedName, String role) {};
 	
 	@Transactional
 	public void adminCorrectOwnData(AdminCorrectOwnData data, String loginUser) {
-		AccountSQL loginAccount = getAccountSQL(Integer.parseInt(loginUser));
+		AccountSQL loginAccount = utility.getAccountSQL(loginUser);
 		AccountHistorySQL newHistory = createHistorySQL();
-		setUsername(loginAccount, newHistory, data.newName());
+		setLoginName(loginAccount, newHistory, data.newLoginName());
+		setDisplayedName(loginAccount, newHistory, data.newDisplayedName());
 		setPassword(loginAccount, data.oldPass(), data.newPass());
 		setHistory(loginAccount, newHistory);
 	}
 	
 	@Transactional
 	public boolean adminCorrectUserData(AdminCorrectUserData data, String loginUser) {
-		AccountSQL targetAccount = getAccountSQL(data.targetId());
-		AccountSQL loginAccount = getAccountSQL(Integer.parseInt(loginUser));
+		AccountSQL targetAccount = utility.getAccountSQL(data.targetId());
+		AccountSQL loginAccount = utility.getAccountSQL(loginUser);
 		AccountHistorySQL newHistory = createHistorySQL();
 		if(hasDeleted(targetAccount, loginAccount, newHistory, data.isDeleted())) {
 			return true;
 		}
-		setUsername(targetAccount, newHistory, data.newName());
+		setLoginName(targetAccount, newHistory, data.newLoginName());
+		setDisplayedName(targetAccount, newHistory, data.newDisplayedName());
 		setRole(targetAccount, newHistory, data.newRole());
 		setHistory(loginAccount, newHistory);
 		return false;
@@ -64,7 +67,7 @@ public class CorrectUserService {
 	}
 	
 	void setHistory(AccountSQL loginAccount, AccountHistorySQL newHistory) {
-		if(!StringUtils.hasLength(newHistory.getNewUser()) && !StringUtils.hasLength(newHistory.getNewRole())) {
+		if(newHistory.getTargetId() == null) {
 			return;
 		}
 		saveHistory(loginAccount, newHistory, HistoryEnum.CHANGE);
@@ -73,29 +76,40 @@ public class CorrectUserService {
 	void saveHistory(AccountSQL loginAccount, AccountHistorySQL newHistory, HistoryEnum code) {
 		newHistory.setAction(code.name());
 		newHistory.setActionId(loginAccount.getId());
-		newHistory.setActionUser(loginAccount.getUser());
+		newHistory.setActionUser(loginAccount.getDisplayedUser());
 		historyRepository.save(newHistory);
 	}
 	
-	AccountSQL getAccountSQL(int loginUser) {
-		return repository.findById(loginUser)
-				.orElseThrow(() -> new NotFindException("ユーザーが見つかりません。"));
-	}
-	
-	void setUsername(AccountSQL targetAccount, AccountHistorySQL newHistory, String newName) {
-		if(!StringUtils.hasLength(newName)) {
+	void setLoginName(AccountSQL targetAccount, AccountHistorySQL newHistory, String newLoginName) {
+		if(!StringUtils.hasLength(newLoginName)) {
 			return;
 		}
-		if(targetAccount.getUser().equals(newName)) {
+		if(targetAccount.getLoginUser().equals(newLoginName)) {
 			return;
 		}
-		if(repository.existsByUser(newName)) {
-			throw new DataBaseException("同名のユーザーは登録できません。");
+		if(repository.existsByLoginUser(newLoginName)) {
+			throw new DataBaseException("同名のログインユーザーは登録できません。");
 		}
 		newHistory.setTargetId(targetAccount.getId());
-		newHistory.setOldUser(targetAccount.getUser());
-		newHistory.setNewUser(newName);
-		targetAccount.setUser(newName);
+		newHistory.setOldLoginUser(targetAccount.getLoginUser());
+		newHistory.setNewLoginUser(newLoginName);
+		targetAccount.setLoginUser(newLoginName);
+	}
+	
+	void setDisplayedName(AccountSQL targetAccount, AccountHistorySQL newHistory, String newDisplayedName) {
+		if(!StringUtils.hasLength(newDisplayedName)) {
+			return;
+		}
+		if(targetAccount.getDisplayedUser().equals(newDisplayedName)) {
+			return;
+		}
+		if(repository.existsByDisplayedUser(newDisplayedName)) {
+			throw new DataBaseException("同名の表示ユーザーは登録できません。");
+		}
+		newHistory.setTargetId(targetAccount.getId());
+		newHistory.setOldDisplayedUser(targetAccount.getDisplayedUser());
+		newHistory.setNewDisplayedUser(newDisplayedName);
+		targetAccount.setDisplayedUser(newDisplayedName);
 	}
 	
 	void setPassword(AccountSQL targetAccount, String oldPass, String newPass) {
@@ -121,7 +135,8 @@ public class CorrectUserService {
 	boolean hasDeleted(AccountSQL targetAccount, AccountSQL loginAccount, AccountHistorySQL newHistory, boolean isDeleted) {
 		if(isDeleted) {
 			newHistory.setTargetId(targetAccount.getId());
-			newHistory.setOldUser(targetAccount.getUser());
+			newHistory.setOldLoginUser(targetAccount.getLoginUser());
+			newHistory.setOldDisplayedUser(targetAccount.getDisplayedUser());
 			newHistory.setOldRole(targetAccount.getRole());
 			repository.delete(targetAccount);
 			saveHistory(loginAccount, newHistory, HistoryEnum.DELETE);

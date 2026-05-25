@@ -25,8 +25,11 @@ public class AccountSQL {
 	@Setter(AccessLevel.NONE)
 	private Integer id;
 	
-	@Column(unique = true, length = 20, nullable = false)
-	private String user;
+	@Column(name = "login_user", unique = true, length = 20, nullable = false)
+	private String loginUser;
+	
+	@Column(name = "displayed_user", unique = true, length = 10, nullable = false)
+	private String displayedUser;
 	
 	@Column(length = 255, nullable = false)
 	private String password;

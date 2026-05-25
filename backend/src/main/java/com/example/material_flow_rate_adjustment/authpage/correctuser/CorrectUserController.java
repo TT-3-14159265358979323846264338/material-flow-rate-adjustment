@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.material_flow_rate_adjustment.authpage.CommentRecord;
+
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -27,21 +29,19 @@ public class CorrectUserController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> adminCorrectOwn(@Valid @RequestBody AdminCorrectOwnData data, @AuthenticationPrincipal String loginUser){
 		correctUserService.adminCorrectOwnData(data, loginUser);
-		return ResponseEntity.ok(new Comment("自身のアカウントを修正しました。"));
+		return ResponseEntity.ok(new CommentRecord("自身のアカウントを修正しました。"));
 	}
 	
 	@PostMapping("/api/correct/user/admin/user")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> adminCorrectUser(@Valid @RequestBody AdminCorrectUserData data, @AuthenticationPrincipal String loginUser){
 		boolean isDeleted = correctUserService.adminCorrectUserData(data, loginUser);
-		return ResponseEntity.ok(new Comment(isDeleted? "対象のアカウントを削除しました。": "対象のアカウントを修正しました。"));
+		return ResponseEntity.ok(new CommentRecord(isDeleted? "対象のアカウントを削除しました。": "対象のアカウントを修正しました。"));
 	}
 	
 	@PostMapping("/api/correct/user/user/own")
 	@PreAuthorize("hasRole('USER') or hasRole('MANAGER')")
 	public ResponseEntity<?> userCorrectOwn(){
-		return ResponseEntity.ok(new Comment("自身のアカウントを修正しました。"));
+		return ResponseEntity.ok(new CommentRecord("自身のアカウントを修正しました。"));
 	}
-	
-	record Comment (String comment){}
 }

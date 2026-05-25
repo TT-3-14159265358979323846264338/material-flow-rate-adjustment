@@ -7,7 +7,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AccountRepository extends JpaRepository<AccountSQL, Integer>{
-	boolean existsByUser(String user);
+	boolean existsByLoginUser(String user);
+	boolean existsByDisplayedUser(String user);
 	boolean existsByRole(String role);
-	Optional<AccountSQL> findByUser(String user);
+	Optional<AccountSQL> findByLoginUser(String user);
 }

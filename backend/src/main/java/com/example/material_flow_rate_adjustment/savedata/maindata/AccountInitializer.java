@@ -39,7 +39,8 @@ public class AccountInitializer implements CommandLineRunner{
 	
 	AccountSQL createAdminAccount() {
 		AccountSQL newAccount = new AccountSQL();
-		newAccount.setUser(user);
+		newAccount.setLoginUser(user);
+		newAccount.setDisplayedUser("管理者");
 		newAccount.setPassword(passwordEncoder.encode(password));
 		newAccount.setRole(AccountRole.ADMIN.name());
 		return newAccount;
@@ -48,7 +49,8 @@ public class AccountInitializer implements CommandLineRunner{
 	AccountHistorySQL createHistory(AccountSQL newAccount) {
 		AccountHistorySQL newHistory = new AccountHistorySQL();
 		newHistory.setTargetId(newAccount.getId());
-		newHistory.setNewUser(newAccount.getUser());
+		newHistory.setNewLoginUser(newAccount.getLoginUser());
+		newHistory.setNewDisplayedUser(newAccount.getDisplayedUser());
 		newHistory.setNewRole(newAccount.getRole());
 		newHistory.setAction(HistoryEnum.CREATE.name());
 		newHistory.setActionId(0);

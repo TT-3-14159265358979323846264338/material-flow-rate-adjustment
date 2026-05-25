@@ -2,37 +2,51 @@ import { useState } from "react";
 import axios from 'axios';
 import DefaultButton from "../../components/DefaultButton";
 import RoleDropdown from "../../components/RoleDropdown";
-import UserNameInput from "../../components/UserNameInput";
+import LoginUserNameInput from "../../components/LoginUserNameInput";
 import { ROLES, type Role } from "../../../types/roleConfig"
 import { errorHandling } from "../../../utils/errorHandling";
+import DisplayedUserNameInput from "../../components/DisplyedUserNameInput";
+
+type NewUserProps = {
+  returnTop: () => void;
+};
 
 type NewUserResponse = {
   password: string;
 };
 
-const NewUser = () => {
-  const [name, setName] = useState("");
+const NewUser = ({returnTop}: NewUserProps) => {
+  const [loginName, setLoginName] = useState("");
+  const [displayedName, setDisplayedName] = useState("");
   const [role, setRole] = useState<Role>(ROLES[1]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const handle = async() => {
-    if(name.trim().length === 0){
+  const handle = async () => {
+    if (loginName.trim().length === 0) {
       alert("ユーザー名を入力してください。");
       return;
     }
-    if(!confirm(name + "に" + role + "権限付与して新規登録しますか。")){
+    if (!confirm(loginName + "に" + role + "権限付与して新規登録しますか。")) {
       return;
     }
-    if(isSubmitting){
+    if (isSubmitting) {
       return;
     }
     setIsSubmitting(true);
     try {
-      const response = await axios.post<NewUserResponse>('http://localhost:8080/api/user/new', {name, role});
+      const response = await axios.post<NewUserResponse>(
+        "http://localhost:8080/api/user/new",
+        { loginName, displayedName, role },
+      );
       const password = response.data.password;
-      alert(name + "が新規登録されました。\n"
-        + "初期パスワードは" + password + "になっています。\n"
-        + "早期にパスワードの変更をお願いします。");
-      setName("");
+      alert(
+        displayedName +
+          "が新規登録されました。\n" +
+          "初期パスワードは" +
+          password +
+          "になっています。\n" +
+          "早期にパスワードの変更をお願いします。",
+      );
+      setLoginName("");
     } catch (error) {
       errorHandling(error);
     } finally {
@@ -42,11 +56,15 @@ const NewUser = () => {
 
   return (
     <div className="w-50">
-      <UserNameInput name={name} setName={setName}></UserNameInput>
-      <RoleDropdown role={role}   setRole={setRole}></RoleDropdown>
-      <DefaultButton onClick={handle}>新規登録</DefaultButton>
-  </div>
+      <LoginUserNameInput name={loginName} setName={setLoginName}></LoginUserNameInput>
+      <DisplayedUserNameInput name={displayedName} setName={setDisplayedName}></DisplayedUserNameInput>
+      <RoleDropdown role={role} setRole={setRole}></RoleDropdown>
+      <div className="flex justify-center gap-5">
+        <DefaultButton onClick={handle}>新規登録</DefaultButton>
+        <DefaultButton onClick={() => returnTop()}>戻る</DefaultButton>
+      </div>
+    </div>
   );
-}
+};
 
 export default NewUser;

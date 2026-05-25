@@ -1,0 +1,148 @@
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { errorHandling } from "../../../utils/errorHandling";
+import MaterialNameInput from "../../components/MaterialNameInput";
+import MaterialDestinationInput from "../../components/MaterialDestinationInput";
+import CheckInput from "../../components/CheckInput";
+import DefaultButton from "../../components/DefaultButton";
+import NewMaterial from "./NewMaterial";
+import CorrectMaterialSort from "../../sort-popup/CorrectMaterialSort";
+
+type ViewConfig = "Top" | "Sort" | "New";
+
+type CorrectMaterialResponse = {
+  id: number;
+  name: string;
+  destination: string;
+};
+
+type PostResponse = {
+  comment: string;
+};
+
+const CorrectMatterial = () => {
+  const [materialData, setMaterialData] = useState<CorrectMaterialResponse[]>([]);
+  const [sortData, setSortData] = useState<CorrectMaterialResponse[]>([]);
+  const [selectedMaterial, setSelectedMaterial] = useState<CorrectMaterialResponse>();
+  const [newName, setNewName] = useState<string>("");
+  const [newDestination, setDestination] = useState<string>("");
+  const [isDeleted, setIsDeleted] = useState<boolean>(false);
+  const [view, setView] = useState<ViewConfig>("Top");
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  const getMaterialData = async () => {
+    try {
+      const response = await axios.get<CorrectMaterialResponse[]>("http://localhost:8080/api/correct/material/get/data");
+      setMaterialData(response.data);
+      setSortData(response.data);
+    } catch (error) {
+      errorHandling(error);
+    }
+  };
+  useEffect(() => {
+    getMaterialData();
+  }, []);
+
+  const correctHandle = async () => {
+    if (!selectedMaterial) {
+      alert("修正したい製品を選択して、必要項目に入力してください。");
+      return;
+    }
+    const canCorrect = isDeleted
+      ? confirm("対象の製品削除を本当に実行してもよいですか。")
+      : confirm("対象の製品を修正しますか。");
+    if (!canCorrect) {
+      return;
+    }
+    if (isSubmitting) {
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      const targetId = selectedMaterial.id;
+      const response = await axios.post<PostResponse>("http://localhost:8080/api/correct/material", {
+        targetId,
+        newName,
+        newDestination,
+        isDeleted,
+      });
+      alert(response.data.comment);
+      setSelectedMaterial(undefined);
+      await getMaterialData();
+    } catch (error) {
+      errorHandling(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const returnTop = () => setView("Top");
+  const newReturnTop = async () => {
+    await getMaterialData();
+    setView("Top");
+  };
+
+  if (view === "Sort") {
+    return <CorrectMaterialSort materialData={materialData} setSortData={setSortData} returnTop={returnTop}></CorrectMaterialSort>;
+  }
+  if (view === "New") {
+    return <NewMaterial returnTop={newReturnTop}></NewMaterial>;
+  }
+  return (
+    <div className="flex flex-col items-stretch">
+      <div className="flex">
+        <div className="flex flex-col w-130 h-83 mr-5">
+          <h2>製品一覧</h2>
+          <ul className="border rounded-t-md bg-white">
+            <li className="ml-2 mr-2 gap-2 flex items-center">
+              <span className="block w-60 text-left">製品名</span>
+              <span className="flex-1 text-left">向け先</span>
+            </li>
+          </ul>
+          <ul className="flex-1 overflow-y-auto border border-b-black rounded-b-md bg-white">
+            {sortData.map((data) => (
+              <li
+                key={data.id}
+                onClick={() => {
+                  setSelectedMaterial(data);
+                  setNewName(data.name);
+                  setDestination(data.destination);
+                  setIsDeleted(false);
+                }}
+                className={`ml-2 mr-2 gap-2 flex items-center border-b border-b-gray-300 cursor-pointer
+                  ${data.id === selectedMaterial?.id ? " bg-gray-200" : " bg-white"}`}
+              >
+                <span className="block w-60 text-left">{data.name}</span>
+                <span className="flex-1 text-left">{data.destination}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="w-50 ml-5">
+          <h2>修正内容</h2>
+          <span className="text-xs text-left pb-2">※空欄及び未変更の項目は修正しない。</span>
+          {selectedMaterial ? (
+            <div>
+              <div className="mb-5">
+                <MaterialNameInput name={newName} setName={setNewName}></MaterialNameInput>
+                <MaterialDestinationInput name={newDestination} setName={setDestination}></MaterialDestinationInput>
+              </div>
+              <CheckInput isChecked={isDeleted} setChecked={setIsDeleted}>製品削除</CheckInput>
+            </div>
+          ) : (
+            <div></div>
+          )}
+        </div>
+      </div>
+
+      <div className="flex justify-center gap-5">
+        <DefaultButton onClick={() => setView("Sort")}>ソート</DefaultButton>
+        <DefaultButton onClick={correctHandle}>登録修正</DefaultButton>
+        <DefaultButton onClick={() => setView("New")}>新規登録</DefaultButton>
+      </div>
+    </div>
+  );
+};
+
+export default CorrectMatterial;

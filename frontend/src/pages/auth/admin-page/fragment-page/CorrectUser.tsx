@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
 import DefaultButton from "../../components/DefaultButton";
-import UserNameInput from "../../components/UserNameInput";
+import LoginUserNameInput from "../../components/LoginUserNameInput";
 import RoleDropdown from "../../components/RoleDropdown";
 import CheckInput from "../../components/CheckInput";
 import ChangePasswordInput from "../../components/ChangePasswordInput";
@@ -9,10 +9,15 @@ import { isThisAccountId } from "../../utils/isThisAccountId";
 import { errorHandling } from "../../../utils/errorHandling";
 import { ROLES, type Role } from "../../../types/roleConfig";
 import CorrectUserSort from "../../sort-popup/CorrectUserSort";
+import NewUser from "./NewUser";
+import DisplayedUserNameInput from "../../components/DisplyedUserNameInput";
+
+type ViewConfig = "Top" | "Sort" | "New";
 
 type CorrectUserResponse = {
   id: number;
-  username: string;
+  loginName: string;
+  displayedName: string;
   role: Role;
 };
 
@@ -24,17 +29,20 @@ const CorrectUser = () => {
   const [accountData, setAccountData] = useState<CorrectUserResponse[]>([]);
   const [sortData, setSortData] = useState<CorrectUserResponse[]>([]);
   const [selectedAccount, setSelectedAccount] = useState<CorrectUserResponse>();
-  const [newName, setNewName] = useState<string>("");
+  const [newLoginName, setNewLoginName] = useState<string>("");
+  const [newDisplayedName, setDisplayedName] = useState<string>("");
   const [newRole, setNewRole] = useState<Role>(ROLES[1]);
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
   const [newPass, setNewPass] = useState<string>("");
   const [oldPass, setOldPass] = useState<string>("");
-  const [hasDisplaySort, setHasDisplaySort] = useState<boolean>(false);
+  const [view, setView] = useState<ViewConfig>("Top");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const getAccountData = async () => {
-    try{
-      const response = await axios.get<CorrectUserResponse[]>("http://localhost:8080/api/correct/user/admin/get/data");
+    try {
+      const response = await axios.get<CorrectUserResponse[]>(
+        "http://localhost:8080/api/correct/user/admin/get/data",
+      );
       setAccountData(response.data);
       setSortData(response.data);
     } catch (error) {
@@ -45,23 +53,32 @@ const CorrectUser = () => {
     getAccountData();
   }, []);
 
-  const correctHandle = async() => {
-    if(!selectedAccount){
+  const correctHandle = async () => {
+    if (!selectedAccount) {
+      alert("修正したいユーザーを選択して、必要項目に入力してください。");
       return;
     }
-    const canCorrect = isDeleted? confirm("対象のアカウント削除を本当に実行してもよいですか。"): confirm("対象のアカウントを修正しますか。");
-    if(!canCorrect){
+    const canCorrect = isDeleted
+      ? confirm("対象のアカウント削除を本当に実行してもよいですか。")
+      : confirm("対象のアカウントを修正しますか。");
+    if (!canCorrect) {
       return;
     }
-    if(isSubmitting){
+    if (isSubmitting) {
       return;
     }
     setIsSubmitting(true);
     try {
       const targetId = selectedAccount.id;
-      const response = isThisAccountId(targetId)? 
-              await axios.post<PostResponse>('http://localhost:8080/api/correct/user/admin/own', {newName, newPass, oldPass}):
-              await axios.post<PostResponse>('http://localhost:8080/api/correct/user/admin/user', {targetId, newName, newRole, isDeleted});
+      const response = isThisAccountId(targetId)
+        ? await axios.post<PostResponse>(
+            "http://localhost:8080/api/correct/user/admin/own",
+            { newLoginName, newDisplayedName, newPass, oldPass },
+          )
+        : await axios.post<PostResponse>(
+            "http://localhost:8080/api/correct/user/admin/user",
+            { targetId, newLoginName, newDisplayedName, newRole, isDeleted },
+          );
       alert(response.data.comment);
       setSelectedAccount(undefined);
       await getAccountData();
@@ -72,23 +89,27 @@ const CorrectUser = () => {
     }
   };
 
-  const sortHandle = () => {
-    setHasDisplaySort(true);
+  const returnTop = () => setView("Top");
+  const newReturnTop = async () => {
+    await getAccountData();
+    setView("Top");
   };
 
-  if(hasDisplaySort){
-    return(
-      <CorrectUserSort accountData={accountData} setSortData={setSortData} setHasDisplay={setHasDisplaySort}></CorrectUserSort>
-    );
+  if(view === "Sort") {
+    return <CorrectUserSort accountData={accountData} setSortData={setSortData} returnTop={returnTop}></CorrectUserSort>;
   }
-  return(
+  if(view === "New"){
+    return <NewUser returnTop={newReturnTop}></NewUser>;
+  }
+  return (
     <div className="flex flex-col items-stretch">
       <div className="flex">
-        <div className="flex flex-col w-120 h-83 mr-5">
+        <div className="flex flex-col w-130 h-83 mr-5">
           <h2>ユーザー一覧</h2>
           <ul className="border rounded-t-md bg-white">
             <li className="ml-2 mr-2 gap-2 flex items-centers">
-              <span className="block w-80 text-left">ユーザー名</span>
+              <span className="block w-45 text-left">ログインユーザー名</span>
+              <span className="block w-45 text-left">表示ユーザー名</span>
               <span className="flex-1 text-left">権限</span>
             </li>
           </ul>
@@ -98,17 +119,19 @@ const CorrectUser = () => {
                 key={data.id}
                 onClick={() => {
                   setSelectedAccount(data);
-                  setNewName(data.username);
+                  setNewLoginName(data.loginName);
+                  setDisplayedName(data.displayedName);
                   setNewRole(data.role);
                   setIsDeleted(false);
-                  setNewPass("")
-                  setOldPass("")
+                  setNewPass("");
+                  setOldPass("");
                 }}
                 className={`ml-2 mr-2 gap-2 flex items-center border-b border-b-gray-300 cursor-pointer
-                  ${data.id === selectedAccount?.id? " bg-gray-200": " bg-white"}`
-                }>
-                  <span className="block w-80 text-left">{data.username}</span>
-                  <span className="flex-1 text-left">{data.role}</span>
+                  ${data.id === selectedAccount?.id ? " bg-gray-200" : " bg-white"}`}
+              >
+                <span className="block w-45 text-left">{data.loginName}</span>
+                <span className="block w-45 text-left">{data.displayedName}</span>
+                <span className="flex-1 text-left">{data.role}</span>
               </li>
             ))}
           </ul>
@@ -116,29 +139,39 @@ const CorrectUser = () => {
 
         <div className="w-50 ml-5">
           <h2>修正内容</h2>
-          <h3 className="text-left pb-2">※空欄及び未変更の項目は修正しない。</h3>
-          <h3 className="text-left pb-2">※パスワード修正時は、以前のパスワードが一致しなければ、修正しない。</h3>
-          {selectedAccount?
-            isThisAccountId(selectedAccount.id)? (
+          <span className="text-xs text-left pb-2">※空欄及び未変更の項目は修正しない。</span>
+          {selectedAccount ? (
+            isThisAccountId(selectedAccount.id) ? (
               <div>
-                <UserNameInput name={newName} setName={setNewName}></UserNameInput>
-                <ChangePasswordInput newPass={newPass} setNewPass={setNewPass} oldPass={oldPass} setOldPass={setOldPass}></ChangePasswordInput>
+                <LoginUserNameInput name={newLoginName} setName={setNewLoginName}></LoginUserNameInput>
+                <DisplayedUserNameInput name={newDisplayedName} setName={setDisplayedName}></DisplayedUserNameInput>
+                <ChangePasswordInput
+                  newPass={newPass}
+                  setNewPass={setNewPass}
+                  oldPass={oldPass}
+                  setOldPass={setOldPass}
+                ></ChangePasswordInput>
               </div>
-            ): (
+            ) : (
               <div>
                 <div className="mb-5">
-                  <UserNameInput name={newName} setName={setNewName}></UserNameInput>
+                  <LoginUserNameInput name={newLoginName} setName={setNewLoginName}></LoginUserNameInput>
+                  <DisplayedUserNameInput name={newDisplayedName} setName={setDisplayedName}></DisplayedUserNameInput>
                   <RoleDropdown role={newRole} setRole={setNewRole}></RoleDropdown>
                 </div>
-                <CheckInput children="アカウント削除" isChecked={isDeleted} setChecked={setIsDeleted}></CheckInput>
+                <CheckInput isChecked={isDeleted} setChecked={setIsDeleted}>アカウント削除</CheckInput>
               </div>
-            ): <div></div>}
+            )
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
 
       <div className="flex justify-center gap-5">
-        <DefaultButton onClick={sortHandle}>ソート</DefaultButton>
+        <DefaultButton onClick={() => setView("Sort")}>ソート</DefaultButton>
         <DefaultButton onClick={correctHandle}>登録修正</DefaultButton>
+        <DefaultButton onClick={() => setView("New")}>新規登録</DefaultButton>
       </div>
     </div>
   );

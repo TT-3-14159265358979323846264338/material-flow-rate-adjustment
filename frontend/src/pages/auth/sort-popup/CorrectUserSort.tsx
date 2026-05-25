@@ -3,28 +3,27 @@ import { ROLES, type Role } from "../../types/roleConfig";
 import RadioInput from "../components/RadioInput";
 import CheckInput from "../components/CheckInput";
 import DefaultButton from "../components/DefaultButton";
-
-const ORDER = ["昇順", "降順"] as const;
-type Order = typeof ORDER[number];
+import { type Order, ORDER } from "../types/orderConfig";
 
 const ORDER_CODE = ["ID", "ユーザー名", "権限"] as const;
 type OrderCode = typeof ORDER_CODE[number];
 
 type CorrectUserResponse = {
   id: number;
-  username: string;
+  loginName: string;
+  displayedName: string;
   role: Role;
 };
 
 type CorrentUserSortProps = {
   accountData: CorrectUserResponse[];
   setSortData: Dispatch<SetStateAction<CorrectUserResponse[]>>;
-  setHasDisplay: Dispatch<SetStateAction<boolean>>;
+  returnTop: () => void;
 };
 
-const CorrectUserSort = ({accountData, setSortData, setHasDisplay}: CorrentUserSortProps) => {
-  const [order, setOrder] = useState<Order>(ORDER[0]);
-  const [orderCode, setOrderCode] = useState<OrderCode>(ORDER_CODE[0]);
+const CorrectUserSort = ({accountData, setSortData, returnTop}: CorrentUserSortProps) => {
+  const [order, setOrder] = useState<Order>("昇順");
+  const [orderCode, setOrderCode] = useState<OrderCode>("ID");
   const [isAdmin, setIsAdmin] = useState<boolean>(true);
   const [isUser, setIsUser] = useState<boolean>(true);
   const [isManager, setIsManager] = useState<boolean>(true);
@@ -37,12 +36,12 @@ const CorrectUserSort = ({accountData, setSortData, setHasDisplay}: CorrentUserS
     return !isSelected? array.filter((account) => account.role !== role): array;
   };
   const sort = (array: CorrectUserResponse[]) => {
-    switch(orderCode){
-      case ORDER_CODE[0]:
+    switch (orderCode) {
+      case "ID":
         return array;
-      case ORDER_CODE[1]:
-        return array.toSorted((a, b) => a.username.localeCompare(b.username));
-      case ORDER_CODE[2]:
+      case "ユーザー名":
+        return array.toSorted((a, b) => a.displayedName.localeCompare(b.displayedName));
+      case "権限":
         return array.toSorted((a, b) => a.role.localeCompare(b.role));
       default:
         return array;
@@ -54,11 +53,8 @@ const CorrectUserSort = ({accountData, setSortData, setHasDisplay}: CorrentUserS
       filterArray = filter(isSelected, role, filterArray);
     });
     const sortArray = sort(filterArray);
-    setSortData(order === ORDER[0]? sortArray: sortArray.toReversed());
-    setHasDisplay(false);
-  };
-  const returnHandle = () => {
-    setHasDisplay(false);
+    setSortData(order === "昇順"? sortArray : sortArray.toReversed());
+    returnTop();
   };
 
   return (
@@ -83,7 +79,7 @@ const CorrectUserSort = ({accountData, setSortData, setHasDisplay}: CorrentUserS
       </div>
       <div className="flex justify-center gap-5">
         <DefaultButton onClick={sortHandle}>ソート</DefaultButton>
-        <DefaultButton onClick={returnHandle}>戻る</DefaultButton>
+        <DefaultButton onClick={() => returnTop()}>戻る</DefaultButton>
       </div>
     </div>
   );

@@ -1,0 +1,41 @@
+import { useState, useEffect, useCallback, Dispatch, SetStateAction } from "react";
+import axios from "axios";
+import { errorHandling } from "../../utils/errorHandling";
+
+type UeGetMappingProps = {
+  URL: string;
+  params?: Record<string, any>;
+};
+
+type UeGetMappingReturn<T> = {
+  data: T[];
+  sortData: T[];
+  setSortData: Dispatch<SetStateAction<T[]>>;
+  getData: () => Promise<void>;
+};
+
+export const useGetMapping = <T>({ URL, params }: UeGetMappingProps): UeGetMappingReturn<T> => {
+  const [data, setData] = useState<T[]>([]);
+  const [sortData, setSortData] = useState<T[]>([]);
+
+  const getData = useCallback(async () => {
+    try {
+      const response = await axios.get<T[]>("http://localhost:8080" + URL, { params });
+      setData(response.data);
+      setSortData(response.data);
+    } catch (error) {
+      errorHandling(error);
+    }
+  }, [URL, params]);
+
+  useEffect(() => {
+    getData();
+  }, [getData]);
+
+  return {
+    data,
+    sortData,
+    setSortData,
+    getData,
+  };
+};

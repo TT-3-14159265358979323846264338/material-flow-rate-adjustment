@@ -1,11 +1,12 @@
 import DefaultButton from "../../components/DefaultButton";
 import { type HistoryUserConfig } from "../../../types/historyUserConfig";
 import { type Role } from "../../../types/roleConfig";
-import { useHistory } from "../../hooks/useHistory";
 import { ReturnProps } from "../../types/returnProps";
+import HistoryUserSort from "./HistoryUserSort";
+import { useHistory } from "../../hooks/useHistory";
 
 type HistoryUserResponse = {
-  targetId: number;
+  id: number;
   oldLoginUser: string;
   newLoginUser: string;
   oldDisplayedUser: string;
@@ -17,9 +18,14 @@ type HistoryUserResponse = {
   date: string;
 };
 
-const HistoryUser = ({returnTop}:ReturnProps) => {
-  const { sortHistory, selectedId, isFilter, liHandle, filterHandle } = useHistory<HistoryUserResponse>({URL: "/api/history/user/get/data",});
+const HistoryUser = ({ returnTop }: ReturnProps) => {
+  const { setDownloadRecord, history, view, setView, returnHistory, selectedId, setSelectedId } = useHistory<HistoryUserResponse>(
+    { historyURL: "/api/history/user/get/data" },
+  );
 
+  if (view === "Sort") {
+    return <HistoryUserSort returnHistory={returnHistory} setDownloadRecord={setDownloadRecord}></HistoryUserSort>;
+  }
   return (
     <div className="flex flex-col">
       <h2>ユーザー情報変更履歴</h2>
@@ -44,39 +50,39 @@ const HistoryUser = ({returnTop}:ReturnProps) => {
           </li>
         </ul>
         <ul className="min-w-max text-xs h-61 overflow-y-auto border border-b-black rounded-b-md">
-          {sortHistory.map((history) => (
+          {history.map((item) => (
             <li
-              key={history.date}
-              onClick={() => liHandle(history)}
+              key={item.date}
+              onClick={() => setSelectedId(item.id)}
               className={`flex min-w-max ml-2 mr-2 items-center border-b border-b-gray-500 cursor-pointer
-            ${history.targetId === selectedId ? " bg-gray-200" : " bg-white"}`}
+            ${item.id === selectedId ? " bg-gray-200" : " bg-white"}`}
             >
-              <span className="block w-35 ml-1">{history.action}</span>
+              <span className="block w-35 ml-1">{item.action}</span>
               <div className="block w-35 ml-1">
                 <span className="flex justify-center border-b border-b-gray-200 after:content-['\00a0']">
-                  {history.oldLoginUser}
+                  {item.oldLoginUser}
                 </span>
-                <span className="flex justify-center after:content-['\00a0']">{history.newLoginUser}</span>
+                <span className="flex justify-center after:content-['\00a0']">{item.newLoginUser}</span>
               </div>
               <div className="block w-35 ml-1">
                 <span className="flex justify-center border-b border-b-gray-200 after:content-['\00a0']">
-                  {history.oldDisplayedUser}
+                  {item.oldDisplayedUser}
                 </span>
-                <span className="flex justify-center after:content-['\00a0']">{history.newDisplayedUser}</span>
+                <span className="flex justify-center after:content-['\00a0']">{item.newDisplayedUser}</span>
               </div>
               <div className="block w-35 ml-1">
-                <span className="flex justify-center border-b border-b-gray-200 after:content-['\00a0']">{history.oldRole}</span>
-                <span className="flex justify-center after:content-['\00a0']">{history.newRole}</span>
+                <span className="flex justify-center border-b border-b-gray-200 after:content-['\00a0']">{item.oldRole}</span>
+                <span className="flex justify-center after:content-['\00a0']">{item.newRole}</span>
               </div>
-              <span className="block w-35 ml-1">{history.actionUser}</span>
-              <span className="block w-35 ml-1">{history.date}</span>
+              <span className="block w-35 ml-1">{item.actionUser}</span>
+              <span className="block w-35 ml-1">{item.date}</span>
             </li>
           ))}
         </ul>
       </div>
 
       <div className="flex justify-center gap-5">
-        <DefaultButton onClick={filterHandle}>{isFilter ? "抽出解除" : "ユーザー抽出"}</DefaultButton>
+        <DefaultButton onClick={() => setView("Sort")}>ソート</DefaultButton>
         <DefaultButton onClick={returnTop}>戻る</DefaultButton>
       </div>
     </div>

@@ -17,6 +17,7 @@ type UeGetMappingReturn<T> = {
 export const useGetMapping = <T>({ URL, params }: UeGetMappingProps): UeGetMappingReturn<T> => {
   const [data, setData] = useState<T[]>([]);
   const [sortData, setSortData] = useState<T[]>([]);
+  const paramsKey = JSON.stringify(params);
 
   const getData = useCallback(async () => {
     try {
@@ -26,7 +27,7 @@ export const useGetMapping = <T>({ URL, params }: UeGetMappingProps): UeGetMappi
     } catch (error) {
       errorHandling(error);
     }
-  }, [URL, params]);
+  }, [URL, paramsKey]);
 
   useEffect(() => {
     getData();

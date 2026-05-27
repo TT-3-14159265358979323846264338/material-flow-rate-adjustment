@@ -1,10 +1,11 @@
 import DefaultButton from "../../components/DefaultButton";
 import { type HistoryUserConfig } from "../../../types/historyUserConfig";
-import { useHistory } from "../../hooks/useHistory";
 import { ReturnProps } from "../../types/returnProps";
+import HistoryMaterialSort from "./HistoryMaterialSort";
+import { useHistory } from "../../hooks/useHistory";
 
 type HistoryMaterialResponse = {
-  targetId: number;
+  id: number;
   oldName: string;
   newName: string;
   oldDestination: string;
@@ -15,10 +16,13 @@ type HistoryMaterialResponse = {
 };
 
 const HistoryMaterial = ({ returnTop }: ReturnProps) => {
-  const { sortHistory, selectedId, isFilter, liHandle, filterHandle } = useHistory<HistoryMaterialResponse>({
-    URL: "/api/history/material/get/data",
-  });
+  const { setDownloadRecord, history, view, setView, returnHistory, selectedId, setSelectedId } = useHistory<HistoryMaterialResponse>(
+    { historyURL: "/api/history/material/get/data"  }
+  );
 
+  if (view === "Sort") {
+    return (<HistoryMaterialSort returnHistory={returnHistory} setDownloadRecord={setDownloadRecord}></HistoryMaterialSort>);
+  }
   return (
     <div className="flex flex-col">
       <h2>製品情報変更履歴</h2>
@@ -39,33 +43,33 @@ const HistoryMaterial = ({ returnTop }: ReturnProps) => {
           </li>
         </ul>
         <ul className="min-w-max text-xs h-61 overflow-y-auto border border-b-black rounded-b-md">
-          {sortHistory.map((history) => (
+          {history.map((item) => (
             <li
-              key={history.date}
-              onClick={() => liHandle(history)}
+              key={item.id}
+              onClick={() => setSelectedId(item.id)}
               className={`flex min-w-max ml-2 mr-2 items-center border-b border-b-gray-500 cursor-pointer
-            ${history.targetId === selectedId ? " bg-gray-200" : " bg-white"}`}
+            ${item.id === selectedId ? " bg-gray-200" : " bg-white"}`}
             >
-              <span className="block w-35 ml-1">{history.action}</span>
+              <span className="block w-35 ml-1">{item.action}</span>
               <div className="block w-35 ml-1">
-                <span className="flex justify-center border-b border-b-gray-200 after:content-['\00a0']">{history.oldName}</span>
-                <span className="flex justify-center after:content-['\00a0']">{history.newName}</span>
+                <span className="flex justify-center border-b border-b-gray-200 after:content-['\00a0']">{item.oldName}</span>
+                <span className="flex justify-center after:content-['\00a0']">{item.newName}</span>
               </div>
               <div className="block w-35 ml-1">
                 <span className="flex justify-center border-b border-b-gray-200 after:content-['\00a0']">
-                  {history.oldDestination}
+                  {item.oldDestination}
                 </span>
-                <span className="flex justify-center after:content-['\00a0']">{history.newDestination}</span>
+                <span className="flex justify-center after:content-['\00a0']">{item.newDestination}</span>
               </div>
-              <span className="block w-35 ml-1">{history.actionUser}</span>
-              <span className="block w-35 ml-1">{history.date}</span>
+              <span className="block w-35 ml-1">{item.actionUser}</span>
+              <span className="block w-35 ml-1">{item.date}</span>
             </li>
           ))}
         </ul>
       </div>
 
       <div className="flex justify-center gap-5">
-        <DefaultButton onClick={filterHandle}>{isFilter ? "抽出解除" : "製品抽出"}</DefaultButton>
+        <DefaultButton onClick={() => setView("Sort")}>ソート</DefaultButton>
         <DefaultButton onClick={returnTop}>戻る</DefaultButton>
       </div>
     </div>

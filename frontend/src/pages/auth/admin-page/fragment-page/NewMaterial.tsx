@@ -30,6 +30,7 @@ const NewMaterial = ({ returnTop }: ReturnProps) => {
       });
       alert(response.data.comment);
       setName("");
+      setDestination("");
     } catch (error) {
       errorHandling(error);
     } finally {

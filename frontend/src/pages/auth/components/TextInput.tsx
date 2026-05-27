@@ -17,7 +17,7 @@ const TextInput = ({children, value, maxLength, onChange}: TextInputProps) => (
       maxLength={maxLength}
       onChange={onChange}
       spellCheck="false"
-      className="border border-b-black rounded-md focus:outline-none focus:ring-2 focus:ring-amber-200 bg-white mb-2"
+      className="text-center border border-b-black rounded-md focus:outline-none focus:ring-2 focus:ring-amber-200 bg-white mb-2"
       required
     />
   </div>

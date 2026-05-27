@@ -1,51 +1,41 @@
-import { useState } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import { useGetMapping } from "./useGetMapping";
+import { useView } from "./useView";
+
+type ViewConfig = "Top" | "Sort";
 
 type UseHistoryProps = {
-  URL: string;
+  historyURL: string;
 };
 
-type TargetId = {
-  targetId: number;
-};
-
-type UseHistoryReturn<T extends TargetId> = {
-  sortHistory: T[];
+type UseHistoryReturn<T> = {
+  setDownloadRecord: Dispatch<SetStateAction<Record<string, any>>>;
+  history: T[];
+  view: ViewConfig;
+  setView: Dispatch<SetStateAction<ViewConfig>>;
+  returnHistory: () => void;
   selectedId: number | undefined;
-  isFilter: boolean;
-  liHandle: (data: T) => void;
-  filterHandle: () => void;
+  setSelectedId: Dispatch<SetStateAction<number | undefined>>;
 };
 
-export const useHistory = <T extends TargetId>({ URL }: UseHistoryProps): UseHistoryReturn<T> => {
-  const { data: history, sortData: sortHistory, setSortData: setSortHistory } = useGetMapping<T>({ URL });
+export const useHistory = <T>({ historyURL }: UseHistoryProps): UseHistoryReturn<T> => {
+  const [downloadRecord, setDownloadRecord] = useState<Record<string, any>>({
+    number: 50,
+  });
+  const { data: history, getData: getHistoryData } = useGetMapping<T>({
+    URL: historyURL,
+    params: downloadRecord,
+  });
+  const { view, setView, returnTop: returnHistory } = useView<ViewConfig>({ getData: getHistoryData });
   const [selectedId, setSelectedId] = useState<number>();
-  const [isFilter, setIsFilter] = useState<boolean>(false);
-
-  const liHandle = (item: T) => {
-    setSelectedId(item.targetId);
-  };
-
-  const filterHandle = () => {
-    if (!selectedId) {
-      alert("項目が選択されていません。\n" + "項目を選択するとその項目の修正履歴が抽出されます。");
-      return;
-    }
-    if (isFilter) {
-      setSortHistory(history);
-      setIsFilter(false);
-      return;
-    }
-    const filterArray = history.filter((item) => item.targetId === selectedId);
-    setSortHistory(filterArray);
-    setIsFilter(true);
-  };
 
   return {
-    sortHistory,
+    setDownloadRecord,
+    history,
+    view,
+    setView,
+    returnHistory,
     selectedId,
-    isFilter,
-    liHandle,
-    filterHandle,
+    setSelectedId,
   };
 };

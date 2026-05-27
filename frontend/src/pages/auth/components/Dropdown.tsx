@@ -13,7 +13,7 @@ const Dropdown = ({children, value, onChange, list}: DropdownProps) => (
     <select
       value={value}
       onChange={onChange}
-      className="border border-b-black rounded-md focus:outline-none focus:ring-2 focus:ring-amber-200 bg-white mb-2 cursor-pointer"
+      className="text-center border border-b-black rounded-md focus:outline-none focus:ring-2 focus:ring-amber-200 bg-white mb-2 cursor-pointer"
       required
     >
       {list.map((item) => (

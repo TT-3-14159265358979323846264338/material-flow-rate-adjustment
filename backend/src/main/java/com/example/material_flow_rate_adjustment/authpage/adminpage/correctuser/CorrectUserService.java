@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import com.example.material_flow_rate_adjustment.authpage.HistoryService;
 import com.example.material_flow_rate_adjustment.authpage.UtilityService;
 import com.example.material_flow_rate_adjustment.errorhandling.DataBaseException;
 import com.example.material_flow_rate_adjustment.savedata.historydata.AccountHistoryRepository;
@@ -23,6 +24,7 @@ public class CorrectUserService {
 	private final AccountRepository repository;
 	private final AccountHistoryRepository historyRepository;
 	private final UtilityService utility;
+	private final HistoryService historyService;
 	
 	@Transactional(readOnly = true)
 	public List<Account> getUser() {
@@ -65,17 +67,7 @@ public class CorrectUserService {
 	}
 	
 	void setHistory(AccountSQL loginAccount, AccountHistorySQL newHistory) {
-		if(newHistory.getTargetId() == null) {
-			return;
-		}
-		saveHistory(loginAccount, newHistory, HistoryEnum.CHANGE);
-	}
-	
-	void saveHistory(AccountSQL loginAccount, AccountHistorySQL newHistory, HistoryEnum code) {
-		newHistory.setAction(code.name());
-		newHistory.setActionId(loginAccount.getId());
-		newHistory.setActionUser(loginAccount.getDisplayedUser());
-		historyRepository.save(newHistory);
+		historyService.saveHistory(loginAccount, newHistory, historyRepository, HistoryEnum.CHANGE);
 	}
 	
 	void setLoginName(AccountSQL targetAccount, AccountHistorySQL newHistory, String newLoginName) {
@@ -127,7 +119,7 @@ public class CorrectUserService {
 			newHistory.setOldDisplayedUser(targetAccount.getDisplayedUser());
 			newHistory.setOldRole(targetAccount.getRole());
 			repository.delete(targetAccount);
-			saveHistory(loginAccount, newHistory, HistoryEnum.DELETE);
+			historyService.saveHistory(loginAccount, newHistory, historyRepository, HistoryEnum.DELETE);
 		}
 		return isDeleted;
 	}

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import com.example.material_flow_rate_adjustment.authpage.HistoryService;
 import com.example.material_flow_rate_adjustment.authpage.UtilityService;
 import com.example.material_flow_rate_adjustment.errorhandling.NotFindException;
 import com.example.material_flow_rate_adjustment.savedata.historydata.HistoryEnum;
@@ -22,6 +23,7 @@ public class CorrectMaterialService {
 	private final MaterialRepository materialRepository;
 	private final MaterialHistoryRepository historyRepository;
 	private final UtilityService utility;
+	private final HistoryService historyService;
 	
 	@Transactional(readOnly = true)
 	public List<Material> getMaterial(){
@@ -45,9 +47,7 @@ public class CorrectMaterialService {
 		}
 		setName(account, material, newHistory, data.newName());
 		setDestination(account, material, newHistory, data.newDestination());
-		if(newHistory.getTargetId() != null) {
-			save(account, newHistory, HistoryEnum.CHANGE);
-		}
+		historyService.saveHistory(account, newHistory, historyRepository, HistoryEnum.CHANGE);
 		return false;
 	}
 	
@@ -91,13 +91,6 @@ public class CorrectMaterialService {
 		newHistory.setOldName(material.getName());
 		newHistory.setOldDestination(material.getDestination());
 		materialRepository.delete(material);
-		save(account, newHistory, HistoryEnum.DELETE);
-	}
-	
-	void save(AccountSQL account, MaterialHistorySQL newHistory, HistoryEnum code) {
-		newHistory.setAction(code.name());
-		newHistory.setActionId(account.getId());
-		newHistory.setActionUser(account.getDisplayedUser());
-		historyRepository.save(newHistory);
+		historyService.saveHistory(account, newHistory, historyRepository, HistoryEnum.DELETE);
 	}
 }

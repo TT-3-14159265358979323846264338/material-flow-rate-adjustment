@@ -5,6 +5,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.material_flow_rate_adjustment.authpage.DefaultHistoryFilterRecord;
+
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -14,7 +16,7 @@ public class HistoryMaterialController {
 	
 	@GetMapping("/api/history/material/get/data")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> adminGetMaterialHistory() {
-		return ResponseEntity.ok(historyMaterialService.getHistory());
+	public ResponseEntity<?> adminGetMaterialHistory(DefaultHistoryFilterRecord filter) {
+		return ResponseEntity.ok(historyMaterialService.getHistory(filter));
 	}
 }

@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.example.material_flow_rate_adjustment.authpage.DefaultHistoryFilterRecord;
+import com.example.material_flow_rate_adjustment.authpage.HistoryService;
 import com.example.material_flow_rate_adjustment.savedata.historydata.MaterialHistoryRepository;
 import com.example.material_flow_rate_adjustment.savedata.historydata.MaterialHistorySQL;
 
@@ -14,14 +17,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class HistoryMaterialService {
 	private final MaterialHistoryRepository repository;
+	private final HistoryService historyService;
 	
 	@Transactional(readOnly = true)
-	public List<History> getHistory() {
-		return repository.findAll().stream().map(this::createHistory).toList();
+	public List<History> getHistory(DefaultHistoryFilterRecord filter) {
+		return historyService.getHistory(filter, repository).map(this::createHistory).toList();
 	}
 	
 	History createHistory(MaterialHistorySQL history) {
-		return new History(history.getTargetId(),
+		return new History(history.getId(),
 				history.getOldName(),
 				history.getNewName(),
 				history.getOldDestination(),
@@ -31,7 +35,7 @@ public class HistoryMaterialService {
 				history.getDate());
 	}
 	
-	record History(Integer targetId,
+	record History(Integer id,
 			String oldName, 
 			String newName, 
 			String oldDestination, 

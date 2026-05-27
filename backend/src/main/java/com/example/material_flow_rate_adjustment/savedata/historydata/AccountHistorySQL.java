@@ -1,35 +1,23 @@
 package com.example.material_flow_rate_adjustment.savedata.historydata;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "account_history")
 @Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountHistorySQL {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(columnDefinition = "INT UNSIGNED AUTO_INCREMENT", updatable = false)
-	@Setter(AccessLevel.NONE)
-	private Integer id;
-	
-	@Column(name = "target_id", columnDefinition = "INT UNSIGNED", nullable = false, updatable = false)
-	private Integer targetId;
-	
+public class AccountHistorySQL extends BaseHistorySQL{
 	@Column(name = "old_login_user", length = 20, updatable = false)
 	private String oldLoginUser;
 	
@@ -47,16 +35,4 @@ public class AccountHistorySQL {
 	
 	@Column(name = "new_role", length = 10, updatable = false)
 	private String newRole;
-	
-	@Column(length = 10, nullable = false, updatable = false)
-	private String action;
-	
-	@Column(name = "action_id", columnDefinition = "INT UNSIGNED", nullable = false, updatable = false)
-	private Integer actionId;
-	
-	@Column(name = "action_user", length = 10, nullable = false, updatable = false)
-	private String actionUser;
-	
-	@Column(columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP", nullable = false, insertable = false, updatable = false)
-	private LocalDateTime date;
 }

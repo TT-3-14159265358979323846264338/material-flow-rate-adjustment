@@ -5,3 +5,7 @@ export const onlyHalfWidthAlphanumericCharacters = (value: string): string => {
 export const onlyHalfWidthCharacters = (value: string): string => {
   return value.replace(/[^A-Za-z0-9!@#$%^&*()_+\-=\[\]{};':",./<>?]/g, "");
 };
+
+export const onlyNumber = (value: string): string => {
+  return value.replace(/[^0-9]/g, "");
+};

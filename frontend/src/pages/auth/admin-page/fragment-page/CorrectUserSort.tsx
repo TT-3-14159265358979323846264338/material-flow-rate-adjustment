@@ -4,20 +4,14 @@ import RadioInput from "../../components/RadioInput";
 import CheckInput from "../../components/CheckInput";
 import DefaultButton from "../../components/DefaultButton";
 import { type Order, ORDER } from "../../types/orderConfig";
+import { UserResponse } from "../types/userResponse";
 
 const ORDER_CODE = ["ID", "ユーザー名", "権限"] as const;
 type OrderCode = typeof ORDER_CODE[number];
 
-type CorrectUserResponse = {
-  id: number;
-  loginName: string;
-  displayedName: string;
-  role: Role;
-};
-
 type CorrentUserSortProps = {
-  accountData: CorrectUserResponse[];
-  setSortData: Dispatch<SetStateAction<CorrectUserResponse[]>>;
+  accountData: UserResponse[];
+  setSortData: Dispatch<SetStateAction<UserResponse[]>>;
   returnTop: () => void;
 };
 
@@ -32,10 +26,10 @@ const CorrectUserSort = ({accountData, setSortData, returnTop}: CorrentUserSortP
     { isSelected: isUser, setIsSelected: setIsUser, role: ROLES[1] },
     { isSelected: isManager, setIsSelected: setIsManager, role: ROLES[2] },
   ], [isAdmin, isUser, isManager]);
-  const filter = (isSelected: boolean, role: Role, array: CorrectUserResponse[]) => {
-    return !isSelected? array.filter((account) => account.role !== role): array;
+  const filter = (isSelected: boolean, role: Role, array: UserResponse[]) => {
+    return !isSelected ? array.filter((account) => account.role !== role) : array;
   };
-  const sort = (array: CorrectUserResponse[]) => {
+  const sort = (array: UserResponse[]) => {
     switch (orderCode) {
       case "ID":
         return array;

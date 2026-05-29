@@ -2,26 +2,21 @@ import { useState, Dispatch, SetStateAction } from "react";
 import RadioInput from "../../components/RadioInput";
 import DefaultButton from "../../components/DefaultButton";
 import { type Order, ORDER } from "../../types/orderConfig";
+import { MaterialResponse } from "../../types/materialResponse";
 
 const ORDER_CODE = ["ID", "製品名", "向け先"] as const;
 type OrderCode = (typeof ORDER_CODE)[number];
 
-type CorrectMaterialResponse = {
-  id: number;
-  name: string;
-  destination: string;
-};
-
 type CorrentMaterialSortProps = {
-  materialData: CorrectMaterialResponse[];
-  setSortData: Dispatch<SetStateAction<CorrectMaterialResponse[]>>;
+  materialData: MaterialResponse[];
+  setSortData: Dispatch<SetStateAction<MaterialResponse[]>>;
   returnTop: () => void;
 };
 
 const CorrectMaterialSort = ({ materialData, setSortData, returnTop }: CorrentMaterialSortProps) => {
   const [order, setOrder] = useState<Order>("昇順");
   const [orderCode, setOrderCode] = useState<OrderCode>("ID");
-  const sort = (array: CorrectMaterialResponse[]) => {
+  const sort = (array: MaterialResponse[]) => {
     switch (orderCode) {
       case "ID":
         return array;

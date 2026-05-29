@@ -3,12 +3,12 @@ import TopPageTab from '../components/TopPageTab';
 import { TabConfig } from '../types/tabConfig';
 import Logout from '../common-fragment-page/Logout';
 import CorrectPassword from '../common-fragment-page/CorrectPassowrd';
-import CorrectPlan from './fragment-page/CorrectPlan';
+import PlanManagement from './fragment-page/PlanManagement';
 
 type TabKey =
   | "check-now-material"
   | "check-achievement"
-  | "schedule-management"
+  | "plan-management"
   | "calendar-management"
   | "change-user"
   | "logout";
@@ -28,9 +28,9 @@ const ManagerPage = () => {
       content: <p>既存の実績を確認する</p>,
     },
     {
-      id: "schedule-management",
+      id: "plan-management",
       label: "計画管理",
-      content: <CorrectPlan></CorrectPlan>,
+      content: <PlanManagement></PlanManagement>,
     },
     {
       id: "calendar-management",

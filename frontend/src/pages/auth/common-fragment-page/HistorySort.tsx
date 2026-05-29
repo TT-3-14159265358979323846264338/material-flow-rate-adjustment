@@ -3,7 +3,7 @@ import { useGetMapping } from "../hooks/useGetMapping";
 import TextInput from "../components/TextInput";
 import Dropdown from "../components/Dropdown";
 import DefaultButton from "../components/DefaultButton";
-import { monthArray, yearArray } from "../utils/termArray";
+import { monthArray, allYearArray } from "../utils/termArray";
 
 type HistorySortProps<T> = {
   returnHistory: () => void;
@@ -54,14 +54,14 @@ const HistorySort = <T extends { id: number }>({ returnHistory, setDownloadRecor
           最大検索数
         </TextInput>
         <div className="flex items-center gap-3 *:flex-1 *:block">
-          <Dropdown value={minYear} onChange={(e) => setMinYear(e.target.value)} list={yearArray()}>
+          <Dropdown value={minYear} onChange={(e) => setMinYear(e.target.value)} list={allYearArray()}>
             年
           </Dropdown>
           <Dropdown value={minMonth} onChange={(e) => setMinMonth(e.target.value)} list={monthArray()}>
             月
           </Dropdown>
           <span>～</span>
-          <Dropdown value={maxYear} onChange={(e) => setMaxYear(e.target.value)} list={yearArray()}>
+          <Dropdown value={maxYear} onChange={(e) => setMaxYear(e.target.value)} list={allYearArray()}>
             年
           </Dropdown>
           <Dropdown value={maxMonth} onChange={(e) => setMaxMonth(e.target.value)} list={monthArray()}>

@@ -11,14 +11,10 @@ import { useGetMapping } from "../../hooks/useGetMapping";
 import { useView } from "../../hooks/useView";
 import { CommentPostResponse } from "../../types/commentPostResponse";
 import HistoryMaterial from "./HistoryMaterial";
-
-type ViewConfig = "Top" | "Sort" | "New" | "History";
-
-type CorrectMaterialResponse = {
-  id: number;
-  name: string;
-  destination: string;
-};
+import { SimpleViewConfig } from "../../types/ViewConfig";
+import { MaterialResponse } from "../../types/materialResponse";
+import MaterialBaseInput from "../components/MaterialBaseInput";
+import MaterialUnitInput from "../components/MaterialUnitInput";
 
 const CorrectMatterial = () => {
   const {
@@ -26,11 +22,13 @@ const CorrectMatterial = () => {
     sortData: sortData,
     setSortData: setSortData,
     getData: getMaterialData,
-  } = useGetMapping<CorrectMaterialResponse>({ URL: "/api/correct/material/get/data" });
-  const { view, setView, returnTop, newDataReturnTop } = useView<ViewConfig>({ getData: getMaterialData });
-  const [selectedMaterial, setSelectedMaterial] = useState<CorrectMaterialResponse>();
+  } = useGetMapping<MaterialResponse>({ URL: "/api/correct/material/get/data" });
+  const { view, setView, returnTop, newDataReturnTop } = useView<SimpleViewConfig>({ getData: getMaterialData });
+  const [selectedMaterial, setSelectedMaterial] = useState<MaterialResponse>();
   const [newName, setNewName] = useState<string>("");
   const [newDestination, setDestination] = useState<string>("");
+  const [newBase, setNewBase] = useState<string>("");
+  const [newUnit, setNewUnit] = useState<string>("");
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
@@ -55,6 +53,8 @@ const CorrectMatterial = () => {
         targetId,
         newName,
         newDestination,
+        newBase,
+        newUnit,
         isDeleted,
       });
       alert(response.data.comment);
@@ -96,6 +96,8 @@ const CorrectMatterial = () => {
                   setNewName(data.name);
                   setDestination(data.destination);
                   setIsDeleted(false);
+                  data.base ? setNewBase(data.base) : setNewBase("");
+                  setNewUnit(data.unit);
                 }}
                 className={`ml-2 mr-2 gap-2 flex items-center border-b border-b-gray-300 cursor-pointer
                   ${data.id === selectedMaterial?.id ? " bg-gray-200" : " bg-white"}`}
@@ -109,12 +111,16 @@ const CorrectMatterial = () => {
 
         <div className="w-50 ml-5">
           <h2>修正内容</h2>
-          <span className="text-xs text-left pb-2">※空欄及び未変更の項目は修正しない。</span>
+          <span className="text-xs text-left pb-2">※空欄/未変更項目は修正しない。</span>
           {selectedMaterial ? (
             <div>
               <div className="mb-5">
                 <MaterialNameInput name={newName} setName={setNewName}></MaterialNameInput>
                 <MaterialDestinationInput name={newDestination} setName={setDestination}></MaterialDestinationInput>
+                <div className="flex gap-5">
+                  <MaterialBaseInput base={newBase} setBase={setNewBase}></MaterialBaseInput>
+                  <MaterialUnitInput unit={newUnit} setUnit={setNewUnit}></MaterialUnitInput>
+                </div>
               </div>
               <CheckInput isChecked={isDeleted} setChecked={setIsDeleted}>製品削除</CheckInput>
             </div>

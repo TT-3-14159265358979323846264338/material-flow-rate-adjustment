@@ -10,6 +10,10 @@ type HistoryMaterialResponse = {
   newName: string;
   oldDestination: string;
   newDestination: string;
+  oldBase: string;
+  newBase: string;
+  oldUnit: string;
+  newUnit: string;
   action: HistoryUserConfig;
   actionUser: string;
   date: string;
@@ -26,46 +30,62 @@ const HistoryMaterial = ({ returnTop }: ReturnProps) => {
   return (
     <div className="flex flex-col">
       <h2>製品情報変更履歴</h2>
-      <div className="w-195 overflow-x-auto whitespace-nowrap rounded-s-md bg-white">
-        <ul className="min-w-max text-sm border rounded-t-md">
-          <li className="flex items-center ml-2 mr-2">
-            <span className="block w-35 ml-1">修正内容</span>
-            <div className="block w-35 ml-1">
-              <span className="flex justify-center border-b border-b-gray-200">前 製品名</span>
-              <span className="flex justify-center">後 製品名</span>
-            </div>
-            <div className="block w-35 ml-1">
-              <span className="flex justify-center border-b border-b-gray-200">前 向け先</span>
-              <span className="flex justify-center">後 向け先</span>
-            </div>
-            <span className="block w-35 ml-1">実行管理者</span>
-            <span className="block w-35 ml-1">日付</span>
-          </li>
-        </ul>
-        <ul className="min-w-max text-xs h-61 overflow-y-auto border border-b-black rounded-b-md">
-          {history.map((item) => (
-            <li
-              key={item.id}
-              onClick={() => setSelectedId(item.id)}
-              className={`flex min-w-max ml-2 mr-2 items-center border-b border-b-gray-500 cursor-pointer
-            ${item.id === selectedId ? " bg-gray-200" : " bg-white"}`}
-            >
-              <span className="block w-35 ml-1">{item.action}</span>
-              <div className="block w-35 ml-1">
-                <span className="flex justify-center border-b border-b-gray-200 after:content-['\00a0']">{item.oldName}</span>
-                <span className="flex justify-center after:content-['\00a0']">{item.newName}</span>
+      <div className="w-195 h-75 overflow-y-auto overflow-x-auto rounded-s-md bg-white">
+        <div className="min-w-max">
+          <ul className="sticky top-0 text-sm border rounded-t-md bg-white">
+            <li className="flex items-center ml-2 mr-2 *:block *:w-35 *:ml-1">
+              <span>修正内容</span>
+              <div className="*:flex *:justify-center">
+                <span className="border-b border-b-gray-200">前 製品名</span>
+                <span>後 製品名</span>
               </div>
-              <div className="block w-35 ml-1">
-                <span className="flex justify-center border-b border-b-gray-200 after:content-['\00a0']">
-                  {item.oldDestination}
-                </span>
-                <span className="flex justify-center after:content-['\00a0']">{item.newDestination}</span>
+              <div className="*:flex *:justify-center">
+                <span className="border-b border-b-gray-200">前 向け先</span>
+                <span>後 向け先</span>
               </div>
-              <span className="block w-35 ml-1">{item.actionUser}</span>
-              <span className="block w-35 ml-1">{item.date}</span>
+              <div className="*:flex *:justify-center">
+                <span className="border-b border-b-gray-200">前 基本製造量</span>
+                <span>後 基本製造量</span>
+              </div>
+              <div className="*:flex *:justify-center">
+                <span className="border-b border-b-gray-200">前 納入単位</span>
+                <span>後 納入単位</span>
+              </div>
+              <span>実行管理者</span>
+              <span>日付</span>
             </li>
-          ))}
-        </ul>
+          </ul>
+          <ul className="text-xs border border-b-black rounded-b-md">
+            {history.map((item) => (
+              <li
+                key={item.id}
+                onClick={() => setSelectedId(item.id)}
+                className={`flex min-w-max ml-2 mr-2 items-center border-b border-b-gray-500 cursor-pointer  *:block *:w-35 *:ml-1
+            ${item.id === selectedId ? " bg-gray-200" : " bg-white"}`}
+              >
+                <span>{item.action}</span>
+                <div className="*:flex *:justify-center *:after:content-['\00a0']">
+                  <span className="border-b border-b-gray-200">{item.oldName}</span>
+                  <span>{item.newName}</span>
+                </div>
+                <div className="*:flex *:justify-center *:after:content-['\00a0']">
+                  <span className="border-b border-b-gray-200">{item.oldDestination}</span>
+                  <span>{item.newDestination}</span>
+                </div>
+                <div className="*:flex *:justify-center *:after:content-['\00a0']">
+                  <span className="border-b border-b-gray-200">{item.oldBase}</span>
+                  <span>{item.newBase}</span>
+                </div>
+                <div className="*:flex *:justify-center *:after:content-['\00a0']">
+                  <span className="border-b border-b-gray-200">{item.oldUnit}</span>
+                  <span>{item.newUnit}</span>
+                </div>
+                <span>{item.actionUser}</span>
+                <span>{item.date}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       <div className="flex justify-center gap-5">

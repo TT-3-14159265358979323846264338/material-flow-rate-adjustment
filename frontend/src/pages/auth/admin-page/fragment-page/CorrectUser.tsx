@@ -15,15 +15,8 @@ import { useGetMapping } from "../../hooks/useGetMapping";
 import { useView } from "../../hooks/useView";
 import { CommentPostResponse } from "../../types/commentPostResponse";
 import HistoryUser from "./HistoryUser";
-
-type ViewConfig = "Top" | "Sort" | "New" | "History";
-
-type CorrectUserResponse = {
-  id: number;
-  loginName: string;
-  displayedName: string;
-  role: Role;
-};
+import { SimpleViewConfig } from "../../types/ViewConfig";
+import { UserResponse } from "../types/userResponse";
 
 const CorrectUser = () => {
   const {
@@ -31,9 +24,9 @@ const CorrectUser = () => {
     sortData: sortData,
     setSortData: setSortData,
     getData: getAccountData,
-  } = useGetMapping<CorrectUserResponse>({ URL: "/api/correct/user/admin/get/data" });
-  const { view, setView, returnTop, newDataReturnTop } = useView<ViewConfig>({ getData: getAccountData });
-  const [selectedAccount, setSelectedAccount] = useState<CorrectUserResponse>();
+  } = useGetMapping<UserResponse>({ URL: "/api/correct/user/admin/get/data" });
+  const { view, setView, returnTop, newDataReturnTop } = useView<SimpleViewConfig>({ getData: getAccountData });
+  const [selectedAccount, setSelectedAccount] = useState<UserResponse>();
   const [newLoginName, setNewLoginName] = useState<string>("");
   const [newDisplayedName, setDisplayedName] = useState<string>("");
   const [newRole, setNewRole] = useState<Role>(ROLES[1]);
@@ -125,7 +118,7 @@ const CorrectUser = () => {
 
         <div className="w-50 ml-5">
           <h2>修正内容</h2>
-          <span className="text-xs text-left pb-2">※空欄及び未変更の項目は修正しない。</span>
+          <span className="text-xs text-left pb-2">※空欄/未変更項目は修正しない。</span>
           {selectedAccount ? (
             isThisAccountId(selectedAccount.id) ? (
               <div>
@@ -145,7 +138,9 @@ const CorrectUser = () => {
                   <DisplayedUserNameInput name={newDisplayedName} setName={setDisplayedName}></DisplayedUserNameInput>
                   <RoleDropdown role={newRole} setRole={setNewRole}></RoleDropdown>
                 </div>
-                <CheckInput isChecked={isDeleted} setChecked={setIsDeleted}>アカウント削除</CheckInput>
+                <CheckInput isChecked={isDeleted} setChecked={setIsDeleted}>
+                  アカウント削除
+                </CheckInput>
               </div>
             )
           ) : (

@@ -8,6 +8,8 @@ import com.example.material_flow_rate_adjustment.errorhandling.DataBaseException
 import com.example.material_flow_rate_adjustment.errorhandling.NotFindException;
 import com.example.material_flow_rate_adjustment.savedata.maindata.AccountRepository;
 import com.example.material_flow_rate_adjustment.savedata.maindata.AccountSQL;
+import com.example.material_flow_rate_adjustment.savedata.maindata.MaterialRepository;
+import com.example.material_flow_rate_adjustment.savedata.maindata.MaterialSQL;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class UtilityService {
 	private final AccountRepository accountRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final MaterialRepository materialRepository;
 	
 	public AccountSQL getAccountSQL(String loginUser) {
 		return getAccountSQL(Integer.parseInt(loginUser));
@@ -35,5 +38,9 @@ public class UtilityService {
 				throw new DataBaseException("以前のパスワードが一致しないため、処理を停止しました。");
 			}
 		}
+	}
+	
+	public MaterialSQL getMaterialSQL(int id) {
+		return materialRepository.findById(id).orElseThrow(() -> new NotFindException("製品が見つかりません。"));
 	}
 }

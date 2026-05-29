@@ -36,7 +36,7 @@ public class AdjustmentSQL {
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adjustment_id", referencedColumnName = "id", columnDefinition = "INT UNSIGNED", nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private MonthAdjustmentSQL monthAdjustment;
+	private MonthPlanSQL monthAdjustment;
 	
 	@Column(columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP", nullable = false, insertable = false, updatable = false)
 	private LocalDateTime date;

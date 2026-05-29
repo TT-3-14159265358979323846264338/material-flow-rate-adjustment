@@ -30,6 +30,10 @@ public class HistoryMaterialService {
 				history.getNewName(),
 				history.getOldDestination(),
 				history.getNewDestination(),
+				history.getOldBase(),
+				history.getNewBase(),
+				history.getOldUnit(),
+				history.getNewUnit(),
 				history.getAction(),
 				history.getActionUser(),
 				history.getDate());
@@ -40,6 +44,10 @@ public class HistoryMaterialService {
 			String newName, 
 			String oldDestination, 
 			String newDestination, 
+			Integer oldBase, 
+			Integer newBase, 
+			String oldUnit, 
+			String newUnit, 
 			String action, 
 			String actionUser, 
 			LocalDateTime date) {}

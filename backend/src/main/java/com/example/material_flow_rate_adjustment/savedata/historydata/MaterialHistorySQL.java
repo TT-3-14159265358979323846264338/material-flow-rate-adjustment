@@ -29,4 +29,16 @@ public class MaterialHistorySQL extends BaseHistorySQL{
 	
 	@Column(name = "new_material_destination", length = 10, updatable = false)
 	private String newDestination;
+	
+	@Column(name = "old_base", columnDefinition = "INT UNSIGNED", updatable = false)
+	private Integer oldBase;
+	
+	@Column(name = "new_base", columnDefinition = "INT UNSIGNED", updatable = false)
+	private Integer newBase;
+	
+	@Column(name = "old_unit", length = 10, updatable = false)
+	private String oldUnit;
+	
+	@Column(name = "new_unit", length = 10, updatable = false)
+	private String newUnit;
 }

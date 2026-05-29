@@ -1,5 +1,6 @@
 package com.example.material_flow_rate_adjustment.authpage.adminpage.correctmaterial;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,10 +32,18 @@ public class CorrectMaterialService {
 	}
 	
 	Material createMaterial(MaterialSQL material) {
-		return new Material(material.getId(), material.getName(), material.getDestination());
+		return new Material(material.getId(), 
+				material.getName(), 
+				material.getDestination(), 
+				material.getBase(), 
+				material.getUnit());
 	}
 	
-	record Material(int id, String name, String destination) {}
+	record Material(int id, 
+			String name, 
+			String destination, 
+			Integer base, 
+			String unit) {}
 	
 	@Transactional
 	public boolean adminCorrectMaterialData(AdminCorrectMaterial data, String loginUser) {
@@ -45,8 +54,10 @@ public class CorrectMaterialService {
 			delete(account, material, newHistory);
 			return true;
 		}
-		setName(account, material, newHistory, data.newName());
-		setDestination(account, material, newHistory, data.newDestination());
+		setName(material, newHistory, data.newName());
+		setDestination(material, newHistory, data.newDestination());
+		setBase(material, newHistory, data.newBase());
+		setUnit(material, newHistory, data.newUnit());
 		historyService.saveHistory(account, newHistory, historyRepository, HistoryEnum.CHANGE);
 		return false;
 	}
@@ -60,7 +71,7 @@ public class CorrectMaterialService {
 		return new MaterialHistorySQL();
 	}
 	
-	void setName(AccountSQL account, MaterialSQL material, MaterialHistorySQL newHistory, String newName) {
+	void setName(MaterialSQL material, MaterialHistorySQL newHistory, String newName) {
 		if(!StringUtils.hasLength(newName)) {
 			return;
 		}
@@ -73,7 +84,7 @@ public class CorrectMaterialService {
 		material.setName(newName);
 	}
 	
-	void setDestination(AccountSQL account, MaterialSQL material, MaterialHistorySQL newHistory, String destination) {
+	void setDestination(MaterialSQL material, MaterialHistorySQL newHistory, String destination) {
 		if(!StringUtils.hasLength(destination)) {
 			return;
 		}
@@ -84,6 +95,30 @@ public class CorrectMaterialService {
 		newHistory.setOldDestination(material.getDestination());
 		newHistory.setNewDestination(destination);
 		material.setDestination(destination);
+	}
+	
+	void setBase(MaterialSQL material, MaterialHistorySQL newHistory, String base) {
+		Integer newBase = StringUtils.hasLength(base)? Integer.parseInt(base): null;
+		if(Objects.equals(material.getBase(), newBase)) {
+			return;
+		}
+		newHistory.setTargetId(material.getId());
+		newHistory.setOldBase(material.getBase());
+		newHistory.setNewBase(newBase);
+		material.setBase(newBase);
+	}
+	
+	void setUnit(MaterialSQL material, MaterialHistorySQL newHistory, String unit) {
+		if(!StringUtils.hasLength(unit)) {
+			return;
+		}
+		if(material.getUnit().equals(unit)) {
+			return;
+		}
+		newHistory.setTargetId(material.getId());
+		newHistory.setOldUnit(material.getUnit());
+		newHistory.setNewUnit(unit);
+		material.setUnit(unit);
 	}
 	
 	void delete(AccountSQL account, MaterialSQL material, MaterialHistorySQL newHistory) {

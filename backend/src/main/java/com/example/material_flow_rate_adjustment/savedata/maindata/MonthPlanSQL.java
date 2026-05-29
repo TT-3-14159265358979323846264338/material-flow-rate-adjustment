@@ -20,11 +20,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "month_adjustment")
+@Table(name = "month_plan")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MonthAdjustmentSQL {
+public class MonthPlanSQL {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(columnDefinition = "INT UNSIGNED AUTO_INCREMENT", updatable = false)

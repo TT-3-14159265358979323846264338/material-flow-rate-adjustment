@@ -2,7 +2,7 @@ import DefaultButton from "../../components/DefaultButton";
 import { type HistoryUserConfig } from "../../../types/historyUserConfig";
 import { ReturnProps } from "../../types/returnProps";
 import HistoryMaterialSort from "./HistoryMaterialSort";
-import { useHistory } from "../../hooks/useHistory";
+import { useHistory } from "../hooks/useHistory";
 
 type HistoryMaterialResponse = {
   id: number;

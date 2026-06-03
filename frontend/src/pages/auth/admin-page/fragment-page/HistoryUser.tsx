@@ -3,7 +3,7 @@ import { type HistoryUserConfig } from "../../../types/historyUserConfig";
 import { type Role } from "../../../types/roleConfig";
 import { ReturnProps } from "../../types/returnProps";
 import HistoryUserSort from "./HistoryUserSort";
-import { useHistory } from "../../hooks/useHistory";
+import { useHistory } from "../hooks/useHistory";
 
 type HistoryUserResponse = {
   id: number;

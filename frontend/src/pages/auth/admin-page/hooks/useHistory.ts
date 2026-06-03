@@ -1,6 +1,6 @@
 import { useState, Dispatch, SetStateAction } from "react";
-import { useGetMapping } from "./useGetMapping";
-import { useView } from "./useView";
+import { useGetMapping } from "../../hooks/useGetMapping";
+import { useView } from "../../hooks/useView";
 
 type ViewConfig = "Top" | "Sort";
 

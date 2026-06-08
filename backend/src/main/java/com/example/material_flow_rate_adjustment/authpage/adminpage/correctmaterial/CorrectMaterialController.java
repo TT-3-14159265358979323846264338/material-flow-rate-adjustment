@@ -20,7 +20,7 @@ public class CorrectMaterialController {
 	private final CorrectMaterialService correctMaterialService;
 	
 	@GetMapping("/api/correct/material/get/data")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
 	public ResponseEntity<?> adminGetData() {
 		return ResponseEntity.ok(correctMaterialService.getMaterial());
 	}

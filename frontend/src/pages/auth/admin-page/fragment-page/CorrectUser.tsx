@@ -54,12 +54,18 @@ const CorrectUser = () => {
       const targetId = selectedAccount.id;
       const response = isThisAccountId(targetId)
         ? await axios.post<CommentPostResponse>(
-            "http://localhost:8080/api/correct/user/admin/own",
+            import.meta.env.VITE_BACK_BASE_API + "/api/correct/user/admin/own",
             { newLoginName, newDisplayedName, newPass, oldPass },
           )
         : await axios.post<CommentPostResponse>(
-            "http://localhost:8080/api/correct/user/admin/user",
-            { targetId, newLoginName, newDisplayedName, newRole, isDeleted },
+            import.meta.env.VITE_BACK_BASE_API + "/api/correct/user/admin/user",
+            {
+              targetId,
+              newLoginName,
+              newDisplayedName,
+              newRole,
+              isDeleted,
+            },
           );
       alert(response.data.comment);
       setSelectedAccount(undefined);

@@ -21,7 +21,7 @@ export const useGetMapping = <T>({ URL, params }: UeGetMappingProps): UeGetMappi
 
   const getData = useCallback(async () => {
     try {
-      const response = await axios.get<T[]>("http://localhost:8080" + URL, { params });
+      const response = await axios.get<T[]>(import.meta.env.VITE_BACK_BASE_API + URL, { params });
       setData(response.data);
       setSortData(response.data);
     } catch (error) {

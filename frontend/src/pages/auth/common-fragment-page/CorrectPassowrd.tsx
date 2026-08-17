@@ -23,10 +23,13 @@ const CorrectPassword = () => {
     }
     setIsSubmitting(true);
     try {
-      const response = await axios.post<CommentPostResponse>("http://localhost:8080/api/correct/password", {
-        oldPass,
-        newPass,
-      });
+      const response = await axios.post<CommentPostResponse>(
+        import.meta.env.VITE_BACK_BASE_API + "/api/correct/password",
+        {
+          oldPass,
+          newPass,
+        },
+      );
       alert(response.data.comment);
       setOldPass("");
       setNewPass("");

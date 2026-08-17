@@ -49,7 +49,7 @@ const CorrectMatterial = () => {
     setIsSubmitting(true);
     try {
       const targetId = selectedMaterial.id;
-      const response = await axios.post<CommentPostResponse>("http://localhost:8080/api/correct/material", {
+      const response = await axios.post<CommentPostResponse>(import.meta.env.VITE_BACK_BASE_API + "/api/correct/material", {
         targetId,
         newName,
         newDestination,

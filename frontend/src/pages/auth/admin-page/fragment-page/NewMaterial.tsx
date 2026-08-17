@@ -28,12 +28,15 @@ const NewMaterial = ({ returnTop }: ReturnProps) => {
     }
     setIsSubmitting(true);
     try {
-      const response = await axios.post<CommentPostResponse>("http://localhost:8080/api/material/new", {
-        name,
-        destination,
-        base,
-        unit,
-      });
+      const response = await axios.post<CommentPostResponse>(
+        import.meta.env.VITE_BACK_BASE_API + "/api/material/new",
+        {
+          name,
+          destination,
+          base,
+          unit,
+        },
+      );
       alert(response.data.comment);
       setName("");
       setDestination("");

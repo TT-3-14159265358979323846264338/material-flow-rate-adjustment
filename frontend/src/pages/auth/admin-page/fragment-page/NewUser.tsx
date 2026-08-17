@@ -31,7 +31,7 @@ const NewUser = ({returnTop}: ReturnProps) => {
     setIsSubmitting(true);
     try {
       const response = await axios.post<NewUserResponse>(
-        "http://localhost:8080/api/user/new",
+        import.meta.env.VITE_BACK_BASE_API + "/api/user/new",
         { loginName, displayedName, role },
       );
       const password = response.data.password;

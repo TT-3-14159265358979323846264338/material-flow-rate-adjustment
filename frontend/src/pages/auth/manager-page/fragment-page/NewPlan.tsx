@@ -35,12 +35,15 @@ const NewPlan = ({ returnTop }: ReturnProps) => {
     setIsSubmitting(true);
     try {
       const materialId = getSelectedMaterial().id;
-      const response = await axios.post<CommentPostResponse>("http://localhost:8080/api/plan/new", {
-        materialId,
-        year,
-        month,
-        flow,
-      });
+      const response = await axios.post<CommentPostResponse>(
+        import.meta.env.VITE_BACK_BASE_API + "/api/plan/new",
+        {
+          materialId,
+          year,
+          month,
+          flow,
+        },
+      );
       alert(response.data.comment);
       setMaterial("");
       setflow("");

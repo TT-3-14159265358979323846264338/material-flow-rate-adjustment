@@ -14,6 +14,7 @@ services:
       JWT_PERIOD: ${JWT_PERIOD}
       ADMIN_USER: ${ADMIN_USER}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      FRONT_BASE_API: ${FRONT_BASE_API}
       JAVA_TOOL_OPTIONS: "-Djava.awt.headless=true"
       TZ: Asia/Tokyo
 

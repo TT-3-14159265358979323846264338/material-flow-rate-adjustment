@@ -39,5 +39,5 @@ React+TypeScript+Javaでシステム開発を勉強するために、新規作�
 ├─ env.example　　　　　　　　　　　　　　　　　　　　　　　　　:Docker用情報ファイル (必要事項を記載して.envで保存してね)
 ├─ bat/　　　　　　　　　　　　　　　　　　　　　　　　　　　　 :Docker用バッチファイル
 │
-└─ other/　　　　　　　　　　　　　　　　　　　　　　　　　　　 :設計メモなど (なくてもゲーム影響なし)
+└─ other/　　　　　　　　　　　　　　　　　　　　　　　　　　　 :設計メモなど (なくても影響なし)
 ```

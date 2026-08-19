@@ -4,8 +4,6 @@ import DefaultButton from "../../components/DefaultButton";
 import LoginUserNameInput from "../components/LoginUserNameInput";
 import RoleDropdown from "../components/RoleDropdown";
 import CheckInput from "../../components/CheckInput";
-import ChangePasswordInput from "../../components/ChangePasswordInput";
-import { isThisAccountId } from "../../utils/isThisAccountId";
 import { errorHandling } from "../../../utils/errorHandling";
 import { ROLES, type Role } from "../../../types/roleConfig";
 import CorrectUserSort from "./CorrectUserSort";
@@ -31,8 +29,6 @@ const CorrectUser = () => {
   const [newDisplayedName, setDisplayedName] = useState<string>("");
   const [newRole, setNewRole] = useState<Role>(ROLES[1]);
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
-  const [newPass, setNewPass] = useState<string>("");
-  const [oldPass, setOldPass] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const correctHandle = async () => {
@@ -52,12 +48,7 @@ const CorrectUser = () => {
     setIsSubmitting(true);
     try {
       const targetId = selectedAccount.id;
-      const response = isThisAccountId(targetId)
-        ? await axios.post<CommentPostResponse>(
-            import.meta.env.VITE_BACK_BASE_API + "/api/correct/user/admin/own",
-            { newLoginName, newDisplayedName, newPass, oldPass },
-          )
-        : await axios.post<CommentPostResponse>(
+      const response = await axios.post<CommentPostResponse>(
             import.meta.env.VITE_BACK_BASE_API + "/api/correct/user/admin/user",
             {
               targetId,
@@ -108,8 +99,6 @@ const CorrectUser = () => {
                   setDisplayedName(data.displayedName);
                   setNewRole(data.role);
                   setIsDeleted(false);
-                  setNewPass("");
-                  setOldPass("");
                 }}
                 className={`ml-2 mr-2 gap-2 flex items-center border-b border-b-gray-300 cursor-pointer
                   ${data.id === selectedAccount?.id ? " bg-gray-200" : " bg-white"}`}
@@ -126,18 +115,6 @@ const CorrectUser = () => {
           <h2>修正内容</h2>
           <span className="text-xs text-left pb-2">※空欄/未変更項目は修正しない。</span>
           {selectedAccount ? (
-            isThisAccountId(selectedAccount.id) ? (
-              <div>
-                <LoginUserNameInput name={newLoginName} setName={setNewLoginName}></LoginUserNameInput>
-                <DisplayedUserNameInput name={newDisplayedName} setName={setDisplayedName}></DisplayedUserNameInput>
-                <ChangePasswordInput
-                  newPass={newPass}
-                  setNewPass={setNewPass}
-                  oldPass={oldPass}
-                  setOldPass={setOldPass}
-                ></ChangePasswordInput>
-              </div>
-            ) : (
               <div>
                 <div className="mb-5">
                   <LoginUserNameInput name={newLoginName} setName={setNewLoginName}></LoginUserNameInput>
@@ -148,7 +125,6 @@ const CorrectUser = () => {
                   アカウント削除
                 </CheckInput>
               </div>
-            )
           ) : (
             <div></div>
           )}

@@ -4,12 +4,14 @@ import { TabConfig } from '../types/tabConfig';
 import Logout from '../common-fragment-page/Logout';
 import CorrectUser from './fragment-page/CorrectUser';
 import CorrectMatterial from './fragment-page/CorrectMaterial';
+import CorrectPassword from '../common-fragment-page/CorrectPassowrd';
 
 type TabKey =
   | "check-now-material"
   | "check-achievement"
   | "material-management"
   | "user-management"
+  | "change-user"
   | "logout";
 
 const tabData: TabConfig<TabKey>[] = [
@@ -32,6 +34,11 @@ const tabData: TabConfig<TabKey>[] = [
     id: "user-management",
     label: "ユーザー管理",
     content: <CorrectUser></CorrectUser>,
+  },
+  {
+    id: "change-user",
+    label: "ユーザー修正",
+    content: <CorrectPassword></CorrectPassword>,
   },
   {
     id: "logout",

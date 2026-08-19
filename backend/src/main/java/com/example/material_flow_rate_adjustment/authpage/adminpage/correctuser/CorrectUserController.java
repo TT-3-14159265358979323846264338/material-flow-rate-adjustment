@@ -25,13 +25,6 @@ public class CorrectUserController {
 		return ResponseEntity.ok(correctUserService.getUser());
 	}
 	
-	@PostMapping("/api/correct/user/admin/own")
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> adminCorrectOwn(@Valid @RequestBody AdminCorrectOwnData data, @AuthenticationPrincipal String loginUser){
-		correctUserService.adminCorrectOwnData(data, loginUser);
-		return ResponseEntity.ok(new CommentRecord("自身のアカウントを修正しました。"));
-	}
-	
 	@PostMapping("/api/correct/user/admin/user")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> adminCorrectUser(@Valid @RequestBody AdminCorrectUserData data, @AuthenticationPrincipal String loginUser){

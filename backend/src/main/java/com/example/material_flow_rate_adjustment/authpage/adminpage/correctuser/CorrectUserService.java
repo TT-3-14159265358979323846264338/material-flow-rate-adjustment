@@ -38,16 +38,6 @@ public class CorrectUserService {
 	record Account(int id, String loginName, String displayedName, String role) {};
 	
 	@Transactional
-	public void adminCorrectOwnData(AdminCorrectOwnData data, String loginUser) {
-		AccountSQL loginAccount = utility.getAccountSQL(loginUser);
-		AccountHistorySQL newHistory = createHistorySQL();
-		setLoginName(loginAccount, newHistory, data.newLoginName());
-		setDisplayedName(loginAccount, newHistory, data.newDisplayedName());
-		utility.setPassword(loginAccount, data.oldPass(), data.newPass());
-		setHistory(loginAccount, newHistory);
-	}
-	
-	@Transactional
 	public boolean adminCorrectUserData(AdminCorrectUserData data, String loginUser) {
 		AccountSQL targetAccount = utility.getAccountSQL(data.targetId());
 		AccountSQL loginAccount = utility.getAccountSQL(loginUser);
@@ -57,7 +47,7 @@ public class CorrectUserService {
 		}
 		setLoginName(targetAccount, newHistory, data.newLoginName());
 		setDisplayedName(targetAccount, newHistory, data.newDisplayedName());
-		setRole(targetAccount, newHistory, data.newRole());
+		setRole(targetAccount, loginAccount, newHistory, data.newRole());
 		setHistory(loginAccount, newHistory);
 		return false;
 	}
@@ -102,9 +92,12 @@ public class CorrectUserService {
 		targetAccount.setDisplayedUser(newDisplayedName);
 	}
 	
-	void setRole(AccountSQL targetAccount, AccountHistorySQL newHistory, AccountRole role) {
+	void setRole(AccountSQL targetAccount, AccountSQL loginAccount, AccountHistorySQL newHistory, AccountRole role) {
 		if(targetAccount.getRole().equals(role.name())) {
 			return;
+		}
+		if(isFinalAdmin(targetAccount, loginAccount)) {
+			throw new DataBaseException("最後の管理者ユーザーの権限を変更できません。");
 		}
 		newHistory.setTargetId(targetAccount.getId());
 		newHistory.setOldRole(targetAccount.getRole());
@@ -112,8 +105,18 @@ public class CorrectUserService {
 		targetAccount.setRole(role.name());
 	}
 	
+	boolean isFinalAdmin(AccountSQL targetAccount, AccountSQL loginAccount) {
+		if(targetAccount.equals(loginAccount)) {
+			return repository.countByRole(AccountRole.ADMIN.name()) == 1;
+		}
+		return false;
+	}
+	
 	boolean hasDeleted(AccountSQL targetAccount, AccountSQL loginAccount, AccountHistorySQL newHistory, boolean isDeleted) {
 		if(isDeleted) {
+			if(isFinalAdmin(targetAccount, loginAccount)) {
+				throw new DataBaseException("最後の管理者ユーザーを消去することはできません。");
+			}
 			newHistory.setTargetId(targetAccount.getId());
 			newHistory.setOldLoginUser(targetAccount.getLoginUser());
 			newHistory.setOldDisplayedUser(targetAccount.getDisplayedUser());

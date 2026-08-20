@@ -12,11 +12,11 @@ import jakarta.validation.constraints.NotNull;
 
 @NotNull(message = "権限は必須入力です")
 @Documented
-@Constraint(validatedBy = {RoleValidator.class})
+@Constraint(validatedBy = {})
 @Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidRole {
-	String message() default "存在しない権限が入力されました";
+	String message() default "";
 	Class<?>[] groups() default {};
 	Class<? extends Payload>[] payload() default {};
 }

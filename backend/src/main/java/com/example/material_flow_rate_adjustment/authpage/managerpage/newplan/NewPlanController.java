@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class NewPlanController {
 	private final NewPlanService newPlanService;
 	
-	@PostMapping("/api/plan/new")
+	@PostMapping("/api/plan")
 	@PreAuthorize("hasRole('MANAGER')")
 	public ResponseEntity<?> newMaterialPostMapping(@Valid @RequestBody NewPlan newPlan, @AuthenticationPrincipal String loginUser) {
 		String comment = newPlanService.createNewPlan(newPlan, loginUser);

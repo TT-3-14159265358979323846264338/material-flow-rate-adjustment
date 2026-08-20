@@ -3,7 +3,6 @@ package com.example.material_flow_rate_adjustment.authpage.commonpage.correctpas
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,8 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class CorrectPasswordController {
 	private final CorrectPasswordService correctPasswordService;
 	
-	@PostMapping("/api/correct/password")
-	@PreAuthorize("hasRole('USER') or hasRole('MANAGER')")
+	@PostMapping("/api/password")
 	public ResponseEntity<?> userCorrectPassword(@Valid @RequestBody NewPass data, @AuthenticationPrincipal String loginUser){
 		correctPasswordService.userCorrectPassword(data, loginUser);
 		return ResponseEntity.ok(new CommentRecord("パスワードを変更しました。"));

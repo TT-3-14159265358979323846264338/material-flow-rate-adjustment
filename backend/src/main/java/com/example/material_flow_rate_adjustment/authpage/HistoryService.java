@@ -9,8 +9,6 @@ import java.util.stream.Stream;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import com.example.material_flow_rate_adjustment.savedata.historydata.BaseHistorySQL;
-import com.example.material_flow_rate_adjustment.savedata.historydata.HistoryEnum;
-import com.example.material_flow_rate_adjustment.savedata.maindata.AccountSQL;
 
 @Service
 public class HistoryService {
@@ -45,14 +43,5 @@ public class HistoryService {
 			return !endTime.isBefore(account.getDate());
 		}
 		return true;
-	}
-	
-	public <T extends BaseHistorySQL, U extends JpaRepository<T, Integer>> void saveHistory(AccountSQL loginAccount, T newHistory, U historyRepository, HistoryEnum code) {
-		if(newHistory.getTargetId() != null) {
-			newHistory.setAction(code.name());
-			newHistory.setActionId(loginAccount.getId());
-			newHistory.setActionUser(loginAccount.getDisplayedUser());
-			historyRepository.save(newHistory);
-		}
 	}
 }

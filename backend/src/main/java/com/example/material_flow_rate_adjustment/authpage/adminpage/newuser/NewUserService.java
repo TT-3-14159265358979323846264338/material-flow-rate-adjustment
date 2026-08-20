@@ -30,7 +30,7 @@ public class NewUserService {
 		if(repository.existsByDisplayedUser(data.displayedName())) {
 			throw new DataBaseException("同名の表示ユーザーは登録できません。");
 		}
-		//初期パスワードはユーザーにしている。
+		//初期パスワードはユーザーにしている。最終的にはランダム生成にする。
 		AccountSQL newAccount = createNewAccount(data.loginName(), data.displayedName(), data.loginName(), data.role().name());
 		repository.save(newAccount);
 		AccountHistorySQL newHistory = createNewHistory(newAccount, loginUser);
@@ -44,6 +44,7 @@ public class NewUserService {
 		newAccount.setDisplayedUser(displayedName);
 		newAccount.setPassword(passwordEncoder.encode(password));
 		newAccount.setRole(role);
+		newAccount.setHasDeleted(false);
 		return newAccount;
 	}
 	
@@ -56,6 +57,7 @@ public class NewUserService {
 		newHistory.setAction(HistoryEnum.CREATE.name());
 		newHistory.setActionId(Integer.parseInt(loginUser));
 		newHistory.setActionUser(utility.getAccountSQL(loginUser).getDisplayedUser());
+		newHistory.setHasDeletedNew(false);
 		return newHistory;
 	}
 }

@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class NewMaterialController {
 	private final NewMaterialService newMaterialService;
 	
-	@PostMapping("/api/material/new")
+	@PostMapping("/api/material")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> newMaterialPostMapping(@Valid @RequestBody NewMaterial newMaterial, @AuthenticationPrincipal String loginUser) {
 		String comment = newMaterialService.createNewMaterial(newMaterial, loginUser);

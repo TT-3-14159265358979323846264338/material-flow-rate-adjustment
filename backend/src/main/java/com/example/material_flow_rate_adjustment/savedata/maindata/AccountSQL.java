@@ -2,29 +2,25 @@ package com.example.material_flow_rate_adjustment.savedata.maindata;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
 @Entity
-@Table(name = "account")
+@Table(name = "account", indexes = {
+		@Index(name = "idx_account_role", columnList = "role")
+})
 @Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountSQL {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(columnDefinition = "INT UNSIGNED AUTO_INCREMENT", updatable = false)
-	@Setter(AccessLevel.NONE)
-	private Integer id;
-	
+public class AccountSQL extends BaseSQL{
 	@Column(name = "login_user", unique = true, length = 20, nullable = false)
 	private String loginUser;
 	

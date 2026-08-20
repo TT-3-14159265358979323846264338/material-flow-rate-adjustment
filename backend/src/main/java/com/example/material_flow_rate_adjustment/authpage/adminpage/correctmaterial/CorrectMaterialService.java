@@ -6,10 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import com.example.material_flow_rate_adjustment.authpage.HistoryService;
 import com.example.material_flow_rate_adjustment.authpage.UtilityService;
-import com.example.material_flow_rate_adjustment.errorhandling.NotFindException;
-import com.example.material_flow_rate_adjustment.savedata.historydata.HistoryEnum;
 import com.example.material_flow_rate_adjustment.savedata.historydata.MaterialHistoryRepository;
 import com.example.material_flow_rate_adjustment.savedata.historydata.MaterialHistorySQL;
 import com.example.material_flow_rate_adjustment.savedata.maindata.AccountSQL;
@@ -24,11 +21,10 @@ public class CorrectMaterialService {
 	private final MaterialRepository materialRepository;
 	private final MaterialHistoryRepository historyRepository;
 	private final UtilityService utility;
-	private final HistoryService historyService;
 	
 	@Transactional(readOnly = true)
 	public List<Material> getMaterial(){
-		return materialRepository.findAll().stream().map(this::createMaterial).toList();
+		return materialRepository.findByHasDeletedFalse().stream().map(this::createMaterial).toList();
 	}
 	
 	Material createMaterial(MaterialSQL material) {
@@ -46,10 +42,10 @@ public class CorrectMaterialService {
 			String unit) {}
 	
 	@Transactional
-	public boolean adminCorrectMaterialData(AdminCorrectMaterial data, String loginUser) {
+	public boolean adminCorrectMaterialData(int id, AdminCorrectMaterial data, String loginUser) {
 		AccountSQL account = utility.getAccountSQL(loginUser);
-		MaterialSQL material = getMaterialSQL(data.targetId());
-		MaterialHistorySQL newHistory = createHistorySQL();
+		MaterialSQL material = utility.getMaterialSQL(id);
+		MaterialHistorySQL newHistory = createHistorySQL(material);
 		if(data.isDeleted()) {
 			delete(account, material, newHistory);
 			return true;
@@ -58,17 +54,18 @@ public class CorrectMaterialService {
 		setDestination(material, newHistory, data.newDestination());
 		setBase(material, newHistory, data.newBase());
 		setUnit(material, newHistory, data.newUnit());
-		historyService.saveHistory(account, newHistory, historyRepository, HistoryEnum.CHANGE);
+		saveData(account, material, newHistory);
 		return false;
 	}
 	
-	MaterialSQL getMaterialSQL(int id) {
-		return materialRepository.findById(id)
-				.orElseThrow(() -> new NotFindException("製品が見つかりません。"));
-	}
-	
-	MaterialHistorySQL createHistorySQL() {
-		return new MaterialHistorySQL();
+	MaterialHistorySQL createHistorySQL(MaterialSQL material) {
+		MaterialHistorySQL newHistory = new MaterialHistorySQL();
+		newHistory.setOldName(material.getName());
+		newHistory.setOldDestination(material.getDestination());
+		newHistory.setOldBase(material.getBase());
+		newHistory.setOldUnit(material.getUnit());
+		newHistory.setHasDeletedOld(material.getHasDeleted());
+		return newHistory;
 	}
 	
 	void setName(MaterialSQL material, MaterialHistorySQL newHistory, String newName) {
@@ -79,7 +76,6 @@ public class CorrectMaterialService {
 			return;
 		}
 		newHistory.setTargetId(material.getId());
-		newHistory.setOldName(material.getName());
 		newHistory.setNewName(newName);
 		material.setName(newName);
 	}
@@ -92,7 +88,6 @@ public class CorrectMaterialService {
 			return;
 		}
 		newHistory.setTargetId(material.getId());
-		newHistory.setOldDestination(material.getDestination());
 		newHistory.setNewDestination(destination);
 		material.setDestination(destination);
 	}
@@ -103,7 +98,6 @@ public class CorrectMaterialService {
 			return;
 		}
 		newHistory.setTargetId(material.getId());
-		newHistory.setOldBase(material.getBase());
 		newHistory.setNewBase(newBase);
 		material.setBase(newBase);
 	}
@@ -116,16 +110,15 @@ public class CorrectMaterialService {
 			return;
 		}
 		newHistory.setTargetId(material.getId());
-		newHistory.setOldUnit(material.getUnit());
 		newHistory.setNewUnit(unit);
 		material.setUnit(unit);
 	}
 	
+	void saveData(AccountSQL account, MaterialSQL material, MaterialHistorySQL newHistory) {
+		utility.changeData(account, material, materialRepository, newHistory, historyRepository);
+	}
+	
 	void delete(AccountSQL account, MaterialSQL material, MaterialHistorySQL newHistory) {
-		newHistory.setTargetId(material.getId());
-		newHistory.setOldName(material.getName());
-		newHistory.setOldDestination(material.getDestination());
-		materialRepository.delete(material);
-		historyService.saveHistory(account, newHistory, historyRepository, HistoryEnum.DELETE);
+		utility.deleteData(account, material, materialRepository, newHistory, historyRepository);
 	}
 }

@@ -8,6 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,6 +30,12 @@ public abstract class BaseHistorySQL {
 	@Column(name = "target_id", columnDefinition = "INT UNSIGNED", nullable = false, updatable = false)
 	private Integer targetId;
 	
+	@Column(name = "has_deleted_old", updatable = false)
+	private Boolean hasDeletedOld;
+	
+	@Column(name = "has_deleted_new", updatable = false)
+	private Boolean hasDeletedNew;
+	
 	@Column(length = 10, nullable = false, updatable = false)
 	private String action;
 	
@@ -37,6 +45,8 @@ public abstract class BaseHistorySQL {
 	@Column(name = "action_user", length = 10, nullable = false, updatable = false)
 	private String actionUser;
 	
-	@Column(columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP", nullable = false, insertable = false, updatable = false)
+	@CreationTimestamp
+	@Column(nullable = false, updatable = false)
+	@Setter(AccessLevel.NONE)
 	private LocalDateTime date;
 }

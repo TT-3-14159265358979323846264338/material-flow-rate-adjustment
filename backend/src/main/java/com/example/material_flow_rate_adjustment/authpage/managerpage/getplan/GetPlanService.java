@@ -18,7 +18,7 @@ public class GetPlanService {
 	@Transactional(readOnly = true)
 	public List<Plan> getPlan(FilterRecord filterRecord) {
 		int limitSize = filterRecord.getNumber() <= 0? Integer.MAX_VALUE : filterRecord.getNumber();
-		return planRepository.findAll().stream().limit(limitSize).map(this::createPlan).toList();
+		return planRepository.findByHasDeletedFalse().stream().limit(limitSize).map(this::createPlan).toList();
 	}
 	
 	Plan createPlan(MonthPlanSQL monthPlan) {

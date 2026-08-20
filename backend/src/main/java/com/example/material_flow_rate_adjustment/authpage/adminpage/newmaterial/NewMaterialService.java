@@ -36,6 +36,7 @@ public class NewMaterialService {
 		newMaterial.setDestination(destination);
 		newMaterial.setBase(base);
 		newMaterial.setUnit(unit);
+		newMaterial.setHasDeleted(false);
 		return newMaterial;
 	}
 	
@@ -50,6 +51,7 @@ public class NewMaterialService {
 		newHistory.setAction(HistoryEnum.CREATE.name());
 		newHistory.setActionId(Integer.parseInt(loginUser));
 		newHistory.setActionUser(utility.getAccountSQL(loginUser).getDisplayedUser());
+		newHistory.setHasDeletedNew(false);
 		return newHistory;
 	}
 }

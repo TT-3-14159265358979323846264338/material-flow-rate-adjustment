@@ -43,6 +43,7 @@ public class AccountInitializer implements CommandLineRunner{
 		newAccount.setDisplayedUser("管理者");
 		newAccount.setPassword(passwordEncoder.encode(password));
 		newAccount.setRole(AccountRole.ADMIN.name());
+		newAccount.setHasDeleted(false);
 		return newAccount;
 	}
 	
@@ -52,6 +53,7 @@ public class AccountInitializer implements CommandLineRunner{
 		newHistory.setNewLoginUser(newAccount.getLoginUser());
 		newHistory.setNewDisplayedUser(newAccount.getDisplayedUser());
 		newHistory.setNewRole(newAccount.getRole());
+		newHistory.setHasDeletedNew(newAccount.getHasDeleted());
 		newHistory.setAction(HistoryEnum.CREATE.name());
 		newHistory.setActionId(0);
 		newHistory.setActionUser("system");

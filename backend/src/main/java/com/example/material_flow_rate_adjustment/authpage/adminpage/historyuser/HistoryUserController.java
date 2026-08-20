@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class HistoryUserController {
 	private final HistoryUserService historyUserService;
 	
-	@GetMapping("/api/history/user/get/data")
+	@GetMapping("/api/history/user")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> adminGetUserHistory(DefaultHistoryFilterRecord filter) {
 		return ResponseEntity.ok(historyUserService.getHistory(filter));

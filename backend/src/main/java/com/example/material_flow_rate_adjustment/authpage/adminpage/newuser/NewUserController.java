@@ -16,12 +16,10 @@ import lombok.RequiredArgsConstructor;
 public class NewUserController {
 	private final NewUserService newUserService;
 	
-	@PostMapping("/api/user/new")
+	@PostMapping("/api/user")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> newUserPostMapping(@Valid @RequestBody NewUser newUser, @AuthenticationPrincipal String loginUser) {
 		String password = newUserService.createNewUser(newUser, loginUser);
 		return ResponseEntity.ok(new Password(password));
 	}
-	
-	record Password(String password) {}
 }

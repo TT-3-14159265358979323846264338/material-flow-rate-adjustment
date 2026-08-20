@@ -30,6 +30,7 @@ public class NewPlanService {
 		newPlan.setYear(year);
 		newPlan.setMonth(month);
 		newPlan.setFlow(flow);
+		newPlan.setHasDeleted(false);
 		return newPlan;
 	}
 	

@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 public class GetPlanController {
 	private final GetPlanService getPlanService;
 	
-	@GetMapping("/api/correct/plan/get/data")
+	@GetMapping("/api/plan")
 	@PreAuthorize("hasRole('MANAGER')")
 	public ResponseEntity<?> managerGetPlan(FilterRecord filterRecord) {
 		return ResponseEntity.ok(getPlanService.getPlan(filterRecord));

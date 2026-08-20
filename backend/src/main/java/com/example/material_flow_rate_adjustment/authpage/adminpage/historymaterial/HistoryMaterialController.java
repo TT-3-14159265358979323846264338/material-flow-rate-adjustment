@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class HistoryMaterialController {
 	private final HistoryMaterialService historyMaterialService;
 	
-	@GetMapping("/api/history/material/get/data")
+	@GetMapping("/api/history/material")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> adminGetMaterialHistory(DefaultHistoryFilterRecord filter) {
 		return ResponseEntity.ok(historyMaterialService.getHistory(filter));

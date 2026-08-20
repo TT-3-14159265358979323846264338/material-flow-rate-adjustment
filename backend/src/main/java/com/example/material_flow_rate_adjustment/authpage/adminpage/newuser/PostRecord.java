@@ -17,3 +17,5 @@ record NewUser(
 		@ValidRole
 		AccountRole role
 		) {}
+
+record Password(String password) {}

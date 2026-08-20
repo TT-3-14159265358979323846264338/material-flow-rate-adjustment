@@ -11,10 +11,11 @@ import { useGetMapping } from "../../hooks/useGetMapping";
 import { useView } from "../../hooks/useView";
 import { CommentPostResponse } from "../../types/commentPostResponse";
 import HistoryMaterial from "./HistoryMaterial";
-import { AdminViewConfig } from "../../types/viewConfig";
 import { MaterialResponse } from "../../types/materialResponse";
 import MaterialBaseInput from "../components/MaterialBaseInput";
 import MaterialUnitInput from "../components/MaterialUnitInput";
+
+type ViewConfig = "Top" | "Sort" | "New" | "History";
 
 const CorrectMatterial = () => {
   const {
@@ -23,7 +24,7 @@ const CorrectMatterial = () => {
     setSortData: setSortData,
     getData: getMaterialData,
   } = useGetMapping<MaterialResponse>({ URL: "/api/material" });
-  const { view, setView, returnTop, newDataReturnTop } = useView<AdminViewConfig>({ getData: getMaterialData });
+  const { view, setView, returnTop, newDataReturnTop } = useView<ViewConfig>({ getData: getMaterialData });
   const [selectedMaterial, setSelectedMaterial] = useState<MaterialResponse>();
   const [newName, setNewName] = useState<string>("");
   const [newDestination, setDestination] = useState<string>("");

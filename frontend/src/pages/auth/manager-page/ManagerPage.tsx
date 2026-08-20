@@ -2,7 +2,6 @@ import { useState } from 'react';
 import TopPageTab from '../components/TopPageTab';
 import { TabConfig } from '../types/tabConfig';
 import Logout from '../common-fragment-page/Logout';
-import CorrectPassword from '../common-fragment-page/CorrectPassowrd';
 import PlanManagement from './fragment-page/PlanManagement';
 
 type TabKey =
@@ -10,8 +9,7 @@ type TabKey =
   | "check-achievement"
   | "plan-management"
   | "calendar-management"
-  | "change-user"
-  | "logout";
+  | "account";
 
 const ManagerPage = () => {
   const [activeTab, setActiveTab] = useState<TabKey>('check-now-material');
@@ -38,13 +36,8 @@ const ManagerPage = () => {
       content: <p>操業日程の作成・修正・履歴確認</p>,
     },
     {
-      id: "change-user",
-      label: "ユーザー修正",
-      content: <CorrectPassword></CorrectPassword>,
-    },
-    {
-      id: "logout",
-      label: "ログアウト",
+      id: "account",
+      label: "アカウント",
       content: <Logout></Logout>,
     },
   ];

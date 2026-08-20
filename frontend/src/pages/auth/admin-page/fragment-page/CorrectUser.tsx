@@ -13,8 +13,9 @@ import { useGetMapping } from "../../hooks/useGetMapping";
 import { useView } from "../../hooks/useView";
 import { CommentPostResponse } from "../../types/commentPostResponse";
 import HistoryUser from "./HistoryUser";
-import { AdminViewConfig } from "../../types/viewConfig";
 import { UserResponse } from "../types/userResponse";
+
+type ViewConfig = "Top" | "Sort" | "New" | "History";
 
 const CorrectUser = () => {
   const {
@@ -23,7 +24,7 @@ const CorrectUser = () => {
     setSortData: setSortData,
     getData: getAccountData,
   } = useGetMapping<UserResponse>({ URL: "/api/user" });
-  const { view, setView, returnTop, newDataReturnTop } = useView<AdminViewConfig>({ getData: getAccountData });
+  const { view, setView, returnTop, newDataReturnTop } = useView<ViewConfig>({ getData: getAccountData });
   const [selectedAccount, setSelectedAccount] = useState<UserResponse>();
   const [newLoginName, setNewLoginName] = useState<string>("");
   const [newDisplayedName, setDisplayedName] = useState<string>("");

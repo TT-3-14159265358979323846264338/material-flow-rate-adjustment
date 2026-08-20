@@ -3,7 +3,7 @@ import { useState, Dispatch, SetStateAction } from "react";
 type Base = "Top" | string;
 
 type UseViewProps = {
-  getData: () => Promise<void>;
+  getData?: () => Promise<void>;
 };
 
 type UseViewReturn<T extends Base> = {
@@ -13,12 +13,12 @@ type UseViewReturn<T extends Base> = {
   newDataReturnTop: () => void;
 };
 
-export const useView = <T extends Base>({ getData }: UseViewProps): UseViewReturn<T> => {
+export const useView = <T extends Base>({ getData }: UseViewProps = {}): UseViewReturn<T> => {
   const [view, setView] = useState<T>("Top" as T);
 
   const returnTop = () => setView("Top" as T);
   const newDataReturnTop = async () => {
-    await getData();
+    await getData?.();
     returnTop();
   };
 

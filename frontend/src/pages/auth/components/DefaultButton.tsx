@@ -7,7 +7,7 @@ const DefaultButton = ({children, onClick}: DefaultButtonProps) => (
   <button
     type="button"
     onClick={onClick}
-    className="default-button mt-3 w-30"
+    className="default-button mt-3 w-35"
   >
     {children}
   </button>

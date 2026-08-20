@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useGetMapping } from "../../hooks/useGetMapping";
 import { useView } from "../../hooks/useView";
 import DefaultButton from "../../components/DefaultButton";
-import { DefaultViewConfig } from "../../types/viewConfig";
 import NewPlan from "./NewPlan";
+
+type DefaultViewConfig = "Top" | "Sort" | "Correct" | "New";
 
 type PlanManagementResponse = {
   id: number;

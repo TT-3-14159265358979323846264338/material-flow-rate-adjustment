@@ -5,17 +5,21 @@ import DefaultButton from "../components/DefaultButton";
 import { errorHandling } from "../../utils/errorHandling";
 import { CommentPostResponse } from "../types/commentPostResponse";
 
-const CorrectPassword = () => {
+type CorrectPasswordProps = {
+  returnTop: () => void;
+};
+
+const CorrectPassword = ({ returnTop }: CorrectPasswordProps) => {
   const [oldPass, setOldPass] = useState<string>("");
   const [newPass, setNewPass] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const handle = async() => {
+  const handle = async () => {
     if (newPass.trim().length === 0 || oldPass.trim().length === 0) {
       alert("以前のパスワードと新規のパスワードを共に入力してください。");
       return;
     }
-    if(!confirm("パスワードを変更しますか。")){
+    if (!confirm("パスワードを変更しますか。")) {
       return;
     }
     if (isSubmitting) {
@@ -23,13 +27,10 @@ const CorrectPassword = () => {
     }
     setIsSubmitting(true);
     try {
-      const response = await axios.post<CommentPostResponse>(
-        import.meta.env.VITE_BACK_BASE_API + "/api/password",
-        {
-          oldPass,
-          newPass,
-        },
-      );
+      const response = await axios.post<CommentPostResponse>(import.meta.env.VITE_BACK_BASE_API + "/api/password", {
+        oldPass,
+        newPass,
+      });
       alert(response.data.comment);
       setOldPass("");
       setNewPass("");
@@ -48,7 +49,10 @@ const CorrectPassword = () => {
         oldPass={oldPass}
         setOldPass={setOldPass}
       ></ChangePasswordInput>
-      <DefaultButton onClick={handle}>パス変更</DefaultButton>
+      <div className="flex justify-center gap-5">
+        <DefaultButton onClick={handle}>パスワード変更</DefaultButton>
+        <DefaultButton onClick={returnTop}>戻る</DefaultButton>
+      </div>
     </div>
   );
 };

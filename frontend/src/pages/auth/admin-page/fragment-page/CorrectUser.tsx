@@ -22,7 +22,7 @@ const CorrectUser = () => {
     sortData: sortData,
     setSortData: setSortData,
     getData: getAccountData,
-  } = useGetMapping<UserResponse>({ URL: "/api/correct/user/admin/get/data" });
+  } = useGetMapping<UserResponse>({ URL: "/api/user" });
   const { view, setView, returnTop, newDataReturnTop } = useView<AdminViewConfig>({ getData: getAccountData });
   const [selectedAccount, setSelectedAccount] = useState<UserResponse>();
   const [newLoginName, setNewLoginName] = useState<string>("");
@@ -48,16 +48,12 @@ const CorrectUser = () => {
     setIsSubmitting(true);
     try {
       const targetId = selectedAccount.id;
-      const response = await axios.post<CommentPostResponse>(
-            import.meta.env.VITE_BACK_BASE_API + "/api/correct/user/admin/user",
-            {
-              targetId,
-              newLoginName,
-              newDisplayedName,
-              newRole,
-              isDeleted,
-            },
-          );
+      const response = await axios.post<CommentPostResponse>(import.meta.env.VITE_BACK_BASE_API + "/api/user/" + targetId, {
+        newLoginName,
+        newDisplayedName,
+        newRole,
+        isDeleted,
+      });
       alert(response.data.comment);
       setSelectedAccount(undefined);
       await getAccountData();

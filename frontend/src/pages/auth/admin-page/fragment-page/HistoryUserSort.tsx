@@ -8,7 +8,7 @@ type HistoryUserSortProps = {
 };
 
 const HistoryUserSort = ({ returnHistory, setDownloadRecord }: HistoryUserSortProps) => {
-  const getMappingURL = "/api/correct/user/admin/get/data";
+  const getMappingURL = "/api/user";
   const createArray = (data: UserResponse[]) => data.map((user) => user.displayedName);
   return (
     <HistorySort

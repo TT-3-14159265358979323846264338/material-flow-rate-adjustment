@@ -20,7 +20,7 @@ type HistoryUserResponse = {
 
 const HistoryUser = ({ returnTop }: ReturnProps) => {
   const { setDownloadRecord, history, view, setView, returnHistory, selectedId, setSelectedId } = useHistory<HistoryUserResponse>(
-    { historyURL: "/api/history/user/get/data" },
+    { historyURL: "/api/history/user" },
   );
 
   if (view === "Sort") {

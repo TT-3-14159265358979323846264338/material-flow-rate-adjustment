@@ -22,7 +22,7 @@ const CorrectMatterial = () => {
     sortData: sortData,
     setSortData: setSortData,
     getData: getMaterialData,
-  } = useGetMapping<MaterialResponse>({ URL: "/api/correct/material/get/data" });
+  } = useGetMapping<MaterialResponse>({ URL: "/api/material" });
   const { view, setView, returnTop, newDataReturnTop } = useView<AdminViewConfig>({ getData: getMaterialData });
   const [selectedMaterial, setSelectedMaterial] = useState<MaterialResponse>();
   const [newName, setNewName] = useState<string>("");
@@ -49,14 +49,16 @@ const CorrectMatterial = () => {
     setIsSubmitting(true);
     try {
       const targetId = selectedMaterial.id;
-      const response = await axios.post<CommentPostResponse>(import.meta.env.VITE_BACK_BASE_API + "/api/correct/material", {
-        targetId,
-        newName,
-        newDestination,
-        newBase,
-        newUnit,
-        isDeleted,
-      });
+      const response = await axios.post<CommentPostResponse>(
+        import.meta.env.VITE_BACK_BASE_API + "/api/material/" + targetId,
+        {
+          newName,
+          newDestination,
+          newBase,
+          newUnit,
+          isDeleted,
+        },
+      );
       alert(response.data.comment);
       setSelectedMaterial(undefined);
       await getMaterialData();

@@ -13,7 +13,7 @@ import { CommentPostResponse } from "../../types/commentPostResponse";
 import { errorHandling } from "../../../utils/errorHandling";
 
 const NewPlan = ({ returnTop }: ReturnProps) => {
-  const { data: materialData} = useGetMapping<MaterialResponse>({ URL: "/api/correct/material/get/data" });
+  const { data: materialData } = useGetMapping<MaterialResponse>({ URL: "/api/material" });
   const [material, setMaterial] = useState<string>("");
   const [year, setYear] = useState<string>(String(new Date().getFullYear()));
   const [month, setMonth] = useState<string>(String(new Date().getMonth() + 2));
@@ -36,7 +36,7 @@ const NewPlan = ({ returnTop }: ReturnProps) => {
     try {
       const materialId = getSelectedMaterial().id;
       const response = await axios.post<CommentPostResponse>(
-        import.meta.env.VITE_BACK_BASE_API + "/api/plan/new",
+        import.meta.env.VITE_BACK_BASE_API + "/api/plan",
         {
           materialId,
           year,

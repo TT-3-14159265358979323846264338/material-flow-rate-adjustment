@@ -24,7 +24,7 @@ const CorrectPassword = () => {
     setIsSubmitting(true);
     try {
       const response = await axios.post<CommentPostResponse>(
-        import.meta.env.VITE_BACK_BASE_API + "/api/correct/password",
+        import.meta.env.VITE_BACK_BASE_API + "/api/password",
         {
           oldPass,
           newPass,

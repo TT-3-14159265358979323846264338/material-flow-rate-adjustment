@@ -24,7 +24,7 @@ const PlanManagement = () => {
     setSortData: setPlanData,
     getData: getPlanData,
   } = useGetMapping<PlanManagementResponse>({
-    URL: "/api/correct/plan/get/data",
+    URL: "/api/plan",
     params: { number: 50 },
   });
   const { view, setView, returnTop, newDataReturnTop } = useView<DefaultViewConfig>({ getData: getPlanData });

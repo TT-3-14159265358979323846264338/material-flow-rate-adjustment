@@ -29,7 +29,7 @@ const NewMaterial = ({ returnTop }: ReturnProps) => {
     setIsSubmitting(true);
     try {
       const response = await axios.post<CommentPostResponse>(
-        import.meta.env.VITE_BACK_BASE_API + "/api/material/new",
+        import.meta.env.VITE_BACK_BASE_API + "/api/material",
         {
           name,
           destination,

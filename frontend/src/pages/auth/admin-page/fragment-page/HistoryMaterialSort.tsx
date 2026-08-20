@@ -8,7 +8,7 @@ type HistoryMaterialSortProps = {
 };
 
 const HistoryMaterialSort = ({ returnHistory, setDownloadRecord }: HistoryMaterialSortProps) => {
-  const getMappingURL = "/api/correct/material/get/data";
+  const getMappingURL = "/api/material";
   return (
     <HistorySort
       returnHistory={returnHistory}

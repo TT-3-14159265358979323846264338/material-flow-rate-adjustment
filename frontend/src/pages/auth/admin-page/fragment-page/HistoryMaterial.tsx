@@ -21,7 +21,7 @@ type HistoryMaterialResponse = {
 
 const HistoryMaterial = ({ returnTop }: ReturnProps) => {
   const { setDownloadRecord, history, view, setView, returnHistory, selectedId, setSelectedId } = useHistory<HistoryMaterialResponse>(
-    { historyURL: "/api/history/material/get/data"  }
+    { historyURL: "/api/history/material"  }
   );
 
   if (view === "Sort") {

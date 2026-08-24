@@ -1,12 +1,12 @@
 import { useState } from "react";
-import axios from 'axios';
+import { AxiosResponse } from 'axios';
 import DefaultButton from "../../components/DefaultButton";
 import RoleDropdown from "../components/RoleDropdown";
 import LoginUserNameInput from "../components/LoginUserNameInput";
 import { ROLES, type Role } from "../../../types/roleConfig"
-import { errorHandling } from "../../../utils/errorHandling";
 import DisplayedUserNameInput from "../components/DisplyedUserNameInput";
 import { ReturnProps } from "../../types/returnProps";
+import { usePostMapping } from "../../hooks/usePostMapping";
 
 type NewUserResponse = {
   password: string;
@@ -16,8 +16,8 @@ const NewUser = ({returnTop}: ReturnProps) => {
   const [loginName, setLoginName] = useState("");
   const [displayedName, setDisplayedName] = useState("");
   const [role, setRole] = useState<Role>(ROLES[1]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const handle = async () => {
+  const { post } = usePostMapping<NewUserResponse>();
+  const newUserHandle = async () => {
     if (loginName.trim().length === 0) {
       alert("ユーザー名を入力してください。");
       return;
@@ -25,31 +25,17 @@ const NewUser = ({returnTop}: ReturnProps) => {
     if (!confirm(loginName + "に" + role + "権限付与して新規登録しますか。")) {
       return;
     }
-    if (isSubmitting) {
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      const response = await axios.post<NewUserResponse>(
-        import.meta.env.VITE_BACK_BASE_API + "/api/user",
-        { loginName, displayedName, role },
-      );
-      const password = response.data.password;
+    const params = { loginName, displayedName, role };
+    const handle = (response: AxiosResponse<NewUserResponse, any, {}>) => {
       alert(
-        displayedName +
-          "が新規登録されました。\n" +
-          "初期パスワードは" +
-          password +
-          "になっています。\n" +
+          `${displayedName}が新規登録されました。\n` +
+          `初期パスワードは${response.data.password}になっています。\n` +
           "早期にパスワードの変更をお願いします。",
       );
       setLoginName("");
       setDisplayedName("");
-    } catch (error) {
-      errorHandling(error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    };
+    await post({ URL: "/api/user", params, handle});
   };
 
   return (
@@ -58,7 +44,7 @@ const NewUser = ({returnTop}: ReturnProps) => {
       <DisplayedUserNameInput name={displayedName} setName={setDisplayedName}></DisplayedUserNameInput>
       <RoleDropdown role={role} setRole={setRole}></RoleDropdown>
       <div className="flex justify-center gap-5">
-        <DefaultButton onClick={handle}>新規登録</DefaultButton>
+        <DefaultButton onClick={newUserHandle}>新規登録</DefaultButton>
         <DefaultButton onClick={returnTop}>戻る</DefaultButton>
       </div>
     </div>

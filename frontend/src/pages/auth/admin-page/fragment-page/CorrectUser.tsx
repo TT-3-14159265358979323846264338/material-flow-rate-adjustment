@@ -1,19 +1,17 @@
 import { useState } from "react";
-import axios from 'axios';
 import DefaultButton from "../../components/DefaultButton";
 import LoginUserNameInput from "../components/LoginUserNameInput";
 import RoleDropdown from "../components/RoleDropdown";
 import CheckInput from "../../components/CheckInput";
-import { errorHandling } from "../../../utils/errorHandling";
 import { ROLES, type Role } from "../../../types/roleConfig";
 import CorrectUserSort from "./CorrectUserSort";
 import NewUser from "./NewUser";
 import DisplayedUserNameInput from "../components/DisplyedUserNameInput";
 import { useGetMapping } from "../../hooks/useGetMapping";
 import { useView } from "../../hooks/useView";
-import { CommentPostResponse } from "../../types/commentPostResponse";
 import HistoryUser from "./HistoryUser";
 import { UserResponse } from "../types/userResponse";
+import { useCommentPostMapping } from "../../hooks/useCommentPostMapping";
 
 type ViewConfig = "Top" | "Sort" | "New" | "History";
 
@@ -30,9 +28,9 @@ const CorrectUser = () => {
   const [newDisplayedName, setDisplayedName] = useState<string>("");
   const [newRole, setNewRole] = useState<Role>(ROLES[1]);
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const {post} = useCommentPostMapping();
 
-  const correctHandle = async () => {
+  const correctUserHandle = async () => {
     if (!selectedAccount) {
       alert("修正したいユーザーを選択して、必要項目に入力してください。");
       return;
@@ -43,26 +41,17 @@ const CorrectUser = () => {
     if (!canCorrect) {
       return;
     }
-    if (isSubmitting) {
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      const targetId = selectedAccount.id;
-      const response = await axios.post<CommentPostResponse>(import.meta.env.VITE_BACK_BASE_API + "/api/user/" + targetId, {
-        newLoginName,
-        newDisplayedName,
-        newRole,
-        isDeleted,
-      });
-      alert(response.data.comment);
+    const params = {
+      newLoginName,
+      newDisplayedName,
+      newRole,
+      isDeleted,
+    };
+    const handle = async() => {
       setSelectedAccount(undefined);
-      await getAccountData();
-    } catch (error) {
-      errorHandling(error);
-    } finally {
-      setIsSubmitting(false);
-    }
+      await getAccountData();      
+    };
+    await post({ URL: `/api/user/${selectedAccount.id}`, params, handle });
   };
 
   if(view === "Sort") {
@@ -130,7 +119,7 @@ const CorrectUser = () => {
 
       <div className="flex justify-center gap-5">
         <DefaultButton onClick={() => setView("Sort")}>ソート</DefaultButton>
-        <DefaultButton onClick={correctHandle}>登録修正</DefaultButton>
+        <DefaultButton onClick={correctUserHandle}>登録修正</DefaultButton>
         <DefaultButton onClick={() => setView("New")}>新規登録</DefaultButton>
         <DefaultButton onClick={() => setView("History")}>修正履歴</DefaultButton>
       </div>

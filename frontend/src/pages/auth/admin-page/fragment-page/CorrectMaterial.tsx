@@ -1,6 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
-import { errorHandling } from "../../../utils/errorHandling";
 import MaterialNameInput from "../components/MaterialNameInput";
 import MaterialDestinationInput from "../components/MaterialDestinationInput";
 import CheckInput from "../../components/CheckInput";
@@ -9,11 +7,11 @@ import NewMaterial from "./NewMaterial";
 import CorrectMaterialSort from "./CorrectMaterialSort";
 import { useGetMapping } from "../../hooks/useGetMapping";
 import { useView } from "../../hooks/useView";
-import { CommentPostResponse } from "../../types/commentPostResponse";
 import HistoryMaterial from "./HistoryMaterial";
 import { MaterialResponse } from "../../types/materialResponse";
 import MaterialBaseInput from "../components/MaterialBaseInput";
 import MaterialUnitInput from "../components/MaterialUnitInput";
+import { useCommentPostMapping } from "../../hooks/useCommentPostMapping";
 
 type ViewConfig = "Top" | "Sort" | "New" | "History";
 
@@ -31,9 +29,9 @@ const CorrectMatterial = () => {
   const [newBase, setNewBase] = useState<string>("");
   const [newUnit, setNewUnit] = useState<string>("");
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const {post} = useCommentPostMapping();
 
-  const correctHandle = async () => {
+  const correctMaterialHandle = async () => {
     if (!selectedMaterial) {
       alert("修正したい製品を選択して、必要項目に入力してください。");
       return;
@@ -44,30 +42,18 @@ const CorrectMatterial = () => {
     if (!canCorrect) {
       return;
     }
-    if (isSubmitting) {
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      const targetId = selectedMaterial.id;
-      const response = await axios.post<CommentPostResponse>(
-        import.meta.env.VITE_BACK_BASE_API + "/api/material/" + targetId,
-        {
-          newName,
-          newDestination,
-          newBase,
-          newUnit,
-          isDeleted,
-        },
-      );
-      alert(response.data.comment);
+    const params = {
+      newName,
+      newDestination,
+      newBase,
+      newUnit,
+      isDeleted,
+    };
+    const handle = async() => {
       setSelectedMaterial(undefined);
       await getMaterialData();
-    } catch (error) {
-      errorHandling(error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    };
+    await post({ URL: `/api/material/${selectedMaterial.id}`, params, handle });
   };
 
   if (view === "Sort") {
@@ -135,7 +121,7 @@ const CorrectMatterial = () => {
 
       <div className="flex justify-center gap-5">
         <DefaultButton onClick={() => setView("Sort")}>ソート</DefaultButton>
-        <DefaultButton onClick={correctHandle}>登録修正</DefaultButton>
+        <DefaultButton onClick={correctMaterialHandle}>登録修正</DefaultButton>
         <DefaultButton onClick={() => setView("New")}>新規登録</DefaultButton>
         <DefaultButton onClick={() => setView("History")}>修正履歴</DefaultButton>
       </div>

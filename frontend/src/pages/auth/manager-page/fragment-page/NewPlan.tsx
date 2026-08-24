@@ -8,9 +8,7 @@ import { materialArray } from "../../utils/materialArray";
 import { monthArray, nowYearArray } from "../../utils/termArray";
 import TextInput from "../../components/TextInput";
 import { onlyNumber } from "../../../utils/characterLimit";
-import axios from "axios";
-import { CommentPostResponse } from "../../types/commentPostResponse";
-import { errorHandling } from "../../../utils/errorHandling";
+import { useCommentPostMapping } from "../../hooks/useCommentPostMapping";
 
 const NewPlan = ({ returnTop }: ReturnProps) => {
   const { data: materialData } = useGetMapping<MaterialResponse>({ URL: "/api/material" });
@@ -18,10 +16,10 @@ const NewPlan = ({ returnTop }: ReturnProps) => {
   const [year, setYear] = useState<string>(String(new Date().getFullYear()));
   const [month, setMonth] = useState<string>(String(new Date().getMonth() + 2));
   const [flow, setflow] = useState<string>("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const {post} = useCommentPostMapping();
 
   const getSelectedMaterial = () => materialData[materialArray(materialData).indexOf(material)];
-  const handle = async() => {
+  const newPlanHandle = async() => {
     if (material.trim().length === 0 || year.trim().length === 0 || month.trim().length === 0 || flow.trim().length === 0) {
       alert("全項目を入力してください。");
       return;
@@ -29,29 +27,17 @@ const NewPlan = ({ returnTop }: ReturnProps) => {
     if (!confirm(year + "/" + month + "の" + material + "を新規登録しますか。")) {
       return;
     }
-    if (isSubmitting) {
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      const materialId = getSelectedMaterial().id;
-      const response = await axios.post<CommentPostResponse>(
-        import.meta.env.VITE_BACK_BASE_API + "/api/plan",
-        {
-          materialId,
-          year,
-          month,
-          flow,
-        },
-      );
-      alert(response.data.comment);
+    const params = {
+      materialId: getSelectedMaterial().id,
+      year,
+      month,
+      flow,
+    };
+    const handle = () => {
       setMaterial("");
-      setflow("");
-    } catch (error) {
-      errorHandling(error);
-    } finally {
-      setIsSubmitting(false);
-    }
+      setflow("");      
+    };
+    await post({ URL: "/api/plan", params, handle});
   };
 
   return (
@@ -74,7 +60,7 @@ const NewPlan = ({ returnTop }: ReturnProps) => {
         <span>{getSelectedMaterial()?.unit || ""}</span>
       </div>
       <div>
-        <DefaultButton onClick={handle}>新規作成</DefaultButton>
+        <DefaultButton onClick={newPlanHandle}>新規作成</DefaultButton>
         <DefaultButton onClick={returnTop}>戻る</DefaultButton>
       </div>
     </div>

@@ -1,9 +1,7 @@
 import { useState } from "react";
-import axios from "axios";
 import ChangePasswordInput from "../components/ChangePasswordInput";
 import DefaultButton from "../components/DefaultButton";
-import { errorHandling } from "../../utils/errorHandling";
-import { CommentPostResponse } from "../types/commentPostResponse";
+import { useCommentPostMapping } from "../hooks/useCommentPostMapping";
 
 type CorrectPasswordProps = {
   returnTop: () => void;
@@ -12,9 +10,9 @@ type CorrectPasswordProps = {
 const CorrectPassword = ({ returnTop }: CorrectPasswordProps) => {
   const [oldPass, setOldPass] = useState<string>("");
   const [newPass, setNewPass] = useState<string>("");
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const {post} = useCommentPostMapping();
 
-  const handle = async () => {
+  const passwordHandle = async () => {
     if (newPass.trim().length === 0 || oldPass.trim().length === 0) {
       alert("以前のパスワードと新規のパスワードを共に入力してください。");
       return;
@@ -22,23 +20,15 @@ const CorrectPassword = ({ returnTop }: CorrectPasswordProps) => {
     if (!confirm("パスワードを変更しますか。")) {
       return;
     }
-    if (isSubmitting) {
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      const response = await axios.post<CommentPostResponse>(import.meta.env.VITE_BACK_BASE_API + "/api/password", {
-        oldPass,
-        newPass,
-      });
-      alert(response.data.comment);
+    const params = {
+      oldPass,
+      newPass,
+    };
+    const handle = () => {
       setOldPass("");
       setNewPass("");
-    } catch (error) {
-      errorHandling(error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    };
+    await post({ URL: "/api/password", params, handle });
   };
 
   return (
@@ -50,7 +40,7 @@ const CorrectPassword = ({ returnTop }: CorrectPasswordProps) => {
         setOldPass={setOldPass}
       ></ChangePasswordInput>
       <div className="flex justify-center gap-5">
-        <DefaultButton onClick={handle}>パスワード変更</DefaultButton>
+        <DefaultButton onClick={passwordHandle}>パスワード変更</DefaultButton>
         <DefaultButton onClick={returnTop}>戻る</DefaultButton>
       </div>
     </div>

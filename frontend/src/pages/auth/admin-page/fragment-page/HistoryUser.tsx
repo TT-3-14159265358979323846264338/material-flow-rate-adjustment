@@ -1,6 +1,6 @@
 import DefaultButton from "../../components/DefaultButton";
 import { type HistoryUserConfig } from "../../../types/historyUserConfig";
-import { type Role } from "../../../types/roleConfig";
+import { AuthorityCodeConfig } from "../../../types/roleConfig";
 import { ReturnProps } from "../../types/returnProps";
 import HistoryUserSort from "./HistoryUserSort";
 import { useHistory } from "../hooks/useHistory";
@@ -11,8 +11,8 @@ type HistoryUserResponse = {
   newLoginUser: string;
   oldDisplayedUser: string;
   newDisplayedUser: string;
-  oldRole: Role;
-  newRole: Role;
+  oldRole: AuthorityCodeConfig;
+  newRole: AuthorityCodeConfig;
   action: HistoryUserConfig;
   actionUser: string;
   date: string;

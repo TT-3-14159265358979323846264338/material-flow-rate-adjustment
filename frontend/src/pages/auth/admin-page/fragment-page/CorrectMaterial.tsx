@@ -12,16 +12,17 @@ import { MaterialResponse } from "../../types/materialResponse";
 import MaterialBaseInput from "../components/MaterialBaseInput";
 import MaterialUnitInput from "../components/MaterialUnitInput";
 import { useCommentPostMapping } from "../../hooks/useCommentPostMapping";
+import { useMaterialSort } from "../hooks/useMaterialSort";
 
 type ViewConfig = "Top" | "Sort" | "New" | "History";
 
 const CorrectMatterial = () => {
-  const {
-    data: materialData,
-    sortData: sortData,
-    setSortData: setSortData,
-    getData: getMaterialData,
-  } = useGetMapping<MaterialResponse>({ URL: "/api/material" });
+  const { sortData: finalSort, setSortData: setFinalSort } = useMaterialSort();
+  const { sortData, setSortData, setSort } = useMaterialSort();
+  const { data: materialData, getData: getMaterialData } = useGetMapping<MaterialResponse>({
+    URL: "/api/material",
+    params: finalSort,
+  });
   const { view, setView, returnTop, newDataReturnTop } = useView<ViewConfig>({ getData: getMaterialData });
   const [selectedMaterial, setSelectedMaterial] = useState<MaterialResponse>();
   const [newName, setNewName] = useState<string>("");
@@ -57,7 +58,16 @@ const CorrectMatterial = () => {
   };
 
   if (view === "Sort") {
-    return <CorrectMaterialSort materialData={materialData} setSortData={setSortData} returnTop={returnTop}></CorrectMaterialSort>;
+    return (
+      <CorrectMaterialSort
+        finalSort={finalSort}
+        setFinalSort={setFinalSort}
+        sortData={sortData}
+        setSortData={setSortData}
+        setSort={setSort}
+        returnTop={returnTop}
+      ></CorrectMaterialSort>
+    );
   }
   if (view === "New") {
     return <NewMaterial returnTop={newDataReturnTop}></NewMaterial>;
@@ -77,7 +87,7 @@ const CorrectMatterial = () => {
             </li>
           </ul>
           <ul className="flex-1 overflow-y-auto border border-b-black rounded-b-md bg-white">
-            {sortData.map((data) => (
+            {materialData.map((data) => (
               <li
                 key={data.id}
                 onClick={() => {
@@ -111,7 +121,9 @@ const CorrectMatterial = () => {
                   <MaterialUnitInput unit={newUnit} setUnit={setNewUnit}></MaterialUnitInput>
                 </div>
               </div>
-              <CheckInput isChecked={isDeleted} setChecked={setIsDeleted}>製品削除</CheckInput>
+              <CheckInput isChecked={isDeleted} setChecked={(e) => setIsDeleted(e.target.checked)}>
+                製品削除
+              </CheckInput>
             </div>
           ) : (
             <div></div>

@@ -3,7 +3,6 @@ import DefaultButton from "../../components/DefaultButton";
 import LoginUserNameInput from "../components/LoginUserNameInput";
 import RoleDropdown from "../components/RoleDropdown";
 import CheckInput from "../../components/CheckInput";
-import { ROLES, type Role } from "../../../types/roleConfig";
 import CorrectUserSort from "./CorrectUserSort";
 import NewUser from "./NewUser";
 import DisplayedUserNameInput from "../components/DisplyedUserNameInput";
@@ -12,21 +11,20 @@ import { useView } from "../../hooks/useView";
 import HistoryUser from "./HistoryUser";
 import { UserResponse } from "../types/userResponse";
 import { useCommentPostMapping } from "../../hooks/useCommentPostMapping";
+import { useUserSort } from "../hooks/useUserSort";
+import { AuthorityCodeConfig } from "../../../types/roleConfig";
 
 type ViewConfig = "Top" | "Sort" | "New" | "History";
 
 const CorrectUser = () => {
-  const {
-    data: accountData,
-    sortData: sortData,
-    setSortData: setSortData,
-    getData: getAccountData,
-  } = useGetMapping<UserResponse>({ URL: "/api/user" });
+  const { sortData: finalSort, setSortData: setFinalSort } = useUserSort();
+  const { sortData, setSortData, setSort } = useUserSort();
+  const { data: accountData, getData: getAccountData } = useGetMapping<UserResponse>({ URL: "/api/user", params: finalSort });
   const { view, setView, returnTop, newDataReturnTop } = useView<ViewConfig>({ getData: getAccountData });
   const [selectedAccount, setSelectedAccount] = useState<UserResponse>();
   const [newLoginName, setNewLoginName] = useState<string>("");
   const [newDisplayedName, setDisplayedName] = useState<string>("");
-  const [newRole, setNewRole] = useState<Role>(ROLES[1]);
+  const [newRole, setNewRole] = useState<AuthorityCodeConfig>("USER");
   const [isDeleted, setIsDeleted] = useState<boolean>(false);
   const {post} = useCommentPostMapping();
 
@@ -55,7 +53,16 @@ const CorrectUser = () => {
   };
 
   if(view === "Sort") {
-    return <CorrectUserSort accountData={accountData} setSortData={setSortData} returnTop={returnTop}></CorrectUserSort>;
+    return (
+      <CorrectUserSort
+        finalSort={finalSort}
+        setFinalSort={setFinalSort}
+        sortData={sortData}
+        setSortData={setSortData}
+        setSort={setSort}
+        returnTop={returnTop}
+      ></CorrectUserSort>
+    );
   }
   if(view === "New"){
     return <NewUser returnTop={newDataReturnTop}></NewUser>;
@@ -76,7 +83,7 @@ const CorrectUser = () => {
             </li>
           </ul>
           <ul className="flex-1 overflow-y-auto border border-b-black rounded-b-md bg-white">
-            {sortData.map((data) => (
+            {accountData.map((data) => (
               <li
                 key={data.id}
                 onClick={() => {
@@ -101,16 +108,16 @@ const CorrectUser = () => {
           <h2>修正内容</h2>
           <span className="text-xs text-left pb-2">※空欄/未変更項目は修正しない。</span>
           {selectedAccount ? (
-              <div>
-                <div className="mb-5">
-                  <LoginUserNameInput name={newLoginName} setName={setNewLoginName}></LoginUserNameInput>
-                  <DisplayedUserNameInput name={newDisplayedName} setName={setDisplayedName}></DisplayedUserNameInput>
-                  <RoleDropdown role={newRole} setRole={setNewRole}></RoleDropdown>
-                </div>
-                <CheckInput isChecked={isDeleted} setChecked={setIsDeleted}>
-                  アカウント削除
-                </CheckInput>
+            <div>
+              <div className="mb-5">
+                <LoginUserNameInput name={newLoginName} setName={setNewLoginName}></LoginUserNameInput>
+                <DisplayedUserNameInput name={newDisplayedName} setName={setDisplayedName}></DisplayedUserNameInput>
+                <RoleDropdown role={newRole} setRole={setNewRole}></RoleDropdown>
               </div>
+              <CheckInput isChecked={isDeleted} setChecked={(e) => setIsDeleted(e.target.checked)}>
+                アカウント削除
+              </CheckInput>
+            </div>
           ) : (
             <div></div>
           )}

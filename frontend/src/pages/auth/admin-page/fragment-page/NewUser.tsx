@@ -3,10 +3,10 @@ import { AxiosResponse } from 'axios';
 import DefaultButton from "../../components/DefaultButton";
 import RoleDropdown from "../components/RoleDropdown";
 import LoginUserNameInput from "../components/LoginUserNameInput";
-import { ROLES, type Role } from "../../../types/roleConfig"
 import DisplayedUserNameInput from "../components/DisplyedUserNameInput";
 import { ReturnProps } from "../../types/returnProps";
 import { usePostMapping } from "../../hooks/usePostMapping";
+import { AuthorityCodeConfig } from "../../../types/roleConfig";
 
 type NewUserResponse = {
   password: string;
@@ -15,7 +15,7 @@ type NewUserResponse = {
 const NewUser = ({returnTop}: ReturnProps) => {
   const [loginName, setLoginName] = useState("");
   const [displayedName, setDisplayedName] = useState("");
-  const [role, setRole] = useState<Role>(ROLES[1]);
+  const [role, setRole] = useState<AuthorityCodeConfig>("USER");
   const { post } = usePostMapping<NewUserResponse>();
   const newUserHandle = async () => {
     if (loginName.trim().length === 0) {

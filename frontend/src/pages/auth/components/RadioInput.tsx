@@ -1,9 +1,9 @@
-import { Dispatch, SetStateAction, useId } from 'react';
+import { useId } from 'react';
 
 type RadioInputProps<T extends string> = {
-  children: string;
+  children: React.ReactNode;
   selected: T;
-  setSelected: Dispatch<SetStateAction<T>>;
+  setSelected: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value: T;
   groupName: string;
 };
@@ -18,7 +18,7 @@ const RadioInput = <T extends string>({children, selected, setSelected, value, g
       name={groupName}
       data-testid="radio-input"
       value={value}
-      onChange={(_) => setSelected(value)}
+      onChange={(e) => setSelected(e)}
       checked={selected === value}
       className="focus:outline-none focus:ring-2 focus:ring-amber-200 bg-white cursor-pointer"
     />

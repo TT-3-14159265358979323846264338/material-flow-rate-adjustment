@@ -1,6 +1,8 @@
 package com.example.material_flow_rate_adjustment.authpage.adminpage.correctuser;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,8 +26,30 @@ public class CorrectUserService {
 	private final UtilityService utility;
 	
 	@Transactional(readOnly = true)
-	public List<Account> getUser() {
-		return repository.findByHasDeletedFalse().stream().map(this::createAccount).toList();
+	public List<Account> getUser(UserSort userSort) {
+		return repository.findByHasDeletedFalse()
+						.stream()
+						.filter(getFilter(userSort))
+						.sorted(UserSortEnum.userComparator(userSort.order(), userSort.target()))
+						.map(this::createAccount)
+						.toList();
+	}
+	
+	Predicate<AccountSQL> getFilter(UserSort userSort) {
+		if(userSort.isAdmin() == userSort.isUser() && userSort.isAdmin() == userSort.isManager()) {
+			return (_) -> true;
+		}
+		List<String> targetRole = new ArrayList<>();
+		createTargetList(targetRole, userSort.isAdmin(), AccountRole.ADMIN);
+		createTargetList(targetRole, userSort.isUser(), AccountRole.USER);
+		createTargetList(targetRole, userSort.isManager(), AccountRole.MANAGER);
+		return (account) -> targetRole.contains(account.getRole());
+	}
+	
+	void createTargetList(List<String> targetRole, boolean isTarget, AccountRole role) {
+		if(isTarget) {
+			targetRole.add(role.name());
+		}
 	}
 	
 	Account createAccount(AccountSQL account) {

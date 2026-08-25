@@ -1,4 +1,5 @@
 package com.example.material_flow_rate_adjustment.authpage.adminpage.correctmaterial;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -23,8 +24,12 @@ public class CorrectMaterialService {
 	private final UtilityService utility;
 	
 	@Transactional(readOnly = true)
-	public List<Material> getMaterial(){
-		return materialRepository.findByHasDeletedFalse().stream().map(this::createMaterial).toList();
+	public List<Material> getMaterial(MaterialSort materialSort){
+		return materialRepository.findByHasDeletedFalse()
+								.stream()
+								.sorted(MaterialSortEnum.materialComparator(materialSort.order(), materialSort.target()))
+								.map(this::createMaterial)
+								.toList();
 	}
 	
 	Material createMaterial(MaterialSQL material) {
@@ -42,7 +47,7 @@ public class CorrectMaterialService {
 			String unit) {}
 	
 	@Transactional
-	public boolean adminCorrectMaterialData(int id, AdminCorrectMaterial data, String loginUser) {
+	public boolean adminCorrectMaterialData(int id, CorrectMaterial data, String loginUser) {
 		AccountSQL account = utility.getAccountSQL(loginUser);
 		MaterialSQL material = utility.getMaterialSQL(id);
 		MaterialHistorySQL newHistory = createHistorySQL(material);

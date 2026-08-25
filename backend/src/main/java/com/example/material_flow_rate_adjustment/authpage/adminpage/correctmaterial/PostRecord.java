@@ -4,8 +4,16 @@ import com.example.material_flow_rate_adjustment.customannotations.ValidMaterial
 import com.example.material_flow_rate_adjustment.customannotations.ValidMaterialDestination;
 import com.example.material_flow_rate_adjustment.customannotations.ValidMaterialName;
 import com.example.material_flow_rate_adjustment.customannotations.ValidMaterialUnit;
+import com.example.material_flow_rate_adjustment.customannotations.ValidSortOrder;
+import com.example.material_flow_rate_adjustment.customannotations.ValidSortTarget;
 
-record AdminCorrectMaterial(
+record MaterialSort(
+		@ValidSortOrder
+		OrderSortEnum order,
+		@ValidSortTarget
+		MaterialSortEnum target) {}
+
+record CorrectMaterial(
 		@ValidMaterialName
 		String newName,
 		@ValidMaterialDestination

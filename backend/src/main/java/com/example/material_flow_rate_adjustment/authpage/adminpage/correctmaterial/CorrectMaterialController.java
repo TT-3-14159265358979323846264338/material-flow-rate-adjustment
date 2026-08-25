@@ -22,13 +22,13 @@ public class CorrectMaterialController {
 	
 	@GetMapping("/api/material")
 	@PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
-	public ResponseEntity<?> adminGetData() {
-		return ResponseEntity.ok(correctMaterialService.getMaterial());
+	public ResponseEntity<?> adminGetData(@Valid MaterialSort materialSort) {
+		return ResponseEntity.ok(correctMaterialService.getMaterial(materialSort));
 	}
 	
 	@PostMapping("/api/material/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> adminCorrectMaterial(@PathVariable int id, @Valid @RequestBody AdminCorrectMaterial data, @AuthenticationPrincipal String loginUser){
+	public ResponseEntity<?> correctMaterial(@PathVariable int id, @Valid @RequestBody CorrectMaterial data, @AuthenticationPrincipal String loginUser){
 		boolean hasDeleted = correctMaterialService.adminCorrectMaterialData(id, data, loginUser);
 		return ResponseEntity.ok(new CommentRecord(hasDeleted? "製品情報を削除しました。": "製品情報を修正しました。"));
 	}

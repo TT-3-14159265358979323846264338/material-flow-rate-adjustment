@@ -22,8 +22,8 @@ public class CorrectUserController {
 	
 	@GetMapping("/api/user")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> adminGetData() {
-		return ResponseEntity.ok(correctUserService.getUser());
+	public ResponseEntity<?> adminGetData(@Valid UserSort userSort) {
+		return ResponseEntity.ok(correctUserService.getUser(userSort));
 	}
 	
 	@PostMapping("/api/user/{id}")

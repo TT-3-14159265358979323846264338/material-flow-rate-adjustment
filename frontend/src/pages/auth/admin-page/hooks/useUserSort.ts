@@ -18,7 +18,7 @@ export type UserSortConfig = {
   target: UserSortCodeConfig;
 };
 
-const InitialSort: UserSortConfig = {
+export const InitialUserSort: UserSortConfig = {
   isAdmin: false,
   isUser: false,
   isManager: false,
@@ -27,7 +27,7 @@ const InitialSort: UserSortConfig = {
 };
 
 export const useUserSort = () => {
-  const [sortData, setSortData] = useState<UserSortConfig>(InitialSort);
+  const [sortData, setSortData] = useState<UserSortConfig>(InitialUserSort);
   const setSort = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, type, checked, value } = e.currentTarget;
     const sortValue = type === "checkbox" ? checked : value;

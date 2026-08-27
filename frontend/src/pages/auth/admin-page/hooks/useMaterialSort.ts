@@ -15,13 +15,13 @@ export type MaterialSortConfig = {
   target: MaterialSortCodeConfig;
 };
 
-const InitialSort: MaterialSortConfig = {
+export const InitialMaterialSort: MaterialSortConfig = {
   order: "ASCENDING",
   target: "ID",
 };
 
 export const useMaterialSort = () => {
-  const [sortData, setSortData] = useState<MaterialSortConfig>(InitialSort);
+  const [sortData, setSortData] = useState<MaterialSortConfig>(InitialMaterialSort);
   const setSort = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
     setSortData((prev) => ({ ...prev, [name as keyof MaterialSortConfig]: value }));

@@ -81,9 +81,9 @@ const CorrectMatterial = () => {
         <div className="flex flex-col w-130 h-83 mr-5">
           <h2>製品一覧</h2>
           <ul className="border rounded-t-md bg-white">
-            <li className="ml-2 mr-2 gap-2 flex items-center">
-              <span className="block w-60 text-left">製品名</span>
-              <span className="flex-1 text-left">向け先</span>
+            <li className="ml-2 mr-2 gap-2 flex items-center *:text-left">
+              <span className="block w-60">製品名</span>
+              <span className="flex-1">向け先</span>
             </li>
           </ul>
           <ul className="flex-1 overflow-y-auto border border-b-black rounded-b-md bg-white">
@@ -98,11 +98,11 @@ const CorrectMatterial = () => {
                   data.base ? setNewBase(data.base) : setNewBase("");
                   setNewUnit(data.unit);
                 }}
-                className={`ml-2 mr-2 gap-2 flex items-center border-b border-b-gray-300 cursor-pointer
+                className={`ml-2 mr-2 gap-2 flex items-center border-b border-b-gray-300 cursor-pointer *:text-left
                   ${data.id === selectedMaterial?.id ? " bg-gray-200" : " bg-white"}`}
               >
-                <span className="block w-60 text-left">{data.name}</span>
-                <span className="flex-1 text-left">{data.destination}</span>
+                <span className="block w-60">{data.name}</span>
+                <span className="flex-1">{data.destination}</span>
               </li>
             ))}
           </ul>

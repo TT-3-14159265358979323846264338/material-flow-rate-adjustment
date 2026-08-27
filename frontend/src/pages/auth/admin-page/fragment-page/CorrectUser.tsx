@@ -12,7 +12,7 @@ import HistoryUser from "./HistoryUser";
 import { UserResponse } from "../types/userResponse";
 import { useCommentPostMapping } from "../../hooks/useCommentPostMapping";
 import { useUserSort } from "../hooks/useUserSort";
-import { AuthorityCodeConfig } from "../../../types/roleConfig";
+import { AuthorityCodeConfig, AuthorityView } from "../../../types/roleConfig";
 
 type ViewConfig = "Top" | "Sort" | "New" | "History";
 
@@ -76,10 +76,10 @@ const CorrectUser = () => {
         <div className="flex flex-col w-130 h-83 mr-5">
           <h2>ユーザー一覧</h2>
           <ul className="border rounded-t-md bg-white">
-            <li className="ml-2 mr-2 gap-2 flex items-centers">
-              <span className="block w-45 text-left">ログインユーザー名</span>
-              <span className="block w-45 text-left">表示ユーザー名</span>
-              <span className="flex-1 text-left">権限</span>
+            <li className="ml-2 mr-2 gap-2 flex items-centers *:text-left">
+              <span className="block w-45">ログインユーザー名</span>
+              <span className="block w-45">表示ユーザー名</span>
+              <span className="flex-1">権限</span>
             </li>
           </ul>
           <ul className="flex-1 overflow-y-auto border border-b-black rounded-b-md bg-white">
@@ -93,12 +93,12 @@ const CorrectUser = () => {
                   setNewRole(data.role);
                   setIsDeleted(false);
                 }}
-                className={`ml-2 mr-2 gap-2 flex items-center border-b border-b-gray-300 cursor-pointer
+                className={`ml-2 mr-2 gap-2 flex items-center border-b border-b-gray-300 cursor-pointer *:text-left
                   ${data.id === selectedAccount?.id ? " bg-gray-200" : " bg-white"}`}
               >
-                <span className="block w-45 text-left">{data.loginName}</span>
-                <span className="block w-45 text-left">{data.displayedName}</span>
-                <span className="flex-1 text-left">{data.role}</span>
+                <span className="block w-45">{data.loginName}</span>
+                <span className="block w-45">{data.displayedName}</span>
+                <span className="flex-1">{AuthorityView(data.role)}</span>
               </li>
             ))}
           </ul>

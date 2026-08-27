@@ -27,7 +27,7 @@ public class CorrectUserService {
 	
 	@Transactional(readOnly = true)
 	public List<Account> getUser(UserSort userSort) {
-		return repository.findByRoleInHasDeletedFalse(getTargetRole(userSort), userSort.target().getUserSort(userSort.order()))
+		return repository.findByRoleInAndHasDeletedFalse(getTargetRole(userSort), userSort.target().getUserSort(userSort.order()))
 						.stream()
 						.map(this::createAccount)
 						.toList();

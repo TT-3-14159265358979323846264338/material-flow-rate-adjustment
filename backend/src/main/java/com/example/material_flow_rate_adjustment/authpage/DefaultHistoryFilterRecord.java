@@ -8,7 +8,6 @@ import lombok.Data;
 
 @Data 
 public class DefaultHistoryFilterRecord {
-    private int number;
     @DateTimeFormat(pattern = "yyyy-MM") 
     private YearMonth minTerm;
     @DateTimeFormat(pattern = "yyyy-MM") 

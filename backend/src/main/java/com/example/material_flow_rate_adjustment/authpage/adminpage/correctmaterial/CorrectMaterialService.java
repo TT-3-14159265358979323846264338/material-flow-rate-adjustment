@@ -25,9 +25,8 @@ public class CorrectMaterialService {
 	
 	@Transactional(readOnly = true)
 	public List<Material> getMaterial(MaterialSort materialSort){
-		return materialRepository.findByHasDeletedFalse()
+		return materialRepository.findByHasDeletedFalse(materialSort.target().getMaterialSort(materialSort.order()))
 								.stream()
-								.sorted(MaterialSortEnum.materialComparator(materialSort.order(), materialSort.target()))
 								.map(this::createMaterial)
 								.toList();
 	}

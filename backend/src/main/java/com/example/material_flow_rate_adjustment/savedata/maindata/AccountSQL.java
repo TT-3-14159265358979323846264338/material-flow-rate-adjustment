@@ -13,7 +13,7 @@ import lombok.ToString;
 
 @Entity
 @Table(name = "account", indexes = {
-		@Index(name = "idx_account_role", columnList = "role")
+		@Index(name = "idx_account_role", columnList = "role, has_deleted")
 })
 @Data
 @ToString(callSuper = true)

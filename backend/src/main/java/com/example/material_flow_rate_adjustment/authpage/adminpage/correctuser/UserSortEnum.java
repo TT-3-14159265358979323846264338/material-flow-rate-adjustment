@@ -1,26 +1,20 @@
 package com.example.material_flow_rate_adjustment.authpage.adminpage.correctuser;
 
-import java.text.Collator;
-import java.util.Comparator;
-import java.util.Locale;
+import org.springframework.data.domain.Sort;
 
 import com.example.material_flow_rate_adjustment.authpage.adminpage.correctmaterial.OrderSortEnum;
-import com.example.material_flow_rate_adjustment.savedata.maindata.AccountSQL;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public enum UserSortEnum {
-	ID,
-	NAME,
-	AUTHORITY;
+	ID("id"),
+	NAME("loginUser"),
+	AUTHORITY("role");
 	
-	public static Comparator<AccountSQL> userComparator(UserSortEnum target){
-		return switch(target) {
-			case ID -> Comparator.comparingInt(AccountSQL::getId);
-			case NAME -> Comparator.comparing(AccountSQL::getLoginUser, Collator.getInstance(Locale.JAPANESE));
-			case AUTHORITY -> Comparator.comparing(AccountSQL::getRole, Collator.getInstance(Locale.JAPANESE));
-		};
-	}
+	private final String target;
 	
-	public static Comparator<AccountSQL> userComparator(OrderSortEnum order, UserSortEnum target){
-		return OrderSortEnum.orderComparator(userComparator(target), order);
+	public Sort getUserSort(OrderSortEnum order){
+		return Sort.by(order.getOrderSort(), target);
 	}
 }

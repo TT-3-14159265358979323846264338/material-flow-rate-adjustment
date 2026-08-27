@@ -1,22 +1,15 @@
 package com.example.material_flow_rate_adjustment.authpage.adminpage.correctmaterial;
 
-import java.util.Comparator;
+import org.springframework.data.domain.Sort;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
 public enum OrderSortEnum{
-	ASCENDING,
-	DESCENDING;
+	ASCENDING(Sort.Direction.ASC),
+	DESCENDING(Sort.Direction.DESC);
 	
-	public static <T extends Comparable<? super T>> Comparator<T> orderComparator(OrderSortEnum order){
-		return switch(order) {
-			case ASCENDING -> Comparator.naturalOrder();
-			case DESCENDING -> Comparator.reverseOrder();
-		};
-	}
-	
-	public static <T> Comparator<T> orderComparator(Comparator<T> baseComparator, OrderSortEnum order){
-		return switch(order) {
-			case ASCENDING -> baseComparator;
-			case DESCENDING -> baseComparator.reversed();
-		};
-	}
+	private final Sort.Direction orderSort;
 }

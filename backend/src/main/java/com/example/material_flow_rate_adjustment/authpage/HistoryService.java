@@ -3,23 +3,20 @@ package com.example.material_flow_rate_adjustment.authpage;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
-import java.util.Comparator;
 import java.util.stream.Stream;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import com.example.material_flow_rate_adjustment.savedata.historydata.BaseHistoryRepository;
 import com.example.material_flow_rate_adjustment.savedata.historydata.BaseHistorySQL;
 
 @Service
 public class HistoryService {
-	public <T extends BaseHistorySQL, U extends JpaRepository<T, Integer>> Stream<T> getHistory(DefaultHistoryFilterRecord filter, U repository) {
-		int limitSize = filter.getNumber() <= 0? Integer.MAX_VALUE : filter.getNumber();
-		return repository.findAll().stream()
-				.filter(i -> targetFilter(i, filter.getTargetId()))
-				.filter(i -> minTermFilter(i, filter.getMinTerm()))
-				.filter(i -> maxTermFilter(i, filter.getMaxTerm()))
-				.sorted(Comparator.comparing(T::getId).reversed())
-				.limit(limitSize);
+	public <T extends BaseHistorySQL, U extends BaseHistoryRepository<T, Integer>> Stream<T> getHistory(DefaultHistoryFilterRecord filter, U repository) {
+		return repository.findByDateBetween(minTerm(filter.getMinTerm()), maxTerm(filter.getMaxTerm()), historySort())
+				.stream()
+				.filter(i -> targetFilter(i, filter.getTargetId()));
 	}
 	
 	<T extends BaseHistorySQL> boolean targetFilter(T account, int targetId) {
@@ -29,19 +26,15 @@ public class HistoryService {
 		return true;
 	}
 	
-	<T extends BaseHistorySQL> boolean minTermFilter(T account, YearMonth minTerm) {
-		if(minTerm != null) {
-			LocalDateTime startTime = minTerm.atDay(1).atStartOfDay();
-			return !startTime.isAfter(account.getDate());
-		}
-		return true;
+	LocalDateTime minTerm(YearMonth minTerm) {
+		return minTerm != null? minTerm.atDay(1).atStartOfDay(): LocalDateTime.of(1000, 1, 1, 0, 0, 0);
 	}
 	
-	<T extends BaseHistorySQL> boolean maxTermFilter(T account, YearMonth maxTerm) {
-		if(maxTerm != null) {
-			LocalDateTime endTime = maxTerm.atEndOfMonth().atTime(LocalTime.MAX);
-			return !endTime.isBefore(account.getDate());
-		}
-		return true;
+	LocalDateTime maxTerm(YearMonth maxTerm) {
+		return maxTerm != null? maxTerm.atEndOfMonth().atTime(LocalTime.MAX): LocalDateTime.of(9999, 12, 31, 23, 59, 59);
+	}
+	
+	Sort historySort() {
+		return Sort.by(Sort.Direction.ASC, "id");
 	}
 }

@@ -1,8 +1,8 @@
 package com.example.material_flow_rate_adjustment.authpage.adminpage.correctuser;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,29 +27,23 @@ public class CorrectUserService {
 	
 	@Transactional(readOnly = true)
 	public List<Account> getUser(UserSort userSort) {
-		return repository.findByHasDeletedFalse()
+		return repository.findByRoleInHasDeletedFalse(getTargetRole(userSort), userSort.target().getUserSort(userSort.order()))
 						.stream()
-						.filter(getFilter(userSort))
-						.sorted(UserSortEnum.userComparator(userSort.order(), userSort.target()))
 						.map(this::createAccount)
 						.toList();
 	}
 	
-	Predicate<AccountSQL> getFilter(UserSort userSort) {
+	List<String> getTargetRole(UserSort userSort){
 		if(userSort.isAdmin() == userSort.isUser() && userSort.isAdmin() == userSort.isManager()) {
-			return (_) -> true;
+			return Stream.of(AccountRole.values()).map(i -> i.name()).toList();
 		}
-		List<String> targetRole = new ArrayList<>();
-		createTargetList(targetRole, userSort.isAdmin(), AccountRole.ADMIN);
-		createTargetList(targetRole, userSort.isUser(), AccountRole.USER);
-		createTargetList(targetRole, userSort.isManager(), AccountRole.MANAGER);
-		return (account) -> targetRole.contains(account.getRole());
-	}
-	
-	void createTargetList(List<String> targetRole, boolean isTarget, AccountRole role) {
-		if(isTarget) {
-			targetRole.add(role.name());
-		}
+		return Stream.of(
+					userSort.isAdmin()? AccountRole.ADMIN: null,
+					userSort.isUser()? AccountRole.USER: null,
+					userSort.isManager()? AccountRole.MANAGER: null)
+				.filter(Objects::nonNull)
+				.map(i -> i.name())
+				.toList();
 	}
 	
 	Account createAccount(AccountSQL account) {

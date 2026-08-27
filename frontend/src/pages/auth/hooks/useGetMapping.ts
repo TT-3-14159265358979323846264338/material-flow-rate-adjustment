@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, Dispatch, SetStateAction } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { errorHandling } from "../../utils/errorHandling";
 
@@ -9,21 +9,17 @@ type UeGetMappingProps = {
 
 type UeGetMappingReturn<T> = {
   data: T[];
-  sortData: T[];
-  setSortData: Dispatch<SetStateAction<T[]>>;
   getData: () => Promise<void>;
 };
 
 export const useGetMapping = <T>({ URL, params }: UeGetMappingProps): UeGetMappingReturn<T> => {
   const [data, setData] = useState<T[]>([]);
-  const [sortData, setSortData] = useState<T[]>([]);
   const paramsKey = JSON.stringify(params);
 
   const getData = useCallback(async () => {
     try {
       const response = await axios.get<T[]>(import.meta.env.VITE_BACK_BASE_API + URL, { params });
       setData(response.data);
-      setSortData(response.data);
     } catch (error) {
       errorHandling(error);
     }
@@ -35,8 +31,6 @@ export const useGetMapping = <T>({ URL, params }: UeGetMappingProps): UeGetMappi
 
   return {
     data,
-    sortData,
-    setSortData,
     getData,
   };
 };

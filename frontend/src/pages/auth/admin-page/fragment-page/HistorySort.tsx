@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { useGetMapping } from "../../hooks/useGetMapping";
-import TextInput from "../../components/TextInput";
 import Dropdown from "../../components/Dropdown";
 import DefaultButton from "../../components/DefaultButton";
 import { monthArray, allYearArray } from "../../utils/termArray";
@@ -26,7 +25,6 @@ const HistorySort = <T extends { id: number }>({ returnHistory, setDownloadRecor
       minMonth: String(date.getMonth() + 1),
     };
   };
-  const [number, setNumber] = useState<string>("50");
   const [minYear, setMinYear] = useState<string>(defaultMinTerm().minYear);
   const [minMonth, setMinMonth] = useState<string>(defaultMinTerm().minMonth);
   const [maxYear, setMaxYear] = useState<string>(String(new Date().getFullYear()));
@@ -39,7 +37,6 @@ const HistorySort = <T extends { id: number }>({ returnHistory, setDownloadRecor
     const arrayNumber = materialArray().indexOf(selected);
     const targetId = arrayNumber <= 0 ? 0 : data[arrayNumber - 1].id;
     setDownloadRecord({
-      number,
       minTerm,
       maxTerm,
       targetId,
@@ -50,9 +47,6 @@ const HistorySort = <T extends { id: number }>({ returnHistory, setDownloadRecor
   return (
     <div className="flex flex-col">
       <div>
-        <TextInput value={number} onChange={(e) => setNumber(e.target.value)} maxLength={3}>
-          最大検索数
-        </TextInput>
         <div className="flex items-center gap-3 *:flex-1 *:block">
           <Dropdown value={minYear} onChange={(e) => setMinYear(e.target.value)} list={allYearArray()}>
             年

@@ -13,8 +13,9 @@ import MaterialBaseInput from "../components/MaterialBaseInput";
 import MaterialUnitInput from "../components/MaterialUnitInput";
 import { useCommentPostMapping } from "../../hooks/useCommentPostMapping";
 import { useMaterialSort } from "../hooks/useMaterialSort";
+import DefaultModal from "../../components/DefaultModal";
 
-type ViewConfig = "Top" | "Sort" | "New" | "History";
+type ViewConfig = "Top" | "New" | "History";
 
 const CorrectMatterial = () => {
   const { sortData: finalSort, setSortData: setFinalSort } = useMaterialSort();
@@ -24,6 +25,7 @@ const CorrectMatterial = () => {
     params: finalSort,
   });
   const { view, setView, returnTop, newDataReturnTop } = useView<ViewConfig>({ getData: getMaterialData });
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedMaterial, setSelectedMaterial] = useState<MaterialResponse>();
   const [newName, setNewName] = useState<string>("");
   const [newDestination, setDestination] = useState<string>("");
@@ -56,19 +58,6 @@ const CorrectMatterial = () => {
     };
     await post({ URL: `/api/material/${selectedMaterial.id}`, params, handle });
   };
-
-  if (view === "Sort") {
-    return (
-      <CorrectMaterialSort
-        finalSort={finalSort}
-        setFinalSort={setFinalSort}
-        sortData={sortData}
-        setSortData={setSortData}
-        setSort={setSort}
-        returnTop={returnTop}
-      ></CorrectMaterialSort>
-    );
-  }
   if (view === "New") {
     return <NewMaterial returnTop={newDataReturnTop}></NewMaterial>;
   }
@@ -132,11 +121,22 @@ const CorrectMatterial = () => {
       </div>
 
       <div className="flex justify-center gap-5">
-        <DefaultButton onClick={() => setView("Sort")}>ソート</DefaultButton>
+        <DefaultButton onClick={() => setIsOpen(true)}>ソート</DefaultButton>
         <DefaultButton onClick={correctMaterialHandle}>登録修正</DefaultButton>
         <DefaultButton onClick={() => setView("New")}>新規登録</DefaultButton>
         <DefaultButton onClick={() => setView("History")}>修正履歴</DefaultButton>
       </div>
+
+      <DefaultModal isOpen={isOpen} setIsOpen={setIsOpen}>
+        <CorrectMaterialSort
+          finalSort={finalSort}
+          setFinalSort={setFinalSort}
+          sortData={sortData}
+          setSortData={setSortData}
+          setSort={setSort}
+          returnTop={() => setIsOpen(false)}
+        ></CorrectMaterialSort>
+      </DefaultModal>
     </div>
   );
 };

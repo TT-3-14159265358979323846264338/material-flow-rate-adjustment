@@ -19,9 +19,7 @@ type UseHistoryReturn<T> = {
 };
 
 export const useHistory = <T>({ historyURL }: UseHistoryProps): UseHistoryReturn<T> => {
-  const [downloadRecord, setDownloadRecord] = useState<Record<string, any>>({
-    number: 50,
-  });
+  const [downloadRecord, setDownloadRecord] = useState<Record<string, any>>({});
   const { data: history, getData: getHistoryData } = useGetMapping<T>({
     URL: historyURL,
     params: downloadRecord,

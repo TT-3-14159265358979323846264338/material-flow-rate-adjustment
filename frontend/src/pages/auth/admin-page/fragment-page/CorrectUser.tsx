@@ -13,14 +13,16 @@ import { UserResponse } from "../types/userResponse";
 import { useCommentPostMapping } from "../../hooks/useCommentPostMapping";
 import { useUserSort } from "../hooks/useUserSort";
 import { AuthorityCodeConfig, AuthorityView } from "../../../types/roleConfig";
+import DefaultModal from "../../components/DefaultModal";
 
-type ViewConfig = "Top" | "Sort" | "New" | "History";
+type ViewConfig = "Top" | "New" | "History";
 
 const CorrectUser = () => {
   const { sortData: finalSort, setSortData: setFinalSort } = useUserSort();
   const { sortData, setSortData, setSort } = useUserSort();
   const { data: accountData, getData: getAccountData } = useGetMapping<UserResponse>({ URL: "/api/user", params: finalSort });
   const { view, setView, returnTop, newDataReturnTop } = useView<ViewConfig>({ getData: getAccountData });
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedAccount, setSelectedAccount] = useState<UserResponse>();
   const [newLoginName, setNewLoginName] = useState<string>("");
   const [newDisplayedName, setDisplayedName] = useState<string>("");
@@ -52,18 +54,6 @@ const CorrectUser = () => {
     await post({ URL: `/api/user/${selectedAccount.id}`, params, handle });
   };
 
-  if(view === "Sort") {
-    return (
-      <CorrectUserSort
-        finalSort={finalSort}
-        setFinalSort={setFinalSort}
-        sortData={sortData}
-        setSortData={setSortData}
-        setSort={setSort}
-        returnTop={returnTop}
-      ></CorrectUserSort>
-    );
-  }
   if(view === "New"){
     return <NewUser returnTop={newDataReturnTop}></NewUser>;
   }
@@ -125,11 +115,22 @@ const CorrectUser = () => {
       </div>
 
       <div className="flex justify-center gap-5">
-        <DefaultButton onClick={() => setView("Sort")}>ソート</DefaultButton>
+        <DefaultButton onClick={() => setIsOpen(true)}>ソート</DefaultButton>
         <DefaultButton onClick={correctUserHandle}>登録修正</DefaultButton>
         <DefaultButton onClick={() => setView("New")}>新規登録</DefaultButton>
         <DefaultButton onClick={() => setView("History")}>修正履歴</DefaultButton>
       </div>
+
+      <DefaultModal isOpen={isOpen} setIsOpen={setIsOpen}>
+        <CorrectUserSort
+          finalSort={finalSort}
+          setFinalSort={setFinalSort}
+          sortData={sortData}
+          setSortData={setSortData}
+          setSort={setSort}
+          returnTop={() => setIsOpen(false)}
+        ></CorrectUserSort>
+      </DefaultModal>
     </div>
   );
 };

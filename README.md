@@ -9,7 +9,7 @@ React+TypeScript+Javaでシステム開発を勉強するために、新規作�
 **♦環境♦**  
 **言語:**　　　　　　　Java 25, JavaScript ES6+, TypeScript  
 **フレームワーク:**　　Spring boot 4.0.6, Spring Security  
-**ライブラリ:**　　　　React 19.2.5, React Router 7  
+**ライブラリ:**　　　　React 19.2.5, React Router 7, React Modal  
 **データベース:**　　　MySQL 9.6  
 **フロントエンド:**　　Tailwind CSS 4  
 **認証:**　　　　　　　JWT (jjwt 0.12)  

@@ -1,5 +1,7 @@
 package com.example.material_flow_rate_adjustment.authpage.adminpage.historyuser;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +18,7 @@ public class HistoryUserController {
 	
 	@GetMapping("/api/history/user")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> adminGetUserHistory(DefaultHistoryFilterRecord filter) {
+	public ResponseEntity<?> adminGetUserHistory(@Valid DefaultHistoryFilterRecord filter) {
 		return ResponseEntity.ok(historyUserService.getHistory(filter));
 	}
 }

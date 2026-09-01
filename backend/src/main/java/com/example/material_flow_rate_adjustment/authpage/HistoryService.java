@@ -8,15 +8,16 @@ import java.util.stream.Stream;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.example.material_flow_rate_adjustment.authpage.adminpage.correctmaterial.OrderSortEnum;
 import com.example.material_flow_rate_adjustment.savedata.historydata.BaseHistoryRepository;
 import com.example.material_flow_rate_adjustment.savedata.historydata.BaseHistorySQL;
 
 @Service
 public class HistoryService {
 	public <T extends BaseHistorySQL, U extends BaseHistoryRepository<T, Integer>> Stream<T> getHistory(DefaultHistoryFilterRecord filter, U repository) {
-		return repository.findByDateBetween(minTerm(filter.getMinTerm()), maxTerm(filter.getMaxTerm()), historySort())
-				.stream()
-				.filter(i -> targetFilter(i, filter.getTargetId()));
+		return repository.findByDateBetween(minTerm(filter.minYear(), filter.minMonth()), 
+											maxTerm(filter.maxYear(), filter.maxMonth()), 
+											historySort(filter.order(), filter.target())).stream();
 	}
 	
 	<T extends BaseHistorySQL> boolean targetFilter(T account, int targetId) {
@@ -26,15 +27,31 @@ public class HistoryService {
 		return true;
 	}
 	
-	LocalDateTime minTerm(YearMonth minTerm) {
-		return minTerm != null? minTerm.atDay(1).atStartOfDay(): LocalDateTime.of(1000, 1, 1, 0, 0, 0);
+	LocalDateTime minTerm(String minYear, String minMonth) {
+		return getYearMonth(minYear, 1000, minMonth, 1).atDay(1).atStartOfDay();
 	}
 	
-	LocalDateTime maxTerm(YearMonth maxTerm) {
-		return maxTerm != null? maxTerm.atEndOfMonth().atTime(LocalTime.MAX): LocalDateTime.of(9999, 12, 31, 23, 59, 59);
+	LocalDateTime maxTerm(String maxYear, String maxMonth) {
+		return getYearMonth(maxYear, 9999, maxMonth, 12).atEndOfMonth().atTime(LocalTime.MAX);
 	}
 	
-	Sort historySort() {
-		return Sort.by(Sort.Direction.ASC, "id");
+	YearMonth getYearMonth(String year, int baseYear, String month, int baseMonth) {
+		try {
+			return YearMonth.of(getIntValue(year, baseYear), getIntValue(month, baseMonth));
+		}catch(Exception e) {
+			return YearMonth.of(baseYear, baseMonth);
+		}
+	}
+	
+	int getIntValue(String value, int base) {
+		try {
+			return Integer.parseInt(value);
+		}catch(Exception e) {
+			return base;
+		}
+	}
+	
+	Sort historySort(OrderSortEnum order, DefaultHistorySortEnum target) {
+		return target.getHistorySort(order);
 	}
 }

@@ -1,16 +1,15 @@
 package com.example.material_flow_rate_adjustment.authpage;
 
-import java.time.YearMonth;
+import com.example.material_flow_rate_adjustment.authpage.adminpage.correctmaterial.OrderSortEnum;
+import com.example.material_flow_rate_adjustment.customannotations.ValidSortOrder;
+import com.example.material_flow_rate_adjustment.customannotations.ValidSortTarget;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import lombok.Data;
-
-@Data 
-public class DefaultHistoryFilterRecord {
-    @DateTimeFormat(pattern = "yyyy-MM") 
-    private YearMonth minTerm;
-    @DateTimeFormat(pattern = "yyyy-MM") 
-    private YearMonth maxTerm;
-    private int targetId;
-}
+public record DefaultHistoryFilterRecord(
+		String minYear,
+		String minMonth,
+		String maxYear,
+		String maxMonth,
+		@ValidSortOrder
+		OrderSortEnum order,
+		@ValidSortTarget
+		DefaultHistorySortEnum target) {}

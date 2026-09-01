@@ -40,7 +40,7 @@ public class AccountInitializer implements CommandLineRunner{
 	AccountSQL createAdminAccount() {
 		AccountSQL newAccount = new AccountSQL();
 		newAccount.setLoginUser(user);
-		newAccount.setDisplayedUser("管理者");
+		newAccount.setDisplayedUser("初期管理者");
 		newAccount.setPassword(passwordEncoder.encode(password));
 		newAccount.setRole(AccountRole.ADMIN.name());
 		newAccount.setHasDeleted(false);

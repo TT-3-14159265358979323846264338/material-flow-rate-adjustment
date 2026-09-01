@@ -24,7 +24,7 @@ const DefaultModal = ({ isOpen, setIsOpen, children }: DefaultModalProps) => {
           marginRight: "-50%",
           transform: "translate(-50%, -50%)",
           maxWidth: "800px",
-          maxHeight: "400px",
+          maxHeight: "600px",
           overflow: "auto",
           color: "#000000",
           backgroundColor: "#f0aa50",

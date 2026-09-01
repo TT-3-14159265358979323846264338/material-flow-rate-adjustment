@@ -1,8 +1,12 @@
 import DefaultButton from "../../components/DefaultButton";
 import { type HistoryUserConfig } from "../../../types/historyUserConfig";
 import { ReturnProps } from "../../types/returnProps";
+import { useSortGetMapping } from "../../hooks/useSortGetMapping";
+import { useHistorySort } from "../hooks/useHistory";
+import { HistorySortConfig, InitialHistorySort } from "../types/historyConfig";
+import { Base } from "../../hooks/useView";
+import DefaultModal from "../../components/DefaultModal";
 import HistoryMaterialSort from "./HistoryMaterialSort";
-import { useHistory } from "../hooks/useHistory";
 
 type HistoryMaterialResponse = {
   id: number;
@@ -20,13 +24,12 @@ type HistoryMaterialResponse = {
 };
 
 const HistoryMaterial = ({ returnTop }: ReturnProps) => {
-  const { setDownloadRecord, history, view, setView, returnHistory, selectedId, setSelectedId } = useHistory<HistoryMaterialResponse>(
-    { historyURL: "/api/history/material"  }
-  );
+  const { finalSort, setFinalSort, sortData, setSortData, setSort, mappingData, isOpen, setIsOpen } =
+    useSortGetMapping<HistorySortConfig, HistoryMaterialResponse, Base>({
+      useSort: () => useHistorySort<HistorySortConfig>(InitialHistorySort),
+      URL: "/api/history/material",
+    });
 
-  if (view === "Sort") {
-    return (<HistoryMaterialSort returnHistory={returnHistory} setDownloadRecord={setDownloadRecord}></HistoryMaterialSort>);
-  }
   return (
     <div className="flex flex-col">
       <h2>製品情報変更履歴</h2>
@@ -56,12 +59,10 @@ const HistoryMaterial = ({ returnTop }: ReturnProps) => {
             </li>
           </ul>
           <ul className="text-xs border border-b-black rounded-b-md">
-            {history.map((item) => (
+            {mappingData.map((item) => (
               <li
                 key={item.id}
-                onClick={() => setSelectedId(item.id)}
-                className={`flex min-w-max ml-2 mr-2 items-center border-b border-b-gray-500 cursor-pointer  *:block *:w-35 *:ml-1
-            ${item.id === selectedId ? " bg-gray-200" : " bg-white"}`}
+                className={`flex min-w-max ml-2 mr-2 items-center border-b border-b-gray-500 cursor-pointer  *:block *:w-35 *:ml-1`}
               >
                 <span>{item.action}</span>
                 <div className="*:flex *:justify-center *:after:content-['\00a0']">
@@ -89,9 +90,20 @@ const HistoryMaterial = ({ returnTop }: ReturnProps) => {
       </div>
 
       <div className="flex justify-center gap-5">
-        <DefaultButton onClick={() => setView("Sort")}>ソート</DefaultButton>
+        <DefaultButton onClick={() => setIsOpen(true)}>ソート</DefaultButton>
         <DefaultButton onClick={returnTop}>戻る</DefaultButton>
       </div>
+
+      <DefaultModal isOpen={isOpen} setIsOpen={setIsOpen}>
+        <HistoryMaterialSort
+          finalSort={finalSort}
+          setFinalSort={setFinalSort}
+          sortData={sortData}
+          setSortData={setSortData}
+          setSort={setSort}
+          setIsOpen={setIsOpen}
+        ></HistoryMaterialSort>
+      </DefaultModal>
     </div>
   );
 };

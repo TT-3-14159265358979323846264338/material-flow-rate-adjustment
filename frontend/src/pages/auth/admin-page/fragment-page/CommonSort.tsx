@@ -4,8 +4,8 @@ import { ORDER_CODE, OrderCodeConfig } from "../../types/orderConfig";
 import { CommentViewCode, CommentViewConfig } from "../types/commentView";
 
 type CommonSortProps<T, U> = {
-  SortCode: U;
-  InitialSort: T;
+  sortCode: U;
+  initialSort: T;
   finalSort: T;
   setFinalSort: React.Dispatch<React.SetStateAction<T>>;
   sortData: T;
@@ -16,8 +16,8 @@ type CommonSortProps<T, U> = {
 };
 
 const CommonSort = <T extends { order: OrderCodeConfig, target: CommentViewCode<U> }, U extends readonly CommentViewConfig[]>({
-  SortCode,
-  InitialSort,
+  sortCode,
+  initialSort,
   finalSort,
   setFinalSort,
   sortData,
@@ -31,7 +31,7 @@ const CommonSort = <T extends { order: OrderCodeConfig, target: CommentViewCode<
     returnTop();
   };
   const resetHandle = () => {
-    setSortData(InitialSort);
+    setSortData(initialSort);
   };
   const returnHandle = () => {
     setSortData(finalSort);
@@ -50,7 +50,7 @@ const CommonSort = <T extends { order: OrderCodeConfig, target: CommentViewCode<
       </div>
       <h3 className="text-left ml-5">並び替え</h3>
       <div className="flex justify-center gap-10 border rounded-md bg-white p-5 mb-3">
-        {SortCode.map((item) => (
+        {sortCode.map((item) => (
           <RadioInput key={item.code} selected={sortData.target} setSelected={setSort} value={item.code} groupName="target">
             {item.view}
           </RadioInput>

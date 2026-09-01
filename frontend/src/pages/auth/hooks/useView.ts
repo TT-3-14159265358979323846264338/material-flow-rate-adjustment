@@ -1,6 +1,6 @@
 import { useState, Dispatch, SetStateAction } from "react";
 
-type Base = "Top" | string;
+export type Base = "Top" | string;
 
 type UseViewProps = {
   getData?: () => Promise<void>;

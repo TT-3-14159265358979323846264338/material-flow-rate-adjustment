@@ -1,76 +1,75 @@
-import { Dispatch, SetStateAction, useState } from "react";
-import { useGetMapping } from "../../hooks/useGetMapping";
 import Dropdown from "../../components/Dropdown";
-import DefaultButton from "../../components/DefaultButton";
 import { monthArray, allYearArray } from "../../utils/termArray";
+import CommonSort from "./CommonSort";
+import { CommentViewCode, CommentViewConfig } from "../types/commentView";
+import { OrderCodeConfig } from "../../types/orderConfig";
 
-type HistorySortProps<T> = {
-  returnHistory: () => void;
-  setDownloadRecord: Dispatch<SetStateAction<Record<string, any>>>;
-  getMappingURL: string;
-  createArray: (data: T[]) => string[];
+type HistorySortProps<T, U> = {
+  sortCode: U;
+  initialSort: T;
+  finalSort: T;
+  setFinalSort: React.Dispatch<React.SetStateAction<T>>;
+  sortData: T;
+  setSortData: React.Dispatch<React.SetStateAction<T>>;
+  setSort: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement, Element>) => void;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  children?: React.ReactElement;
 };
 
-const HistorySort = <T extends { id: number }>({ returnHistory, setDownloadRecord, getMappingURL, createArray }: HistorySortProps<T>) => {
-  const { data } = useGetMapping<T>({ URL: getMappingURL });
-  const materialArray = () => {
-    const dataArray = createArray(data);
-    return ["指定なし", ...dataArray];
-  };
-  const defaultMinTerm = () => {
-    const date = new Date();
-    date.setMonth(date.getMonth() - 3);
-    return {
-      minYear: String(date.getFullYear()),
-      minMonth: String(date.getMonth() + 1),
-    };
-  };
-  const [minYear, setMinYear] = useState<string>(defaultMinTerm().minYear);
-  const [minMonth, setMinMonth] = useState<string>(defaultMinTerm().minMonth);
-  const [maxYear, setMaxYear] = useState<string>(String(new Date().getFullYear()));
-  const [maxMonth, setMaxMonth] = useState<string>(String(new Date().getMonth() + 1));
-  const [selected, setSelected] = useState<string>("指定なし");
+export type HistorySortConfig<U extends readonly CommentViewConfig[]> = {
+  minYear: string;
+  minMonth: string;
+  maxYear: string;
+  maxMonth: string;
+  order: OrderCodeConfig;
+  target: CommentViewCode<U>;
+};
 
-  const downloadHandle = () => {
-    const minTerm = `${minYear}-${String(minMonth).padStart(2, "0")}`;
-    const maxTerm = `${maxYear}-${String(maxMonth).padStart(2, "0")}`;
-    const arrayNumber = materialArray().indexOf(selected);
-    const targetId = arrayNumber <= 0 ? 0 : data[arrayNumber - 1].id;
-    setDownloadRecord({
-      minTerm,
-      maxTerm,
-      targetId,
-    });
-    returnHistory();
-  };
-
+const HistorySort = <T extends HistorySortConfig<U> , U extends readonly CommentViewConfig[]>({
+  sortCode,
+  initialSort,
+  finalSort,
+  setFinalSort,
+  sortData,
+  setSortData,
+  setSort,
+  setIsOpen,
+  children,
+}: HistorySortProps<T, U>) => {
+  
   return (
-    <div className="flex flex-col">
-      <div>
-        <div className="flex items-center gap-3 *:flex-1 *:block">
-          <Dropdown value={minYear} onChange={(e) => setMinYear(e.target.value)} list={allYearArray()}>
-            年
-          </Dropdown>
-          <Dropdown value={minMonth} onChange={(e) => setMinMonth(e.target.value)} list={monthArray()}>
-            月
-          </Dropdown>
-          <span>～</span>
-          <Dropdown value={maxYear} onChange={(e) => setMaxYear(e.target.value)} list={allYearArray()}>
-            年
-          </Dropdown>
-          <Dropdown value={maxMonth} onChange={(e) => setMaxMonth(e.target.value)} list={monthArray()}>
-            月
-          </Dropdown>
+    <CommonSort
+      sortCode={sortCode}
+      initialSort={initialSort}
+      finalSort={finalSort}
+      setFinalSort={setFinalSort}
+      sortData={sortData}
+      setSortData={setSortData}
+      setSort={setSort}
+      returnTop={() => setIsOpen(false)}
+    >
+      <div className="flex flex-col">
+        <h3 className="text-left ml-5">絞り込み</h3>
+        <div className="flex justify-center gap-10 border rounded-md bg-white p-5 mb-3">
+          <div className="flex items-center gap-3 *:flex-1 *:block">
+            <Dropdown name="minYear" value={sortData.minYear} onChange={setSort} list={allYearArray()}>
+              年
+            </Dropdown>
+            <Dropdown name="minMonth" value={sortData.minMonth} onChange={setSort} list={monthArray()}>
+              月
+            </Dropdown>
+            <span>～</span>
+            <Dropdown name="maxYear" value={sortData.maxYear} onChange={setSort} list={allYearArray()}>
+              年
+            </Dropdown>
+            <Dropdown name="maxMonth" value={sortData.maxMonth} onChange={setSort} list={monthArray()}>
+              月
+            </Dropdown>
+          </div>
         </div>
-        <Dropdown value={selected} onChange={(e) => setSelected(e.target.value)} list={materialArray()}>
-          絞り込み項目
-        </Dropdown>
+        {children}
       </div>
-      <div className="flex justify-center gap-5">
-        <DefaultButton onClick={downloadHandle}>データ取得</DefaultButton>
-        <DefaultButton onClick={returnHistory}>戻る</DefaultButton>
-      </div>
-    </div>
+    </CommonSort>
   );
 };
 

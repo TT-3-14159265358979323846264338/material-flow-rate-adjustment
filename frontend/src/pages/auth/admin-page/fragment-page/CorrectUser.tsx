@@ -6,23 +6,36 @@ import CheckInput from "../../components/CheckInput";
 import CorrectUserSort from "./CorrectUserSort";
 import NewUser from "./NewUser";
 import DisplayedUserNameInput from "../components/DisplyedUserNameInput";
-import { useGetMapping } from "../../hooks/useGetMapping";
-import { useView } from "../../hooks/useView";
 import HistoryUser from "./HistoryUser";
 import { UserResponse } from "../types/userResponse";
 import { useCommentPostMapping } from "../../hooks/useCommentPostMapping";
-import { useUserSort } from "../hooks/useUserSort";
+import { UserSortConfig, useUserSort } from "../hooks/useUserSort";
 import { AuthorityCodeConfig, AuthorityView } from "../../../types/roleConfig";
 import DefaultModal from "../../components/DefaultModal";
+import { useSortGetMapping } from "../../hooks/useSortGetMapping";
 
-type ViewConfig = "Top" | "New" | "History";
+type UserViewConfig = "Top" | "New" | "History";
 
 const CorrectUser = () => {
-  const { sortData: finalSort, setSortData: setFinalSort } = useUserSort();
-  const { sortData, setSortData, setSort } = useUserSort();
-  const { data: accountData, getData: getAccountData } = useGetMapping<UserResponse>({ URL: "/api/user", params: finalSort });
-  const { view, setView, returnTop, newDataReturnTop } = useView<ViewConfig>({ getData: getAccountData });
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const {
+    finalSort,
+    setFinalSort,
+    sortData,
+    setSortData,
+    setSort,
+    mappingData,
+    getMappingData,
+    view,
+    setView,
+    returnTop,
+    newDataReturnTop,
+    isOpen,
+    setIsOpen,
+  } = useSortGetMapping<UserSortConfig, UserResponse, UserViewConfig>({
+    useSort: useUserSort,
+    URL: "/api/user",
+  });
+  
   const [selectedAccount, setSelectedAccount] = useState<UserResponse>();
   const [newLoginName, setNewLoginName] = useState<string>("");
   const [newDisplayedName, setDisplayedName] = useState<string>("");
@@ -49,7 +62,7 @@ const CorrectUser = () => {
     };
     const handle = async() => {
       setSelectedAccount(undefined);
-      await getAccountData();      
+      await getMappingData();      
     };
     await post({ URL: `/api/user/${selectedAccount.id}`, params, handle });
   };
@@ -73,7 +86,7 @@ const CorrectUser = () => {
             </li>
           </ul>
           <ul className="flex-1 overflow-y-auto border border-b-black rounded-b-md bg-white">
-            {accountData.map((data) => (
+            {mappingData.map((data) => (
               <li
                 key={data.id}
                 onClick={() => {

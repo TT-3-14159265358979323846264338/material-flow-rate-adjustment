@@ -5,27 +5,37 @@ import CheckInput from "../../components/CheckInput";
 import DefaultButton from "../../components/DefaultButton";
 import NewMaterial from "./NewMaterial";
 import CorrectMaterialSort from "./CorrectMaterialSort";
-import { useGetMapping } from "../../hooks/useGetMapping";
-import { useView } from "../../hooks/useView";
 import HistoryMaterial from "./HistoryMaterial";
 import { MaterialResponse } from "../../types/materialResponse";
 import MaterialBaseInput from "../components/MaterialBaseInput";
 import MaterialUnitInput from "../components/MaterialUnitInput";
 import { useCommentPostMapping } from "../../hooks/useCommentPostMapping";
-import { useMaterialSort } from "../hooks/useMaterialSort";
+import { MaterialSortConfig, useMaterialSort } from "../hooks/useMaterialSort";
 import DefaultModal from "../../components/DefaultModal";
+import { useSortGetMapping } from "../../hooks/useSortGetMapping";
 
-type ViewConfig = "Top" | "New" | "History";
+type MaterialViewConfig = "Top" | "New" | "History";
 
 const CorrectMatterial = () => {
-  const { sortData: finalSort, setSortData: setFinalSort } = useMaterialSort();
-  const { sortData, setSortData, setSort } = useMaterialSort();
-  const { data: materialData, getData: getMaterialData } = useGetMapping<MaterialResponse>({
+  const {
+    finalSort,
+    setFinalSort,
+    sortData,
+    setSortData,
+    setSort,
+    mappingData,
+    getMappingData,
+    view,
+    setView,
+    returnTop,
+    newDataReturnTop,
+    isOpen,
+    setIsOpen,
+  } = useSortGetMapping<MaterialSortConfig, MaterialResponse, MaterialViewConfig>({
+    useSort: useMaterialSort,
     URL: "/api/material",
-    params: finalSort,
   });
-  const { view, setView, returnTop, newDataReturnTop } = useView<ViewConfig>({ getData: getMaterialData });
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const [selectedMaterial, setSelectedMaterial] = useState<MaterialResponse>();
   const [newName, setNewName] = useState<string>("");
   const [newDestination, setDestination] = useState<string>("");
@@ -54,7 +64,7 @@ const CorrectMatterial = () => {
     };
     const handle = async() => {
       setSelectedMaterial(undefined);
-      await getMaterialData();
+      await getMappingData();
     };
     await post({ URL: `/api/material/${selectedMaterial.id}`, params, handle });
   };
@@ -76,7 +86,7 @@ const CorrectMatterial = () => {
             </li>
           </ul>
           <ul className="flex-1 overflow-y-auto border border-b-black rounded-b-md bg-white">
-            {materialData.map((data) => (
+            {mappingData.map((data) => (
               <li
                 key={data.id}
                 onClick={() => {

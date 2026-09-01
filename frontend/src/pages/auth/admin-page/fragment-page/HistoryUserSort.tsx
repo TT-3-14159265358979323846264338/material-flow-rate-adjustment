@@ -1,21 +1,33 @@
-import { Dispatch, SetStateAction, } from "react";
 import HistorySort from "./HistorySort";
-import { UserResponse } from "../types/userResponse";
+import { HISTORY_SORT_CODE, HistorySortConfig, InitialHistorySort } from "../types/historyConfig";
 
 type HistoryUserSortProps = {
-  returnHistory: () => void;
-  setDownloadRecord: Dispatch<SetStateAction<Record<string, any>>>;
+  finalSort: HistorySortConfig;
+  setFinalSort: React.Dispatch<React.SetStateAction<HistorySortConfig>>;
+  sortData: HistorySortConfig;
+  setSortData: React.Dispatch<React.SetStateAction<HistorySortConfig>>;
+  setSort: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement, Element>) => void;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const HistoryUserSort = ({ returnHistory, setDownloadRecord }: HistoryUserSortProps) => {
-  const getMappingURL = "/api/user";
-  const createArray = (data: UserResponse[]) => data.map((user) => user.displayedName);
+const HistoryUserSort = ({
+  finalSort,
+  setFinalSort,
+  sortData,
+  setSortData,
+  setSort,
+  setIsOpen,
+}: HistoryUserSortProps) => {
   return (
     <HistorySort
-      returnHistory={returnHistory}
-      setDownloadRecord={setDownloadRecord}
-      getMappingURL={getMappingURL}
-      createArray={createArray}
+      sortCode={HISTORY_SORT_CODE}
+      initialSort={InitialHistorySort}
+      finalSort={finalSort}
+      setFinalSort={setFinalSort}
+      sortData={sortData}
+      setSortData={setSortData}
+      setSort={setSort}
+      setIsOpen={setIsOpen}
     ></HistorySort>
   );
 };

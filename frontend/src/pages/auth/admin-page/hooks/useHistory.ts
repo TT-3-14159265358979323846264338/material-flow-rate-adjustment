@@ -1,39 +1,16 @@
-import { useState, Dispatch, SetStateAction } from "react";
-import { useGetMapping } from "../../hooks/useGetMapping";
-import { useView } from "../../hooks/useView";
+import { useState } from "react";
+import { SortConfig } from "../../types/sortConfig";
 
-type ViewConfig = "Top" | "Sort";
-
-type UseHistoryProps = {
-  historyURL: string;
-};
-
-type UseHistoryReturn<T> = {
-  setDownloadRecord: Dispatch<SetStateAction<Record<string, any>>>;
-  history: T[];
-  view: ViewConfig;
-  setView: Dispatch<SetStateAction<ViewConfig>>;
-  returnHistory: () => void;
-  selectedId: number | undefined;
-  setSelectedId: Dispatch<SetStateAction<number | undefined>>;
-};
-
-export const useHistory = <T>({ historyURL }: UseHistoryProps): UseHistoryReturn<T> => {
-  const [downloadRecord, setDownloadRecord] = useState<Record<string, any>>({});
-  const { data: history, getData: getHistoryData } = useGetMapping<T>({
-    URL: historyURL,
-    params: downloadRecord,
-  });
-  const { view, setView, returnTop: returnHistory } = useView<ViewConfig>({ getData: getHistoryData });
-  const [selectedId, setSelectedId] = useState<number>();
-
-  return {
-    setDownloadRecord,
-    history,
-    view,
-    setView,
-    returnHistory,
-    selectedId,
-    setSelectedId,
+export const useHistorySort = <T>(InitialHistorySort: T): SortConfig<T> => {
+  const [sortData, setSortData] = useState<T>(InitialHistorySort);
+  const setSort = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.currentTarget;
+    let sortValue = value as any;
+    if (e.currentTarget instanceof HTMLInputElement) {
+      const { type, checked } = e.currentTarget;
+      sortValue = type === "checkbox" ? checked : value;
+    }
+    setSortData((prev) => ({ ...prev, [name as keyof T]: sortValue }));
   };
+  return { sortData, setSortData, setSort };
 };

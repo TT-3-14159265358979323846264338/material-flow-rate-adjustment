@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { OrderCodeConfig } from "../../types/orderConfig";
 import { CommentViewConfig, CommentViewCode } from "../types/commentView";
+import { SortConfig } from "../../types/sortConfig";
 
 export const USER_SORT_CODE = [
   { code: "ID", view: "ID" },
@@ -26,7 +27,7 @@ export const InitialUserSort: UserSortConfig = {
   target: "ID",
 };
 
-export const useUserSort = () => {
+export const useUserSort = (): SortConfig<UserSortConfig> => {
   const [sortData, setSortData] = useState<UserSortConfig>(InitialUserSort);
   const setSort = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, type, checked, value } = e.currentTarget;

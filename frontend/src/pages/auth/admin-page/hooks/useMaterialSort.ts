@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { OrderCodeConfig } from "../../types/orderConfig";
 import { CommentViewConfig, CommentViewCode } from "../types/commentView";
+import { SortConfig } from "../../types/sortConfig";
 
 export const MATERAIL_SORT_CODE = [
   { code: "ID", view: "ID" },
@@ -20,7 +21,7 @@ export const InitialMaterialSort: MaterialSortConfig = {
   target: "ID",
 };
 
-export const useMaterialSort = () => {
+export const useMaterialSort = (): SortConfig<MaterialSortConfig> => {
   const [sortData, setSortData] = useState<MaterialSortConfig>(InitialMaterialSort);
   const setSort = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;

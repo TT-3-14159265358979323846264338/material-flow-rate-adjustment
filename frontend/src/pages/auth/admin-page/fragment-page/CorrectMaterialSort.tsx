@@ -13,8 +13,8 @@ type CorrentMaterialSortProps = {
 const CorrectMaterialSort = ({ finalSort, setFinalSort, sortData, setSortData, setSort, returnTop }: CorrentMaterialSortProps) => {
   return (
     <CommonSort
-      SortCode={MATERAIL_SORT_CODE}
-      InitialSort={InitialMaterialSort}
+      sortCode={MATERAIL_SORT_CODE}
+      initialSort={InitialMaterialSort}
       finalSort={finalSort}
       setFinalSort={setFinalSort}
       sortData={sortData}

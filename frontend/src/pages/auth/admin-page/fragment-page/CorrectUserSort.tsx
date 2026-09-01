@@ -15,8 +15,8 @@ type CorrentUserSortProps = {
 const CorrectUserSort = ({ finalSort, setFinalSort, sortData, setSortData, setSort, returnTop }: CorrentUserSortProps) => {
   return (
     <CommonSort
-      SortCode={USER_SORT_CODE}
-      InitialSort={InitialUserSort}
+      sortCode={USER_SORT_CODE}
+      initialSort={InitialUserSort}
       finalSort={finalSort}
       setFinalSort={setFinalSort}
       sortData={sortData}

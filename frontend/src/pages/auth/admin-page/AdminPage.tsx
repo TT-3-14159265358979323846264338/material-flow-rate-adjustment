@@ -2,8 +2,8 @@ import { useState } from 'react';
 import TopPageTab from '../components/TopPageTab';
 import { TabConfig } from '../types/tabConfig';
 import Logout from '../common-fragment-page/Logout';
-import CorrectUser from './fragment-page/CorrectUser';
-import CorrectMatterial from './fragment-page/CorrectMaterial';
+import MaterialManegement from './fragment-page/MaterialManagement';
+import UserManegement from './fragment-page/UserManegement';
 
 type TabKey = "check-now-material" | "check-achievement" | "material-management" | "user-management" | "account";
 
@@ -21,12 +21,12 @@ const tabData: TabConfig<TabKey>[] = [
   {
     id: "material-management",
     label: "製品管理",
-    content: <CorrectMatterial></CorrectMatterial>,
+    content: <MaterialManegement></MaterialManegement>,
   },
   {
     id: "user-management",
     label: "ユーザー管理",
-    content: <CorrectUser></CorrectUser>,
+    content: <UserManegement></UserManegement>,
   },
   {
     id: "account",

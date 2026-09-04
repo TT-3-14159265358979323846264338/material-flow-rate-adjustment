@@ -29,10 +29,12 @@ export const InitialUserSort: UserSortConfig = {
 
 export const useUserSort = (): SortConfig<UserSortConfig> => {
   const [sortData, setSortData] = useState<UserSortConfig>(InitialUserSort);
-  const setSort = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, type, checked, value } = e.currentTarget;
-    const sortValue = type === "checkbox" ? checked : value;
-    setSortData((prev) => ({ ...prev, [name as keyof UserSortConfig]: sortValue }));
+  const setSort = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    if (e.currentTarget instanceof HTMLInputElement) {
+      const { name, type, checked, value } = e.currentTarget;
+      const sortValue = type === "checkbox" ? checked : value;
+      setSortData((prev) => ({ ...prev, [name as keyof UserSortConfig]: sortValue }));
+    }
   };
   return { sortData, setSortData, setSort };
 };

@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { useGetMapping } from "../../hooks/useGetMapping";
-import { useView } from "../../hooks/useView";
 import DefaultButton from "../../components/DefaultButton";
 import NewPlan from "./NewPlan";
+import { useSortGetMapping } from "../../hooks/useSortGetMapping";
+import { useCorrect } from "../../admin-page/hooks/useCorrect";
+import { PlanSortConfig, usePlanSort } from "../hooks/usePlanSort";
 
-type DefaultViewConfig = "Top" | "Sort" | "Correct" | "New";
+type DefaultViewConfig = "Top" | "New";
 
 type PlanManagementResponse = {
   id: number;
@@ -21,24 +21,35 @@ type PlanManagementResponse = {
 
 const PlanManagement = () => {
   const {
-    sortData: planData,
-    setSortData: setPlanData,
-    getData: getPlanData,
-  } = useGetMapping<PlanManagementResponse>({
+    finalSort,
+    setFinalSort,
+    sortData,
+    setSortData,
+    setSort,
+    mappingData,
+    getMappingData,
+    view,
+    setView,
+    returnTop: returnFromHistory,
+    newDataReturnTop: returnFromNew,
+    isOpen: isOpenSort,
+    setIsOpen: setIsOpenSort,
+  } = useSortGetMapping<PlanSortConfig, PlanManagementResponse, DefaultViewConfig>({
+    useSort: usePlanSort,
     URL: "/api/plan",
-    params: { number: 50 },
   });
-  const { view, setView, returnTop, newDataReturnTop } = useView<DefaultViewConfig>({ getData: getPlanData });
-  const [selectedPlan, setSelectedPlan] = useState<PlanManagementResponse>();
+  const {
+    selectedItem,
+    setSelectedItem,
+    isOpen: isOpenCorrect,
+    setIsOpen: setIsOpenCorrect,
+    correctHandle,
+    returnFromNotCorrect,
+    returnFromCorrect,
+  } = useCorrect<PlanManagementResponse>(getMappingData);
 
-  if (view === "Sort") {
-    return <div></div>;
-  }
-  if (view === "Correct") {
-    return <div></div>;
-  }
   if (view === "New") {
-    return <NewPlan returnTop={newDataReturnTop}></NewPlan>;
+    return <NewPlan returnTop={returnFromNew}></NewPlan>;
   }
   return (
     <div className="flex">
@@ -59,12 +70,12 @@ const PlanManagement = () => {
             </li>
           </ul>
           <ul className="min-w-max text-xs h-61 overflow-y-auto border border-b-black rounded-b-md">
-            {planData.map((data) => (
+            {mappingData.map((data) => (
               <li
                 key={data.id}
-                onClick={() => setSelectedPlan(data)}
+                onClick={() => setSelectedItem(data)}
                 className={`flex min-w-max ml-2 mr-2 items-center border-b border-b-gray-500 cursor-pointer *:block *:w-35 *:text-left
-                  ${data.id === selectedPlan?.id ? " bg-gray-200" : " bg-white"}`}
+                  ${data.id === selectedItem?.id ? " bg-gray-200" : " bg-white"}`}
               >
                 <span>{data.name}</span>
                 <span>{data.destination}</span>
@@ -82,10 +93,29 @@ const PlanManagement = () => {
       </div>
 
       <div className="flex justify-center gap-5">
-        <DefaultButton onClick={() => setView("Sort")}>ソート</DefaultButton>
-        <DefaultButton onClick={() => setView("Correct")}>登録修正</DefaultButton>
+        <DefaultButton onClick={() => setIsOpenSort(true)}>ソート</DefaultButton>
+        <DefaultButton onClick={() => correctHandle()}>登録修正</DefaultButton>
         <DefaultButton onClick={() => setView("New")}>新規登録</DefaultButton>
+        {/*<DefaultButton onClick={() => setView("History")}>修正履歴</DefaultButton>*/}
       </div>
+
+      {/*<DefaultModal isOpen={isOpenSort} setIsOpen={setIsOpenSort}>
+        <CorrectUserSort
+          finalSort={finalSort}
+          setFinalSort={setFinalSort}
+          sortData={sortData}
+          setSortData={setSortData}
+          setSort={setSort}
+          returnTop={() => setIsOpenSort(false)}
+        ></CorrectUserSort>
+      </DefaultModal>
+      <DefaultModal isOpen={isOpenCorrect} setIsOpen={setIsOpenCorrect}>
+        <CorrectUser
+          selectedUser={selectedItem}
+          returnFromNotCorrect={returnFromNotCorrect}
+          returnFromCorrect={returnFromCorrect}
+        ></CorrectUser>
+      </DefaultModal>*/}
     </div>
   );
 };

@@ -23,7 +23,7 @@ export const InitialMaterialSort: MaterialSortConfig = {
 
 export const useMaterialSort = (): SortConfig<MaterialSortConfig> => {
   const [sortData, setSortData] = useState<MaterialSortConfig>(InitialMaterialSort);
-  const setSort = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const setSort = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.currentTarget;
     setSortData((prev) => ({ ...prev, [name as keyof MaterialSortConfig]: value }));
   };

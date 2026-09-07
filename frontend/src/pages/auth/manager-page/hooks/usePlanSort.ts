@@ -12,15 +12,32 @@ export const PLAN_SORT_CODE = [
 type PlanSortCodeConfig = CommentViewCode<typeof PLAN_SORT_CODE>;
 
 export type PlanSortConfig = {
+  minYear: string;
+  minMonth: string;
+  maxYear: string;
+  maxMonth: string;
+  material: string;
   order: OrderCodeConfig;
   target: PlanSortCodeConfig;
-  maxSize: string;
+};
+
+const defaultMinTerm = () => {
+  const date = new Date();
+  date.setMonth(date.getMonth() - 6);
+  return {
+    minYear: String(date.getFullYear()),
+    minMonth: String(date.getMonth() + 1),
+  };
 };
 
 export const InitialPlanSort: PlanSortConfig = {
+  minYear: defaultMinTerm().minYear,
+  minMonth: defaultMinTerm().minMonth,
+  maxYear: "",
+  maxMonth: "",
+  material: "",
   order: "DESCENDING",
   target: "DATE",
-  maxSize: "100",
 };
 
 export const usePlanSort = (): SortConfig<PlanSortConfig> => {

@@ -3,6 +3,8 @@ import NewPlan from "./NewPlan";
 import { useSortGetMapping } from "../../hooks/useSortGetMapping";
 import { useCorrect } from "../../admin-page/hooks/useCorrect";
 import { PlanSortConfig, usePlanSort } from "../hooks/usePlanSort";
+import DefaultModal from "../../components/DefaultModal";
+import CorrectPlanSort from "./CorrectPlanSort";
 
 type DefaultViewConfig = "Top" | "New";
 
@@ -99,17 +101,17 @@ const PlanManagement = () => {
         {/*<DefaultButton onClick={() => setView("History")}>修正履歴</DefaultButton>*/}
       </div>
 
-      {/*<DefaultModal isOpen={isOpenSort} setIsOpen={setIsOpenSort}>
-        <CorrectUserSort
+      <DefaultModal isOpen={isOpenSort} setIsOpen={setIsOpenSort}>
+        <CorrectPlanSort
           finalSort={finalSort}
           setFinalSort={setFinalSort}
           sortData={sortData}
           setSortData={setSortData}
           setSort={setSort}
           returnTop={() => setIsOpenSort(false)}
-        ></CorrectUserSort>
+        ></CorrectPlanSort>
       </DefaultModal>
-      <DefaultModal isOpen={isOpenCorrect} setIsOpen={setIsOpenCorrect}>
+      {/*<DefaultModal isOpen={isOpenCorrect} setIsOpen={setIsOpenCorrect}>
         <CorrectUser
           selectedUser={selectedItem}
           returnFromNotCorrect={returnFromNotCorrect}

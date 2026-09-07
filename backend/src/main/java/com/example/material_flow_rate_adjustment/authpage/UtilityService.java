@@ -21,14 +21,6 @@ public class UtilityService {
 	private final AccountRepository accountRepository;
 	private final MaterialRepository materialRepository;
 	
-	public int getIntValue(String value, int base) {
-		try {
-			return Integer.parseInt(value);
-		}catch(Exception e) {
-			return base;
-		}
-	}
-	
 	public AccountSQL getAccountSQL(String loginUser) {
 		return getAccountSQL(Integer.parseInt(loginUser));
 	}

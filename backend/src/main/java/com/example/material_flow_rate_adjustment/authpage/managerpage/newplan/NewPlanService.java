@@ -1,5 +1,7 @@
 package com.example.material_flow_rate_adjustment.authpage.managerpage.newplan;
 
+import java.time.LocalDate;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +22,7 @@ public class NewPlanService {
 	public String createNewPlan(NewPlan newPlan, String loginUser){
 		MonthPlanSQL newMonthPlan = createPlan(utility.getMaterialSQL(newPlan.materialId()), newPlan.year(), newPlan.month(), newPlan.flow());
 		monthPlanRepository.save(newMonthPlan);
-		
+		//後でhistory書く
 		return "新規計画を登録しました。";
 	}
 	
@@ -29,6 +31,7 @@ public class NewPlanService {
 		newPlan.setMaterial(material);
 		newPlan.setYear(year);
 		newPlan.setMonth(month);
+		newPlan.setPlanDate(LocalDate.of(year, month, 1));
 		newPlan.setFlow(flow);
 		newPlan.setHasDeleted(false);
 		return newPlan;

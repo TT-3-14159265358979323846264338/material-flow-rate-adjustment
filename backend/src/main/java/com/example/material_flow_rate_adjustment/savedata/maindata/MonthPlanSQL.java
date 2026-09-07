@@ -1,8 +1,11 @@
 package com.example.material_flow_rate_adjustment.savedata.maindata;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -17,7 +20,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
-@Table(name = "month_plan")
+@Table(name = "month_plan", indexes = {
+		@Index(name = "idx_plan_date_deleted", columnList = "plan_date, has_deleted")
+})
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
@@ -34,6 +39,9 @@ public class MonthPlanSQL extends BaseSQL{
 	
 	@Column(columnDefinition = "INT UNSIGNED", nullable = false)
 	private Integer month;
+	
+	@Column(name = "plan_date", nullable = false)
+	private LocalDate planDate;
 	
 	@Column(columnDefinition = "INT UNSIGNED", nullable = false)
 	private Integer flow;

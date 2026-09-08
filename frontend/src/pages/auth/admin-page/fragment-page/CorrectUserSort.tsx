@@ -1,7 +1,7 @@
 import CheckInput from "../../components/CheckInput";
 import { InitialUserSort, USER_SORT_CODE, UserSortConfig } from "../hooks/useUserSort";
 import { AUTHORITY_CODE } from "../../../types/roleConfig";
-import CommonSort from "./CommonSort";
+import CommonSort from "../../components/CommonSort";
 
 type CorrentUserSortProps = {
   finalSort: UserSortConfig;

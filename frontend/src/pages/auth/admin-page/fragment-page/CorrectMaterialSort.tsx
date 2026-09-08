@@ -1,5 +1,5 @@
 import { InitialMaterialSort, MATERAIL_SORT_CODE, MaterialSortConfig } from "../hooks/useMaterialSort";
-import CommonSort from "./CommonSort";
+import CommonSort from "../../components/CommonSort";
 
 type CorrentMaterialSortProps = {
   finalSort: MaterialSortConfig;

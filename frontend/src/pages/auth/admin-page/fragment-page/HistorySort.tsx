@@ -1,4 +1,4 @@
-import CommonSort from "./CommonSort";
+import CommonSort from "../../components/CommonSort";
 import { CommentViewConfig } from "../types/commentView";
 import ImpossibleEmptyDateRange from "../../components/ImpossibleEmptyDateRange";
 import { DateRangeConfig, SortOrderConfig } from "../../types/sortConfig";

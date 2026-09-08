@@ -1,4 +1,4 @@
-import CommonSort from "../../admin-page/fragment-page/CommonSort";
+import CommonSort from "../../components/CommonSort";
 import { InitialPlanSort, PLAN_SORT_CODE, PlanSortConfig } from "../hooks/usePlanSort";
 import PossibleEmptyDateRange from "../../components/PossibleEmptyDateRange";
 import Dropdown from "../../components/Dropdown";

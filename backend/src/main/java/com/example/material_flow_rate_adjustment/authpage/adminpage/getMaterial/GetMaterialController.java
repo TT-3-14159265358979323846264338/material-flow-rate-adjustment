@@ -15,8 +15,14 @@ public class GetMaterialController {
 	private final GetMaterialService getMaterialService;
 	
 	@GetMapping("/api/material")
-	@PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
-	public ResponseEntity<?> adminGetData(@Valid GetMaterialRecord materialSort) {
-		return ResponseEntity.ok(getMaterialService.getMaterial(materialSort));
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<?> getSortMaterial(@Valid GetMaterialRecord materialSort) {
+		return ResponseEntity.ok(getMaterialService.getSortMaterial(materialSort));
+	}
+	
+	@GetMapping("/api/material/all")
+	@PreAuthorize("hasRole('USER') or hasRole('MANAGER')")
+	public ResponseEntity<?> getMaterial() {
+		return ResponseEntity.ok(getMaterialService.getMaterial());
 	}
 }

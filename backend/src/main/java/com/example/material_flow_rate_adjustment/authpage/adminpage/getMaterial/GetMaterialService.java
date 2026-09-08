@@ -15,8 +15,30 @@ public class GetMaterialService {
 	private final MaterialRepository materialRepository;
 	
 	@Transactional(readOnly = true)
-	public List<Material> getMaterial(GetMaterialRecord materialSort){
+	public List<SortMaterial> getSortMaterial(GetMaterialRecord materialSort){
 		return materialRepository.findByHasDeletedFalse(materialSort.target().getMaterialSort(materialSort.order()))
+								.stream()
+								.map(this::createSortMaterial)
+								.toList();
+	}
+	
+	SortMaterial createSortMaterial(MaterialSQL material) {
+		return new SortMaterial(material.getId(), 
+				material.getName(), 
+				material.getDestination(), 
+				material.getBase(), 
+				material.getUnit());
+	}
+	
+	record SortMaterial(int id, 
+			String name, 
+			String destination, 
+			Integer base, 
+			String unit) {}
+	
+	@Transactional(readOnly = true)
+	public List<Material> getMaterial(){
+		return materialRepository.findByHasDeletedFalse()
 								.stream()
 								.map(this::createMaterial)
 								.toList();
@@ -24,15 +46,9 @@ public class GetMaterialService {
 	
 	Material createMaterial(MaterialSQL material) {
 		return new Material(material.getId(), 
-				material.getName(), 
-				material.getDestination(), 
-				material.getBase(), 
-				material.getUnit());
+				material.getName());
 	}
 	
 	record Material(int id, 
-			String name, 
-			String destination, 
-			Integer base, 
-			String unit) {}
+			String name) {}
 }

@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { OrderCodeConfig } from "../../types/orderConfig";
-import { CommentViewConfig, CommentViewCode } from "../types/commentView";
-import { SortConfig } from "../../types/sortConfig";
+import { CommentViewConfig} from "../types/commentView";
+import { SortConfig, SortOrderConfig } from "../../types/sortConfig";
 
 export const USER_SORT_CODE = [
   { code: "ID", view: "ID" },
@@ -9,14 +8,10 @@ export const USER_SORT_CODE = [
   { code: "AUTHORITY", view: "権限" },
 ] as const satisfies readonly CommentViewConfig[];
 
-type UserSortCodeConfig = CommentViewCode<typeof USER_SORT_CODE>;
-
-export type UserSortConfig = {
+export type UserSortConfig = SortOrderConfig<typeof USER_SORT_CODE> & {
   isAdmin: boolean;
   isUser: boolean;
   isManager: boolean;
-  order: OrderCodeConfig;
-  target: UserSortCodeConfig;
 };
 
 export const InitialUserSort: UserSortConfig = {

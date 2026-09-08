@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { CommentViewCode, CommentViewConfig } from "../../admin-page/types/commentView";
-import { OrderCodeConfig } from "../../types/orderConfig";
-import { SortConfig } from "../../types/sortConfig";
+import { CommentViewConfig } from "../../admin-page/types/commentView";
+import { DateRangeConfig, SortConfig, SortOrderConfig } from "../../types/sortConfig";
+import { MaterialResponse } from "../fragment-page/PlanManagement";
 
 export const PLAN_SORT_CODE = [
   { code: "DATE", view: "計画日時" },
@@ -9,17 +9,11 @@ export const PLAN_SORT_CODE = [
   { code: "UPDATE_DATE", view: "更新日" },
 ] as const satisfies readonly CommentViewConfig[];
 
-type PlanSortCodeConfig = CommentViewCode<typeof PLAN_SORT_CODE>;
-
-export type PlanSortConfig = {
-  minYear: string;
-  minMonth: string;
-  maxYear: string;
-  maxMonth: string;
-  material: string;
-  order: OrderCodeConfig;
-  target: PlanSortCodeConfig;
-};
+export type PlanSortConfig = DateRangeConfig &
+  SortOrderConfig<typeof PLAN_SORT_CODE> & 
+  {
+    material: number | undefined ;
+  };
 
 const defaultMinTerm = () => {
   const date = new Date();
@@ -35,16 +29,17 @@ export const InitialPlanSort: PlanSortConfig = {
   minMonth: defaultMinTerm().minMonth,
   maxYear: "",
   maxMonth: "",
-  material: "",
+  material: undefined,
   order: "DESCENDING",
   target: "DATE",
 };
 
-export const usePlanSort = (): SortConfig<PlanSortConfig> => {
+export const usePlanSort = (materialArray: MaterialResponse[]): SortConfig<PlanSortConfig> => {
   const [sortData, setSortData] = useState<PlanSortConfig>(InitialPlanSort);
   const setSort = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.currentTarget;
-    setSortData((prev) => ({ ...prev, [name as keyof PlanSortConfig]: value }));
+    const resultValue = name === "material" ? materialArray?.find((item) => item.name === value)?.id: value;
+    setSortData((prev) => ({ ...prev, [name as keyof PlanSortConfig]: resultValue }));
   };
   return { sortData, setSortData, setSort };
 };

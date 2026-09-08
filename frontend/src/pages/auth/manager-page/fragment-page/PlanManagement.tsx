@@ -5,8 +5,14 @@ import { useCorrect } from "../../admin-page/hooks/useCorrect";
 import { PlanSortConfig, usePlanSort } from "../hooks/usePlanSort";
 import DefaultModal from "../../components/DefaultModal";
 import CorrectPlanSort from "./CorrectPlanSort";
+import { useGetMapping } from "../../hooks/useGetMapping";
 
 type DefaultViewConfig = "Top" | "New";
+
+export type MaterialResponse = {
+  id: number;
+  name: string;
+};
 
 type PlanManagementResponse = {
   id: number;
@@ -22,6 +28,7 @@ type PlanManagementResponse = {
 };
 
 const PlanManagement = () => {
+  const { data: materialArray } = useGetMapping<MaterialResponse>({ URL: "/api/material/all" });
   const {
     finalSort,
     setFinalSort,
@@ -37,7 +44,7 @@ const PlanManagement = () => {
     isOpen: isOpenSort,
     setIsOpen: setIsOpenSort,
   } = useSortGetMapping<PlanSortConfig, PlanManagementResponse, DefaultViewConfig>({
-    useSort: usePlanSort,
+    useSort: () => usePlanSort(materialArray),
     URL: "/api/plan",
   });
   const {
@@ -109,6 +116,7 @@ const PlanManagement = () => {
           setSortData={setSortData}
           setSort={setSort}
           returnTop={() => setIsOpenSort(false)}
+          materialArray={materialArray}
         ></CorrectPlanSort>
       </DefaultModal>
       {/*<DefaultModal isOpen={isOpenCorrect} setIsOpen={setIsOpenCorrect}>

@@ -1,18 +1,9 @@
-import { OrderCodeConfig } from "../../types/orderConfig";
-import { CommentViewCode, CommentViewConfig } from "./commentView";
+import { DateRangeConfig, SortOrderConfig } from "../../types/sortConfig";
+import { CommentViewConfig } from "./commentView";
 
 export const HISTORY_SORT_CODE = [{ code: "DATE", view: "日付" }] as const satisfies readonly CommentViewConfig[];
 
-type HistorySortCodeConfig = CommentViewCode<typeof HISTORY_SORT_CODE>;
-
-export type HistorySortConfig = {
-  minYear: string;
-  minMonth: string;
-  maxYear: string;
-  maxMonth: string;
-  order: OrderCodeConfig;
-  target: HistorySortCodeConfig;
-};
+export type HistorySortConfig = DateRangeConfig & SortOrderConfig<typeof HISTORY_SORT_CODE>;
 
 const defaultMinTerm = () => {
   const date = new Date();

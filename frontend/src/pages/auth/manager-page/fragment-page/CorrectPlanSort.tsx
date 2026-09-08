@@ -1,18 +1,36 @@
-import CheckInput from "../../components/CheckInput";
-import { AUTHORITY_CODE } from "../../../types/roleConfig";
 import CommonSort from "../../admin-page/fragment-page/CommonSort";
 import { InitialPlanSort, PLAN_SORT_CODE, PlanSortConfig } from "../hooks/usePlanSort";
+import PossibleEmptyDateRange from "../../components/PossibleEmptyDateRange";
+import Dropdown from "../../components/Dropdown";
+import { MaterialResponse } from "./PlanManagement";
+import { useMemo } from "react";
 
 type CorrentPlanSortProps = {
   finalSort: PlanSortConfig;
   setFinalSort: React.Dispatch<React.SetStateAction<PlanSortConfig>>;
   sortData: PlanSortConfig;
   setSortData: React.Dispatch<React.SetStateAction<PlanSortConfig>>;
-  setSort: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setSort: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement, Element>) => void;
   returnTop: () => void;
+  materialArray: MaterialResponse[];
 };
 
-const CorrectPlanSort = ({ finalSort, setFinalSort, sortData, setSortData, setSort, returnTop }: CorrentPlanSortProps) => {
+const noSort = "指定なし";
+
+const CorrectPlanSort = ({
+  finalSort,
+  setFinalSort,
+  sortData,
+  setSortData,
+  setSort,
+  returnTop,
+  materialArray,
+}: CorrentPlanSortProps) => {
+  const materialDropList = useMemo(() => [noSort, ...materialArray?.map((item) => item.name)], [materialArray]);
+  const material = useMemo(
+    () => materialArray?.find((item) => item.id === sortData.material)?.name ?? noSort,
+    [materialArray, sortData.material],
+  );
   return (
     <CommonSort
       sortCode={PLAN_SORT_CODE}
@@ -26,16 +44,9 @@ const CorrectPlanSort = ({ finalSort, setFinalSort, sortData, setSortData, setSo
     >
       <div>
         <h3 className="text-left ml-5">絞り込み</h3>
+        <PossibleEmptyDateRange sortData={sortData} setSort={setSort}></PossibleEmptyDateRange>
         <div className="flex justify-center gap-10 border rounded-md bg-white p-5 mb-3">
-          <CheckInput key={AUTHORITY_CODE[0].code} isChecked={sortData.isAdmin} setChecked={setSort} name="isAdmin">
-            {AUTHORITY_CODE[0].view}
-          </CheckInput>
-          <CheckInput key={AUTHORITY_CODE[1].code} isChecked={sortData.isUser} setChecked={setSort} name="isUser">
-            {AUTHORITY_CODE[1].view}
-          </CheckInput>
-          <CheckInput key={AUTHORITY_CODE[2].code} isChecked={sortData.isManager} setChecked={setSort} name="isManager">
-            {AUTHORITY_CODE[2].view}
-          </CheckInput>
+          <Dropdown name="material" value={material} onChange={setSort} list={materialDropList}>製品名</Dropdown>
         </div>
       </div>
     </CommonSort>

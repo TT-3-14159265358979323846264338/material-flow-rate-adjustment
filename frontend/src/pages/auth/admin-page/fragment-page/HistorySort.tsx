@@ -1,8 +1,7 @@
-import Dropdown from "../../components/Dropdown";
-import { monthArray, allYearArray } from "../../utils/termArray";
 import CommonSort from "./CommonSort";
-import { CommentViewCode, CommentViewConfig } from "../types/commentView";
-import { OrderCodeConfig } from "../../types/orderConfig";
+import { CommentViewConfig } from "../types/commentView";
+import ImpossibleEmptyDateRange from "../../components/ImpossibleEmptyDateRange";
+import { DateRangeConfig, SortOrderConfig } from "../../types/sortConfig";
 
 type HistorySortProps<T, U> = {
   sortCode: U;
@@ -16,14 +15,7 @@ type HistorySortProps<T, U> = {
   children?: React.ReactElement;
 };
 
-export type HistorySortConfig<U extends readonly CommentViewConfig[]> = {
-  minYear: string;
-  minMonth: string;
-  maxYear: string;
-  maxMonth: string;
-  order: OrderCodeConfig;
-  target: CommentViewCode<U>;
-};
+export type HistorySortConfig<U extends readonly CommentViewConfig[]> = DateRangeConfig & SortOrderConfig<U>;
 
 const HistorySort = <T extends HistorySortConfig<U> , U extends readonly CommentViewConfig[]>({
   sortCode,
@@ -50,23 +42,7 @@ const HistorySort = <T extends HistorySortConfig<U> , U extends readonly Comment
     >
       <div className="flex flex-col">
         <h3 className="text-left ml-5">絞り込み</h3>
-        <div className="flex justify-center gap-10 border rounded-md bg-white p-5 mb-3">
-          <div className="flex items-center gap-3 *:flex-1 *:block">
-            <Dropdown name="minYear" value={sortData.minYear} onChange={setSort} list={allYearArray()}>
-              年
-            </Dropdown>
-            <Dropdown name="minMonth" value={sortData.minMonth} onChange={setSort} list={monthArray()}>
-              月
-            </Dropdown>
-            <span>～</span>
-            <Dropdown name="maxYear" value={sortData.maxYear} onChange={setSort} list={allYearArray()}>
-              年
-            </Dropdown>
-            <Dropdown name="maxMonth" value={sortData.maxMonth} onChange={setSort} list={monthArray()}>
-              月
-            </Dropdown>
-          </div>
-        </div>
+        <ImpossibleEmptyDateRange sortData={sortData} setSort={setSort}></ImpossibleEmptyDateRange>
         {children}
       </div>
     </CommonSort>

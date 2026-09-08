@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { OrderCodeConfig } from "../../types/orderConfig";
-import { CommentViewConfig, CommentViewCode } from "../types/commentView";
-import { SortConfig } from "../../types/sortConfig";
+import { CommentViewConfig,} from "../types/commentView";
+import { SortConfig, SortOrderConfig } from "../../types/sortConfig";
 
 export const MATERAIL_SORT_CODE = [
   { code: "ID", view: "ID" },
@@ -9,12 +8,7 @@ export const MATERAIL_SORT_CODE = [
   { code: "DESTINATION", view: "向け先" },
 ] as const satisfies readonly CommentViewConfig[];
 
-type MaterialSortCodeConfig = CommentViewCode<typeof MATERAIL_SORT_CODE>;
-
-export type MaterialSortConfig = {
-  order: OrderCodeConfig;
-  target: MaterialSortCodeConfig;
-};
+export type MaterialSortConfig = SortOrderConfig<typeof MATERAIL_SORT_CODE>;
 
 export const InitialMaterialSort: MaterialSortConfig = {
   order: "ASCENDING",

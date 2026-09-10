@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.material_flow_rate_adjustment.authpage.TransformService;
+import com.example.material_flow_rate_adjustment.authpage.adminpage.getMaterial.GetMaterialService;
+import com.example.material_flow_rate_adjustment.authpage.adminpage.getMaterial.GetMaterialService.Material;
 import com.example.material_flow_rate_adjustment.savedata.maindata.MonthPlanRepository;
 import com.example.material_flow_rate_adjustment.savedata.maindata.MonthPlanSQL;
 
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GetPlanService {
 	private final MonthPlanRepository planRepository;
+	private final GetMaterialService getMaterialService;
 	private final TransformService transform;
 	
 	@Transactional(readOnly = true)
@@ -40,8 +43,7 @@ public class GetPlanService {
 	
 	Plan createPlan(MonthPlanSQL monthPlan) {
 		return new Plan(monthPlan.getId(),
-				monthPlan.getMaterial().getName(),
-				monthPlan.getMaterial().getDestination(),
+				getMaterialService.createMaterial(monthPlan.getMaterial()),
 				monthPlan.getYear(),
 				monthPlan.getMonth(),
 				monthPlan.getFlow(),
@@ -53,8 +55,7 @@ public class GetPlanService {
 	}
 	
 	record Plan(int id,
-			String name,
-			String destination,
+			Material material,
 			int year,
 			int month,
 			int flow,

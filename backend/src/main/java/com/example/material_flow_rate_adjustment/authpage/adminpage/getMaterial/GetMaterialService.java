@@ -9,32 +9,19 @@ import com.example.material_flow_rate_adjustment.savedata.maindata.MaterialRepos
 import com.example.material_flow_rate_adjustment.savedata.maindata.MaterialSQL;
 
 import lombok.RequiredArgsConstructor;
+
 @Service
 @RequiredArgsConstructor
 public class GetMaterialService {
 	private final MaterialRepository materialRepository;
 	
 	@Transactional(readOnly = true)
-	public List<SortMaterial> getSortMaterial(GetMaterialRecord materialSort){
+	public List<Material> getSortMaterial(GetMaterialRecord materialSort){
 		return materialRepository.findByHasDeletedFalse(materialSort.target().getMaterialSort(materialSort.order()))
 								.stream()
-								.map(this::createSortMaterial)
+								.map(this::createMaterial)
 								.toList();
 	}
-	
-	SortMaterial createSortMaterial(MaterialSQL material) {
-		return new SortMaterial(material.getId(), 
-				material.getName(), 
-				material.getDestination(), 
-				material.getBase(), 
-				material.getUnit());
-	}
-	
-	record SortMaterial(int id, 
-			String name, 
-			String destination, 
-			Integer base, 
-			String unit) {}
 	
 	@Transactional(readOnly = true)
 	public List<Material> getMaterial(){
@@ -44,11 +31,17 @@ public class GetMaterialService {
 								.toList();
 	}
 	
-	Material createMaterial(MaterialSQL material) {
+	public Material createMaterial(MaterialSQL material) {
 		return new Material(material.getId(), 
-				material.getName());
+				material.getName(), 
+				material.getDestination(), 
+				material.getBase(), 
+				material.getUnit());
 	}
 	
-	record Material(int id, 
-			String name) {}
+	public record Material(int id, 
+			String name, 
+			String destination, 
+			Integer base, 
+			String unit) {}
 }

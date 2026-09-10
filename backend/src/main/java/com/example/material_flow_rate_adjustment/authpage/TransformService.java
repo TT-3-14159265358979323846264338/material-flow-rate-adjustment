@@ -64,11 +64,11 @@ public class TransformService {
 	
 	int value(String original, int minBase, int maxBase, boolean isUsedMaxBase) {
 		int base = isUsedMaxBase? maxBase: minBase;
-		int value = intValue(original, base);
+		int value = integerValue(original, base);
 		return (value < minBase || maxBase < value)? base: value;
 	}
 	
-	public int intValue(String value, int base) {
+	public Integer integerValue(String value, Integer base) {
 		try {
 			return Integer.parseInt(value);
 		}catch(Exception e) {

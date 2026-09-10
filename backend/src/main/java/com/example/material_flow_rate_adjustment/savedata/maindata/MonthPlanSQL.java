@@ -46,15 +46,15 @@ public class MonthPlanSQL extends BaseSQL{
 	@Column(columnDefinition = "INT UNSIGNED", nullable = false)
 	private Integer flow;
 	
-	@Column(columnDefinition = "INT UNSIGNED")
+	@Column(columnDefinition = "INT UNSIGNED", nullable = false)
 	private Integer achievement;
 	
-	@Column(columnDefinition = "INT UNSIGNED")
+	@Column(columnDefinition = "INT UNSIGNED", nullable = false)
 	private Integer shipping;
 	
-	@Column(columnDefinition = "INT")
+	@Column(nullable = false)
 	private Integer adjustment;
 	
-	@Column(columnDefinition = "INT UNSIGNED")
+	@Column(columnDefinition = "INT UNSIGNED", nullable = false)
 	private Integer remaining;
 }

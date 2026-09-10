@@ -4,10 +4,10 @@ import jakarta.validation.constraints.NotNull;
 
 record NewPlan(
 		@NotNull(message = "製品が選択されていません")
-		int materialId,
+		Integer materialId,
 		@NotNull(message = "登録する年がありません")
-		int year,
+		Integer year,
 		@NotNull(message = "登録する月がありません")
-		int month,
+		Integer month,
 		@NotNull(message = "予定数量が入力されていません")
-		int flow) {}
+		Integer flow) {}

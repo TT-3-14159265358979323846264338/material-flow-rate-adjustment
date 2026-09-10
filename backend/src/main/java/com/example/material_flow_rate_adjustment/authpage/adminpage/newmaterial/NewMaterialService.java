@@ -2,7 +2,6 @@ package com.example.material_flow_rate_adjustment.authpage.adminpage.newmaterial
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import com.example.material_flow_rate_adjustment.authpage.UtilityService;
 import com.example.material_flow_rate_adjustment.savedata.historydata.HistoryEnum;
@@ -22,8 +21,7 @@ public class NewMaterialService {
 	
 	@Transactional
 	public String createNewMaterial(NewMaterial data, String loginUser){
-		Integer baseValue = StringUtils.hasLength(data.base())? Integer.parseInt(data.base()): null;
-		MaterialSQL newMaterial = createMaterialSQL(data.name(), data.destination(), baseValue, data.unit());
+		MaterialSQL newMaterial = createMaterialSQL(data.name(), data.destination(), data.base(), data.unit());
 		materialRepository.save(newMaterial);
 		MaterialHistorySQL newHistory = createMaterialHistorySQL(newMaterial, loginUser);
 		historyRepository.save(newHistory);

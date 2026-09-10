@@ -73,14 +73,13 @@ public class CorrectMaterialService {
 		material.setDestination(destination);
 	}
 	
-	void setBase(MaterialSQL material, MaterialHistorySQL newHistory, String base) {
-		Integer newBase = StringUtils.hasLength(base)? Integer.parseInt(base): null;
-		if(Objects.equals(material.getBase(), newBase)) {
+	void setBase(MaterialSQL material, MaterialHistorySQL newHistory, Integer base) {
+		if(Objects.equals(material.getBase(), base)) {
 			return;
 		}
 		newHistory.setTargetId(material.getId());
-		newHistory.setNewBase(newBase);
-		material.setBase(newBase);
+		newHistory.setNewBase(base);
+		material.setBase(base);
 	}
 	
 	void setUnit(MaterialSQL material, MaterialHistorySQL newHistory, String unit) {

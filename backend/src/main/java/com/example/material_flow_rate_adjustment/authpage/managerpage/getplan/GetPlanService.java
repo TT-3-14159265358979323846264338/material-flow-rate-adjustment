@@ -35,8 +35,8 @@ public class GetPlanService {
 	}
 	
 	Predicate<MonthPlanSQL> filter(String material){
-		int id = transform.intValue(material, -1);
-		return id != -1? 
+		Integer id = transform.integerValue(material, null);
+		return id != null? 
 					(plan) -> plan.getMaterial().getId() == id: 
 					(_) -> true;
 	}

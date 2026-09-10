@@ -12,6 +12,8 @@ import com.example.material_flow_rate_adjustment.savedata.maindata.AccountSQL;
 import com.example.material_flow_rate_adjustment.savedata.maindata.BaseSQL;
 import com.example.material_flow_rate_adjustment.savedata.maindata.MaterialRepository;
 import com.example.material_flow_rate_adjustment.savedata.maindata.MaterialSQL;
+import com.example.material_flow_rate_adjustment.savedata.maindata.MonthPlanRepository;
+import com.example.material_flow_rate_adjustment.savedata.maindata.MonthPlanSQL;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,19 +22,22 @@ import lombok.RequiredArgsConstructor;
 public class UtilityService {
 	private final AccountRepository accountRepository;
 	private final MaterialRepository materialRepository;
+	private final MonthPlanRepository monthPlanRepository;
 	
 	public AccountSQL getAccountSQL(String loginUser) {
 		return getAccountSQL(Integer.parseInt(loginUser));
 	}
 	
 	public AccountSQL getAccountSQL(int userId) {
-		AccountSQL account = accountRepository.findById(userId)
-			.orElseThrow(() -> new NotFindException("ユーザーが見つかりません。"));
-		return account;
+		return accountRepository.findById(userId).orElseThrow(() -> new NotFindException("ユーザーが見つかりません。"));
 	}
 	
 	public MaterialSQL getMaterialSQL(int id) {
 		return materialRepository.findById(id).orElseThrow(() -> new NotFindException("製品が見つかりません。"));
+	}
+	
+	public MonthPlanSQL getMonthPlanSQL(int id) {
+		return monthPlanRepository.findById(id).orElseThrow(() -> new NotFindException("計画が見つかりません。"));
 	}
 	
 	public <T extends BaseSQL, U extends BaseHistorySQL> 

@@ -3,6 +3,7 @@ package com.example.material_flow_rate_adjustment.errorhandling;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -12,6 +13,17 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ExceptionController {
+	/**
+	 * Javaに送られたデータに不備がある場合、エラー番号422を返却
+	 * 尚、構文エラーなどにも反応してしまうので、解析の際は注意。
+	 */
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public ResponseEntity<Map<String, String>> handleHttpMessageNotReadable(HttpMessageNotReadableException e) {
+		Map<String, String> error = new HashMap<>();
+		error.put("error", "不適切な値が入力されました。");
+		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(error);
+	}
+	
 	/**
 	 * Validに適合しない場合、エラー番号422を返却
 	 */

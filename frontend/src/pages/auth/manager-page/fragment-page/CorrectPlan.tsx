@@ -34,8 +34,14 @@ const CorrectPlan = ({ selectedPlan, returnFromNotCorrect, returnFromCorrect, ma
     if (!canCorrect) {
       return;
     }
-    const params = {};
-    await post({ URL: `/api/user/${selectedPlan.id}`, params, handle: returnFromCorrect });
+    const params = {
+      materialId: plan.material?.id,
+      year: plan.year,
+      month: plan.month,
+      flow: plan.flow,
+      isDeleted: plan.isDeleted,
+    };
+    await post({ URL: `/api/plan/${selectedPlan.id}`, params, handle: returnFromCorrect });
   };
 
   return (

@@ -1,4 +1,4 @@
-package com.example.material_flow_rate_adjustment.authpage.adminpage.historyuser;
+package com.example.material_flow_rate_adjustment.authpage.managerpage.historyplan;
 
 import jakarta.validation.Valid;
 
@@ -13,12 +13,12 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-public class HistoryUserController {
-	private final HistoryUserService historyUserService;
+public class HistoryPlanController {
+	private final HistoryPlanService historyPlanService;
 	
-	@GetMapping("/api/history/user")
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> userHistory(@Valid DefaultHistoryFilterRecord filter) {
-		return ResponseEntity.ok(historyUserService.getHistory(filter));
+	@GetMapping("/api/history/plan")
+	@PreAuthorize("hasRole('MANAGER')")
+	public ResponseEntity<?> planHistory(@Valid DefaultHistoryFilterRecord filter) {
+		return ResponseEntity.ok(historyPlanService.getHistory(filter));
 	}
 }

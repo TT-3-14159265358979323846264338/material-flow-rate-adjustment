@@ -18,7 +18,7 @@ public class HistoryMaterialController {
 	
 	@GetMapping("/api/history/material")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> adminGetMaterialHistory(@Valid DefaultHistoryFilterRecord filter) {
+	public ResponseEntity<?> materialHistory(@Valid DefaultHistoryFilterRecord filter) {
 		return ResponseEntity.ok(historyMaterialService.getHistory(filter));
 	}
 }

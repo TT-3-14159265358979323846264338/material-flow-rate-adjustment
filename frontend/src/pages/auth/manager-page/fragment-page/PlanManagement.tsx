@@ -9,6 +9,7 @@ import { useGetMapping } from "../../hooks/useGetMapping";
 import CorrectPlan from "./CorrectPlan";
 import { PlanResponse } from "../types/planResponse";
 import { MaterialResponse } from "../../types/materialResponse";
+import HistoryPlan from "./HistoryPLan";
 
 type DefaultViewConfig = "Top" | "New" | "History";
 
@@ -46,7 +47,7 @@ const PlanManagement = () => {
     return <NewPlan materialData={materialArray} returnTop={returnFromNew}></NewPlan>;
   }
   if (view === "History") {
-    
+    return <HistoryPlan returnTop={returnFromHistory}></HistoryPlan>;
   }  
   return (
     <div className="flex">

@@ -30,9 +30,9 @@ const NewPlan = ({ materialData, returnTop }: NewPlanProps) => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-stretch">
       <CommonPlan plan={plan} setPlan={setPlan} materialData={materialData}></CommonPlan>
-      <div>
+      <div className="flex justify-center gap-5">
         <DefaultButton onClick={newPlanHandle}>新規作成</DefaultButton>
         <DefaultButton onClick={returnTop}>戻る</DefaultButton>
       </div>

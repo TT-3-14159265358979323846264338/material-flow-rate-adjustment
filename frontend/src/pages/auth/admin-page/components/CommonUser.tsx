@@ -12,7 +12,7 @@ type CommonUserProps = {
 
 const CommonUser = ({ user, setUser }: CommonUserProps) => {
   return (
-    <div className="w-80">
+    <div className="min-w-50">
       <TextInput
         name="loginName"
         value={user.loginName}
@@ -21,7 +21,7 @@ const CommonUser = ({ user, setUser }: CommonUserProps) => {
       >
         ログインユーザー名
       </TextInput>
-      <TextInput name="displayedName" value={user.displayedName} maxLength={20} onChange={setUser}>
+      <TextInput name="displayedName" value={user.displayedName} maxLength={10} onChange={setUser}>
         表示ユーザー名
       </TextInput>
       <Dropdown

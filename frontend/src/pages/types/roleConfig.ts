@@ -1,4 +1,4 @@
-import { CommentViewCode, CommentViewConfig, getAllCommentView, getCommentCode, getCommentView } from "../auth/admin-page/types/commentView";
+import { CommentViewCode, CommentViewConfig, getAllCommentView, getCommentCode, getCommentView } from "../auth/types/commentView";
 
 export const AUTHORITY_CODE = [
   { code: "ADMIN", view: "管理者" },

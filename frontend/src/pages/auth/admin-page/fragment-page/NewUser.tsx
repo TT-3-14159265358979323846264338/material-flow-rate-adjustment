@@ -33,7 +33,7 @@ const NewUser = ({returnTop}: ReturnProps) => {
   };
 
   return (
-    <div className="w-50">
+    <div className="flex flex-col items-stretch">
       <CommonUser user={user} setUser={setUser}></CommonUser>
       <div className="flex justify-center gap-5">
         <DefaultButton onClick={newUserHandle}>新規登録</DefaultButton>

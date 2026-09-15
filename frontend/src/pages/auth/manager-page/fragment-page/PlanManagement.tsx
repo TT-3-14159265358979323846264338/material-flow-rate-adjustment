@@ -9,7 +9,7 @@ import { useGetMapping } from "../../hooks/useGetMapping";
 import CorrectPlan from "./CorrectPlan";
 import { PlanResponse } from "../types/planResponse";
 import { MaterialResponse } from "../../types/materialResponse";
-import HistoryPlan from "./HistoryPLan";
+import HistoryPlan from "./HistoryPlan";
 
 type DefaultViewConfig = "Top" | "New" | "History";
 
@@ -50,8 +50,8 @@ const PlanManagement = () => {
     return <HistoryPlan returnTop={returnFromHistory}></HistoryPlan>;
   }  
   return (
-    <div className="flex">
-      <div className="flex flex-col w-130 h-83 mr-5">
+    <div className="flex flex-col items-stretch">
+      <div className="flex flex-col w-130 h-83">
         <h2>計画一覧</h2>
         <div className="w-325 overflow-x-auto whitespace-nowrap rounded-s-md bg-white">
           <ul className="min-w-max text-sm border rounded-t-md">

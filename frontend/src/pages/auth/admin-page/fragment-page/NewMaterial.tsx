@@ -25,7 +25,7 @@ const NewMaterial = ({ returnTop }: ReturnProps) => {
   };
 
   return (
-    <div className="w-70">
+    <div className="flex flex-col items-stretch">
       <CommonMaterial material={material} setMaterial={setMaterial}></CommonMaterial>
       <div className="flex justify-center gap-5">
         <DefaultButton onClick={newMaterialHandle}>新規登録</DefaultButton>

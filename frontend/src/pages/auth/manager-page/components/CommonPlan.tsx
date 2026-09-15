@@ -24,7 +24,7 @@ const CommonPlan = ({ plan, setPlan, materialData }: CommonPlanProps) => {
       >
         対象製品
       </Dropdown>
-      <div>
+      <div className="flex justify-center gap-3 *:flex-1">
         <Dropdown name="year" value={plan.year} onChange={setPlan} list={nowYearArray()}>
           年
         </Dropdown>
@@ -32,16 +32,14 @@ const CommonPlan = ({ plan, setPlan, materialData }: CommonPlanProps) => {
           月
         </Dropdown>
       </div>
-      <div>
-        <TextInput
-          name="flow"
-          value={plan.flow}
-          maxLength={10}
-          onChange={(e) => setPlan(defaultEvent(e, onlyNumber))}
-        >
+      <div className="flex justify-center items-center gap-3">
+        <TextInput name="flow" value={plan.flow} maxLength={10} onChange={(e) => setPlan(defaultEvent(e, onlyNumber))}>
           予定数量
         </TextInput>
-        <span>{plan.material?.unit ?? ""}</span>
+        <div className="flex flex-col mb-2 w-30">
+          <span className="min-h-lh"></span>
+          <span className="text-left">{plan.material?.unit}</span>
+        </div>
       </div>
     </div>
   );

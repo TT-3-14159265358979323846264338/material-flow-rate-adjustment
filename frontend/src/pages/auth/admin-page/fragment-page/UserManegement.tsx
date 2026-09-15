@@ -52,9 +52,9 @@ const UserManegement = () => {
       <div className="flex flex-col w-160 h-83">
         <h2>ユーザー一覧</h2>
         <ul className="border rounded-t-md bg-white">
-          <li className="ml-2 mr-2 gap-2 flex items-centers *:text-left">
-            <span className="block w-45">ログインユーザー名</span>
-            <span className="block w-45">表示ユーザー名</span>
+          <li className="ml-2 mr-2 gap-2 flex items-center *:text-left *:block">
+            <span className="w-65">ログインユーザー名</span>
+            <span className="w-45">表示ユーザー名</span>
             <span className="flex-1">権限</span>
           </li>
         </ul>
@@ -63,11 +63,11 @@ const UserManegement = () => {
             <li
               key={data.id}
               onClick={() => setSelectedItem(data)}
-              className={`ml-2 mr-2 gap-2 flex items-center border-b border-b-gray-300 cursor-pointer *:text-left
+              className={`ml-2 mr-2 gap-2 flex items-center border-b border-b-gray-300 cursor-pointer *:text-left *:block
                   ${data.id === selectedItem?.id ? " bg-gray-200" : " bg-white"}`}
             >
-              <span className="block w-45">{data.loginName}</span>
-              <span className="block w-45">{data.displayedName}</span>
+              <span className="w-65">{data.loginName}</span>
+              <span className="w-45">{data.displayedName}</span>
               <span className="flex-1">{AuthorityView(data.role)}</span>
             </li>
           ))}

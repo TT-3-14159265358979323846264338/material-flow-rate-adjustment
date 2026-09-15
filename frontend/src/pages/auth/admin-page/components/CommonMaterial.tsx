@@ -22,14 +22,14 @@ const CommonMaterial = ({ material, setMaterial }: CommonMaterialProps) => {
           <TextInput
             name="base"
             value={material.base}
-            maxLength={10}
+            maxLength={5}
             onChange={(e) => setMaterial(defaultEvent(e, onlyNumber))}
           >
             基本製造量
           </TextInput>
         </div>
         <div className="flex-1">
-          <TextInput name="unit" value={material.unit} maxLength={10} onChange={setMaterial}>
+          <TextInput name="unit" value={material.unit} maxLength={5} onChange={setMaterial}>
             納入単位
           </TextInput>
         </div>

@@ -56,7 +56,7 @@ public class AccountInitializer implements CommandLineRunner{
 		newHistory.setHasDeletedNew(newAccount.getHasDeleted());
 		newHistory.setAction(HistoryEnum.CREATE.name());
 		newHistory.setActionId(0);
-		newHistory.setActionUser("system");
+		newHistory.setActionUser("システム自動");
 		return newHistory;
 	}
 }

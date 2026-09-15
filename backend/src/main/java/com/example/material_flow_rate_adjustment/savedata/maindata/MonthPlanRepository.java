@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MonthPlanRepository extends BaseJpaRepository<MonthPlanSQL, Integer>{
 	@EntityGraph(attributePaths = {"material"})
-	List<MonthPlanSQL> findByPlanDateBetweenHasDeletedFalse(LocalDate minDate, LocalDate maxDate, Sort sort);
+	List<MonthPlanSQL> findByPlanDateBetweenAndHasDeletedFalse(LocalDate minDate, LocalDate maxDate, Sort sort);
 }

@@ -30,6 +30,6 @@ public class MaterialSQL extends BaseSQL{
 	@Column(columnDefinition = "INT UNSIGNED")
 	private Integer base;
 	
-	@Column(length = 10, nullable = false)
+	@Column(length = 5, nullable = false)
 	private String unit;
 }

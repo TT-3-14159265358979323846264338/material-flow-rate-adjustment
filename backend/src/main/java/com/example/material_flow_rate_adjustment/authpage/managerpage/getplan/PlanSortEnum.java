@@ -10,9 +10,9 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum PlanSortEnum {
-	DATE((order) -> Sort.by(order.getOrderSort(), "plan_date")),
-	MATERIAL((order) -> Sort.by(order.getOrderSort(), "material").and(Sort.by(OrderSortEnum.DESCENDING.getOrderSort(), "plan_date"))),
-	UPDATE_DATE((order) -> Sort.by(order.getOrderSort(), "updated_date"));
+	DATE((order) -> Sort.by(order.getOrderSort(), "planDate")),
+	MATERIAL((order) -> Sort.by(order.getOrderSort(), "material").and(Sort.by(OrderSortEnum.DESCENDING.getOrderSort(), "planDate"))),
+	UPDATE_DATE((order) -> Sort.by(order.getOrderSort(), "updatedDate"));
 	
 	private final Function<OrderSortEnum, Sort> sortFunction;
 	

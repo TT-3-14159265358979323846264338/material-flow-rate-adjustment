@@ -10,7 +10,7 @@ import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import jakarta.validation.constraints.Size;
 
-@Size(max = 10, message = "納入単位は10文字以内で入力してください。")
+@Size(max = 5, message = "納入単位は5文字以内で入力してください。")
 @Documented
 @Constraint(validatedBy = {})
 @Target({ ElementType.FIELD })

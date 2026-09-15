@@ -24,7 +24,7 @@ public class GetPlanService {
 	@Transactional(readOnly = true)
 	public List<Plan> getPlan(GetPlanRecord getPlanRecord) {
 		Predicate<MonthPlanSQL> filter = filter(getPlanRecord.material());
-		return planRepository.findByPlanDateBetweenHasDeletedFalse(
+		return planRepository.findByPlanDateBetweenAndHasDeletedFalse(
 								transform.minDate(getPlanRecord.minYear(), getPlanRecord.minMonth()), 
 								transform.maxDate(getPlanRecord.maxYear(), getPlanRecord.maxMonth()),
 								getPlanRecord.target().getPlanSort(getPlanRecord.order()))

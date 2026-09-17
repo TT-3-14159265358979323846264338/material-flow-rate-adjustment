@@ -48,10 +48,10 @@ const MaterialManegement = () => {
   }
   return (
     <div className="flex flex-col items-stretch">
-      <div className="flex flex-col w-160 h-83">
+      <div className="flex flex-col h-83">
         <h2>製品一覧</h2>
         <ul className="border rounded-t-md bg-white">
-          <li className="ml-2 mr-2 gap-2 flex items-center *:text-left">
+          <li className="ml-2 mr-2 gap-2 flex items-center *:text-center *:block">
             <span className="block w-60">製品名</span>
             <span className="flex-1">向け先</span>
           </li>
@@ -61,7 +61,7 @@ const MaterialManegement = () => {
             <li
               key={data.id}
               onClick={() => setSelectedItem(data)}
-              className={`ml-2 mr-2 gap-2 flex items-center border-b border-b-gray-300 cursor-pointer *:text-left
+              className={`ml-2 mr-2 gap-2 flex items-center border-b border-b-gray-300 cursor-pointer *:text-center *:block
                   ${data.id === selectedItem?.id ? " bg-gray-200" : " bg-white"}`}
             >
               <span className="block w-60">{data.name}</span>

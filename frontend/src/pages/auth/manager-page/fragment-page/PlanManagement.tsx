@@ -51,43 +51,41 @@ const PlanManagement = () => {
   }  
   return (
     <div className="flex flex-col items-stretch">
-      <div className="flex flex-col w-130 h-83">
+      <div className="flex flex-col h-83">
         <h2>計画一覧</h2>
-        <div className="w-325 overflow-x-auto whitespace-nowrap rounded-s-md bg-white">
-          <ul className="min-w-max text-sm border rounded-t-md">
-            <li className="ml-2 mr-2 gap-2 flex items-center *:block *:w-35 *:text-left">
-              <span>製品名</span>
-              <span>向け先</span>
-              <span>年</span>
-              <span>月</span>
-              <span>予定数量</span>
-              <span>実績</span>
-              <span>月間出荷量</span>
-              <span>在庫調整分</span>
-              <span>月末在庫</span>
-            </li>
-          </ul>
-          <ul className="min-w-max text-xs h-61 overflow-y-auto border border-b-black rounded-b-md">
-            {mappingData.map((data) => (
-              <li
-                key={data.id}
-                onClick={() => setSelectedItem(data)}
-                className={`flex min-w-max ml-2 mr-2 items-center border-b border-b-gray-500 cursor-pointer *:block *:w-35 *:text-left
+        <ul className="border rounded-t-md bg-white">
+          <li className="ml-2 mr-2 gap-2 flex items-center text-sm *:text-center *:block">
+            <span className="w-35">製品名</span>
+            <span className="w-35">向け先</span>
+            <span className="w-10">年</span>
+            <span className="w-10">月</span>
+            <span className="w-15">予定数量</span>
+            <span className="w-15">実績</span>
+            <span className="w-20">月間出荷量</span>
+            <span className="w-20">在庫調整分</span>
+            <span className="w-15">月末在庫</span>
+          </li>
+        </ul>
+        <ul className="flex-1 overflow-y-auto border border-b-black rounded-b-md bg-white">
+          {mappingData.map((data) => (
+            <li
+              key={data.id}
+              onClick={() => setSelectedItem(data)}
+              className={`ml-2 mr-2 gap-2 flex items-center text-xs border-b border-b-gray-300 cursor-pointer *:text-center *:block
                   ${data.id === selectedItem?.id ? " bg-gray-200" : " bg-white"}`}
-              >
-                <span>{data.material.name}</span>
-                <span>{data.material.destination}</span>
-                <span>{data.year}</span>
-                <span>{data.month}</span>
-                <span>{data.flow}</span>
-                <span>{data.achievement}</span>
-                <span>{data.shipping}</span>
-                <span>{data.adjustment}</span>
-                <span>{data.remaining}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+            >
+              <span className="w-35">{data.material.name}</span>
+              <span className="w-35">{data.material.destination}</span>
+              <span className="w-10">{data.year}</span>
+              <span className="w-10">{data.month}</span>
+              <span className="w-15">{data.flow}</span>
+              <span className="w-15">{data.achievement}</span>
+              <span className="w-20">{data.shipping}</span>
+              <span className="w-20">{data.adjustment}</span>
+              <span className="w-15">{data.remaining}</span>
+            </li>
+          ))}
+        </ul>
       </div>
 
       <div className="flex justify-center gap-5">

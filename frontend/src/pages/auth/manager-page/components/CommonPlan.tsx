@@ -33,7 +33,7 @@ const CommonPlan = ({ plan, setPlan, materialData }: CommonPlanProps) => {
         </Dropdown>
       </div>
       <div className="flex justify-center items-center gap-3">
-        <TextInput name="flow" value={plan.flow} maxLength={10} onChange={(e) => setPlan(defaultEvent(e, onlyNumber))}>
+        <TextInput name="flow" value={plan.flow} maxLength={5} onChange={(e) => setPlan(defaultEvent(e, onlyNumber))}>
           予定数量
         </TextInput>
         <div className="flex flex-col mb-2 w-30">

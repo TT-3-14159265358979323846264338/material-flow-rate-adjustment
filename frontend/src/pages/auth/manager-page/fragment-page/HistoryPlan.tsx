@@ -47,7 +47,7 @@ const HistoryPlan = ({ returnTop }: ReturnProps) => {
         <div className="min-w-max">
           <ul className="sticky top-0 text-sm border rounded-t-md bg-white">
             <li className="flex items-center ml-2 mr-2 *:ml-1 **:block">
-              <span className="w-35">修正内容</span>
+              <span className="w-20">修正内容</span>
               <div className="w-35">
                 <span className="border-b border-b-gray-200">前 製品名</span>
                 <span>後 製品名</span>
@@ -56,31 +56,31 @@ const HistoryPlan = ({ returnTop }: ReturnProps) => {
                 <span className="border-b border-b-gray-200">前 向け先</span>
                 <span>後 向け先</span>
               </div>
-              <div className="w-35">
+              <div className="w-20">
                 <span className="border-b border-b-gray-200">前 計画年</span>
                 <span>後 計画年</span>
               </div>
-              <div className="w-35">
+              <div className="w-20">
                 <span className="border-b border-b-gray-200">前 計画月</span>
                 <span>後 計画月</span>
               </div>
-              <div className="w-35">
+              <div className="w-20">
                 <span className="border-b border-b-gray-200">前 計画量</span>
                 <span>後 計画量</span>
               </div>
-              <div className="w-35">
+              <div className="w-20">
                 <span className="border-b border-b-gray-200">前 実績</span>
                 <span>後 実績</span>
               </div>
-              <div className="w-35">
+              <div className="w-20">
                 <span className="border-b border-b-gray-200">前 出荷量</span>
                 <span>後 出荷量</span>
               </div>
-              <div className="w-35">
+              <div className="w-20">
                 <span className="border-b border-b-gray-200">前 調整量</span>
                 <span>後 調整量</span>
               </div>
-              <div className="w-35">
+              <div className="w-20">
                 <span className="border-b border-b-gray-200">前 残数</span>
                 <span>後 残数</span>
               </div>
@@ -95,7 +95,7 @@ const HistoryPlan = ({ returnTop }: ReturnProps) => {
                 className={`flex min-w-max ml-2 mr-2 items-center border-b border-b-gray-500 
                   *:ml-1 **:block **:min-h-lh`}
               >
-                <span className="w-35">{ActionView(item.action)}</span>
+                <span className="w-20">{ActionView(item.action)}</span>
                 <div className="w-35">
                   <span className="border-b border-b-gray-200">{item.oldName}</span>
                   <span>{item.newName}</span>
@@ -104,31 +104,31 @@ const HistoryPlan = ({ returnTop }: ReturnProps) => {
                   <span className="border-b border-b-gray-200">{item.oldDestination}</span>
                   <span>{item.newDestination}</span>
                 </div>
-                <div className="w-35">
+                <div className="w-20">
                   <span className="border-b border-b-gray-200">{item.oldYear}</span>
                   <span>{item.newYear}</span>
                 </div>
-                <div className="w-35">
+                <div className="w-20">
                   <span className="border-b border-b-gray-200">{item.oldMonth}</span>
                   <span>{item.newMonth}</span>
                 </div>
-                <div className="w-35">
+                <div className="w-20">
                   <span className="border-b border-b-gray-200">{item.oldFlow}</span>
                   <span>{item.newFlow}</span>
                 </div>
-                <div className="w-35">
+                <div className="w-20">
                   <span className="border-b border-b-gray-200">{item.oldAchievement}</span>
                   <span>{item.newAchievement}</span>
                 </div>
-                <div className="w-35">
+                <div className="w-20">
                   <span className="border-b border-b-gray-200">{item.oldShipping}</span>
                   <span>{item.newShipping}</span>
                 </div>
-                <div className="w-35">
+                <div className="w-20">
                   <span className="border-b border-b-gray-200">{item.oldAdjustment}</span>
                   <span>{item.newAdjustment}</span>
                 </div>
-                <div className="w-35">
+                <div className="w-20">
                   <span className="border-b border-b-gray-200">{item.oldRemaining}</span>
                   <span>{item.newRemaining}</span>
                 </div>

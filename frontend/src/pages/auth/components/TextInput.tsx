@@ -8,8 +8,8 @@ type TextInputProps = {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
-const TextInput = ({ children, name="textbox", value, maxLength, onChange }: TextInputProps) => (
-  <div className="flex flex-col items-stretch w-full">
+const TextInput = ({ children, name = "textbox", value, maxLength, onChange }: TextInputProps) => (
+  <div className="flex flex-col items-stretch w-full *:text-center">
     <label>{children}</label>
     <input
       name={name}
@@ -19,7 +19,7 @@ const TextInput = ({ children, name="textbox", value, maxLength, onChange }: Tex
       maxLength={maxLength}
       onChange={onChange}
       spellCheck="false"
-      className="w-full text-center border border-b-black rounded-md focus:outline-none focus:ring-2 focus:ring-amber-200 bg-white mb-2"
+      className="w-full border border-b-black rounded-md focus:outline-none focus:ring-2 focus:ring-amber-200 bg-white mb-2"
       required
     />
   </div>

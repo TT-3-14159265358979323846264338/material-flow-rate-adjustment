@@ -8,14 +8,14 @@ type DropdownProps = {
   list: readonly string[];
 };
 
-const Dropdown = ({name="dropdown", children, value, onChange, list}: DropdownProps) => (
-  <div className="flex flex-col items-stretch">
+const Dropdown = ({ name = "dropdown", children, value, onChange, list }: DropdownProps) => (
+  <div className="flex flex-col items-stretch *:text-center">
     <label>{children}</label>
     <select
       name={name}
-      value={value?? ""}
+      value={value ?? ""}
       onChange={onChange}
-      className="text-center border border-b-black rounded-md focus:outline-none focus:ring-2 focus:ring-amber-200 bg-white mb-2 cursor-pointer"
+      className="border border-b-black rounded-md focus:outline-none focus:ring-2 focus:ring-amber-200 bg-white mb-2 cursor-pointer"
       required
     >
       {list.map((item) => (
@@ -25,6 +25,6 @@ const Dropdown = ({name="dropdown", children, value, onChange, list}: DropdownPr
       ))}
     </select>
   </div>
-)
+);
 
 export default Dropdown;

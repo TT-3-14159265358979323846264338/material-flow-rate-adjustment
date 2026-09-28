@@ -9,6 +9,7 @@ import com.example.material_flow_rate_adjustment.savedata.historydata.MaterialHi
 import com.example.material_flow_rate_adjustment.savedata.historydata.MaterialHistorySQL;
 import com.example.material_flow_rate_adjustment.savedata.maindata.MaterialRepository;
 import com.example.material_flow_rate_adjustment.savedata.maindata.MaterialSQL;
+import com.example.material_flow_rate_adjustment.scheduledtask.CreateAllDefaultCalender;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +19,7 @@ public class NewMaterialService {
 	private final MaterialRepository materialRepository;
 	private final MaterialHistoryRepository historyRepository;
 	private final UtilityService utility;
+	private final CreateAllDefaultCalender createAllDefaultCalender;
 	
 	@Transactional
 	public String createNewMaterial(NewMaterial data, String loginUser){
@@ -25,6 +27,7 @@ public class NewMaterialService {
 		materialRepository.save(newMaterial);
 		MaterialHistorySQL newHistory = createMaterialHistorySQL(newMaterial, loginUser);
 		historyRepository.save(newHistory);
+		createAllDefaultCalender.createCalender(newMaterial);
 		return "新規製品を登録しました。";
 	}
 	

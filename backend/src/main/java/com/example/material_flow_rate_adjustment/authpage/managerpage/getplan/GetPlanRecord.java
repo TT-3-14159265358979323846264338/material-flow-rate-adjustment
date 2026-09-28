@@ -5,11 +5,11 @@ import com.example.material_flow_rate_adjustment.customannotations.ValidSortOrde
 import com.example.material_flow_rate_adjustment.customannotations.ValidSortTarget;
 
 record GetPlanRecord(
-		String minYear,
-		String minMonth,
-		String maxYear,
-		String maxMonth,
-		String material,
+		Integer minYear,
+		Integer minMonth,
+		Integer maxYear,
+		Integer maxMonth,
+		Integer material,
 		@ValidSortOrder
 		OrderSortEnum order,
 		@ValidSortTarget

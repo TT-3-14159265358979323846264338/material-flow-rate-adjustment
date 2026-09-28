@@ -4,10 +4,10 @@ import com.example.material_flow_rate_adjustment.customannotations.ValidSortOrde
 import com.example.material_flow_rate_adjustment.customannotations.ValidSortTarget;
 
 public record DefaultHistoryFilterRecord(
-		String minYear,
-		String minMonth,
-		String maxYear,
-		String maxMonth,
+		Integer minYear,
+		Integer minMonth,
+		Integer maxYear,
+		Integer maxMonth,
 		@ValidSortOrder
 		OrderSortEnum order,
 		@ValidSortTarget

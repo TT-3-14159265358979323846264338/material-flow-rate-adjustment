@@ -20,10 +20,10 @@ public class GetCarenderService {
 	private final TransformService transform;
 	
 	@Transactional(readOnly = true)
-	public List<Holidays> getCarender(String year, String month, int id){
+	public List<Holidays> getCarender(GetCarenderRecord carenderSort, int id){
 		return calendarRepository.findByHolidayBetweenAndMaterial_IdAndHasDeletedFalse(
-										transform.minDate(year, month), 
-										transform.maxDate(year, month), 
+										transform.minDate(carenderSort.year(), carenderSort.month()), 
+										transform.maxDate(carenderSort.year(), carenderSort.month()), 
 										id,
 										Sort.by(Sort.Direction.ASC, "holiday"))
 								.stream()

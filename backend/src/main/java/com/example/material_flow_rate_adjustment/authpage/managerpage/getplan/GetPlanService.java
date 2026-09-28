@@ -23,21 +23,19 @@ public class GetPlanService {
 	
 	@Transactional(readOnly = true)
 	public List<Plan> getPlan(GetPlanRecord getPlanRecord) {
-		Predicate<MonthPlanSQL> filter = filter(getPlanRecord.material());
 		return planRepository.findByPlanDateBetweenAndHasDeletedFalse(
 								transform.minDate(getPlanRecord.minYear(), getPlanRecord.minMonth()), 
 								transform.maxDate(getPlanRecord.maxYear(), getPlanRecord.maxMonth()),
 								getPlanRecord.target().getPlanSort(getPlanRecord.order()))
 							.stream()
-							.filter(filter)
+							.filter(filter(getPlanRecord.material()))
 							.map(this::createPlan)
 							.toList();
 	}
 	
-	Predicate<MonthPlanSQL> filter(String material){
-		Integer id = transform.integerValue(material, null);
-		return id != null? 
-					(plan) -> plan.getMaterial().getId() == id: 
+	Predicate<MonthPlanSQL> filter(Integer material){
+		return material != null? 
+					(plan) -> plan.getMaterial().getId() == material: 
 					(_) -> true;
 	}
 	

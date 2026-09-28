@@ -1,5 +1,7 @@
 package com.example.material_flow_rate_adjustment.authpage.managerpage.getplan;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +15,7 @@ public class GetPlanController {
 	
 	@GetMapping("/api/plan")
 	@PreAuthorize("hasRole('MANAGER')")
-	public ResponseEntity<?> managerGetPlan(GetPlanRecord getPlanRecord) {
+	public ResponseEntity<?> managerGetPlan(@Valid GetPlanRecord getPlanRecord) {
 		return ResponseEntity.ok(getPlanService.getPlan(getPlanRecord));
 	}
 }

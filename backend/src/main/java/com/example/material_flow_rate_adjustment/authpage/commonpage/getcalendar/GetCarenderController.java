@@ -13,9 +13,9 @@ import lombok.RequiredArgsConstructor;
 public class GetCarenderController {
 	private final GetCarenderService getCarenderService;
 	
-	@GetMapping("/api/carender/{year}/{month}/{id}")
+	@GetMapping("/api/carender/{id}")
 	@PreAuthorize("hasRole('USER') or hasRole('MANAGER')")
-	public ResponseEntity<?> getCarender(@PathVariable String year, @PathVariable String month, @PathVariable int id) {
-		return ResponseEntity.ok(getCarenderService.getCarender(year, month, id));
+	public ResponseEntity<?> getCarender(GetCarenderRecord carenderSort, @PathVariable int id) {
+		return ResponseEntity.ok(getCarenderService.getCarender(carenderSort, id));
 	}
 }

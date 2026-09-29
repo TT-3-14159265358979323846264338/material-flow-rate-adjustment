@@ -5,11 +5,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
+import org.hibernate.annotations.Immutable;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "account_history", indexes = {
@@ -18,8 +21,10 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@Immutable
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 public class AccountHistorySQL extends BaseHistorySQL{
 	@Column(name = "old_login_user", length = 20, updatable = false)
 	private String oldLoginUser;

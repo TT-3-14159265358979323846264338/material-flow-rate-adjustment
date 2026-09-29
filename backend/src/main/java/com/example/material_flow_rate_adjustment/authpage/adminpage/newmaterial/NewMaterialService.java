@@ -7,6 +7,7 @@ import com.example.material_flow_rate_adjustment.authpage.UtilityService;
 import com.example.material_flow_rate_adjustment.savedata.historydata.HistoryEnum;
 import com.example.material_flow_rate_adjustment.savedata.historydata.MaterialHistoryRepository;
 import com.example.material_flow_rate_adjustment.savedata.historydata.MaterialHistorySQL;
+import com.example.material_flow_rate_adjustment.savedata.maindata.AccountSQL;
 import com.example.material_flow_rate_adjustment.savedata.maindata.MaterialRepository;
 import com.example.material_flow_rate_adjustment.savedata.maindata.MaterialSQL;
 import com.example.material_flow_rate_adjustment.scheduledtask.CreateAllDefaultCalender;
@@ -23,36 +24,37 @@ public class NewMaterialService {
 	
 	@Transactional
 	public String createNewMaterial(NewMaterial data, String loginUser){
+		AccountSQL account = utility.getAccountSQL(loginUser);
 		MaterialSQL newMaterial = createMaterialSQL(data.name(), data.destination(), data.base(), data.unit());
 		materialRepository.save(newMaterial);
-		MaterialHistorySQL newHistory = createMaterialHistorySQL(newMaterial, loginUser);
+		MaterialHistorySQL newHistory = createMaterialHistorySQL(newMaterial, account);
 		historyRepository.save(newHistory);
-		createAllDefaultCalender.createCalender(newMaterial);
+		createAllDefaultCalender.createCalender(newMaterial, account);
 		return "新規製品を登録しました。";
 	}
 	
 	MaterialSQL createMaterialSQL(String name, String destination, Integer base, String unit) {
-		MaterialSQL newMaterial = new MaterialSQL();
-		newMaterial.setName(name);
-		newMaterial.setDestination(destination);
-		newMaterial.setBase(base);
-		newMaterial.setUnit(unit);
-		newMaterial.setHasDeleted(false);
-		return newMaterial;
+		return MaterialSQL.builder()
+				.name(name)
+				.destination(destination)
+				.base(base)
+				.unit(unit)
+				.hasDeleted(false)
+				.build();
 	}
 	
-	MaterialHistorySQL createMaterialHistorySQL(MaterialSQL newMaterial, String loginUser) {
-		MaterialHistorySQL newHistory = new MaterialHistorySQL();
-		newHistory.setTargetId(newMaterial.getId());
-		newHistory.setNewName(newMaterial.getName());
-		newHistory.setNewDestination(newMaterial.getDestination());
-		newHistory.setNewBase(newMaterial.getBase());
-		newHistory.setNewBase(newMaterial.getBase());
-		newHistory.setNewUnit(newMaterial.getUnit());
-		newHistory.setAction(HistoryEnum.CREATE.name());
-		newHistory.setActionId(Integer.parseInt(loginUser));
-		newHistory.setActionUser(utility.getAccountSQL(loginUser).getDisplayedUser());
-		newHistory.setHasDeletedNew(false);
-		return newHistory;
+	MaterialHistorySQL createMaterialHistorySQL(MaterialSQL newMaterial, AccountSQL account) {
+		return MaterialHistorySQL.builder()
+				.targetId(newMaterial.getId())
+				.newName(newMaterial.getName())
+				.newDestination(newMaterial.getDestination())
+				.newBase(newMaterial.getBase())
+				.newBase(newMaterial.getBase())
+				.newUnit(newMaterial.getUnit())
+				.action(HistoryEnum.CREATE.name())
+				.actionId(account.getId())
+				.actionUser(account.getDisplayedUser())
+				.hasDeletedNew(false)
+				.build();
 	}
 }

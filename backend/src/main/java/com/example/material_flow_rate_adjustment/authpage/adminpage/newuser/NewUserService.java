@@ -10,6 +10,7 @@ import com.example.material_flow_rate_adjustment.savedata.historydata.AccountHis
 import com.example.material_flow_rate_adjustment.savedata.historydata.AccountHistorySQL;
 import com.example.material_flow_rate_adjustment.savedata.historydata.HistoryEnum;
 import com.example.material_flow_rate_adjustment.savedata.maindata.AccountRepository;
+import com.example.material_flow_rate_adjustment.savedata.maindata.AccountRole;
 import com.example.material_flow_rate_adjustment.savedata.maindata.AccountSQL;
 
 import lombok.RequiredArgsConstructor;
@@ -31,33 +32,33 @@ public class NewUserService {
 			throw new DataBaseException("同名の表示ユーザーは登録できません。");
 		}
 		//初期パスワードはユーザーにしている。最終的にはランダム生成にする。
-		AccountSQL newAccount = createNewAccount(data.loginName(), data.displayedName(), data.loginName(), data.role().name());
+		AccountSQL newAccount = createNewAccount(data.loginName(), data.displayedName(), data.loginName(), data.role());
 		repository.save(newAccount);
 		AccountHistorySQL newHistory = createNewHistory(newAccount, loginUser);
 		historyRepository.save(newHistory);
 		return data.loginName();
 	}
 	
-	AccountSQL createNewAccount(String loginName, String displayedName, String password, String role) {
-		AccountSQL newAccount = new AccountSQL();
-		newAccount.setLoginUser(loginName);
-		newAccount.setDisplayedUser(displayedName);
-		newAccount.setPassword(passwordEncoder.encode(password));
-		newAccount.setRole(role);
-		newAccount.setHasDeleted(false);
-		return newAccount;
+	AccountSQL createNewAccount(String loginName, String displayedName, String password, AccountRole role) {
+		return AccountSQL.builder()
+				.loginUser(loginName)
+				.displayedUser(displayedName)
+				.password(passwordEncoder.encode(password))
+				.role(role)
+				.hasDeleted(false)
+				.build();
 	}
 	
 	AccountHistorySQL createNewHistory(AccountSQL newAccount, String loginUser) {
-		AccountHistorySQL newHistory = new AccountHistorySQL();
-		newHistory.setTargetId(newAccount.getId());
-		newHistory.setNewLoginUser(newAccount.getLoginUser());
-		newHistory.setNewDisplayedUser(newAccount.getDisplayedUser());
-		newHistory.setNewRole(newAccount.getRole());
-		newHistory.setAction(HistoryEnum.CREATE.name());
-		newHistory.setActionId(Integer.parseInt(loginUser));
-		newHistory.setActionUser(utility.getAccountSQL(loginUser).getDisplayedUser());
-		newHistory.setHasDeletedNew(false);
-		return newHistory;
+		return AccountHistorySQL.builder()
+				.targetId(newAccount.getId())
+				.newLoginUser(newAccount.getLoginUser())
+				.newDisplayedUser(newAccount.getDisplayedUser())
+				.newRole(newAccount.getRole().name())
+				.action(HistoryEnum.CREATE.name())
+				.actionId(Integer.parseInt(loginUser))
+				.actionUser(utility.getAccountSQL(loginUser).getDisplayedUser())
+				.hasDeletedNew(false)
+				.build();
 	}
 }

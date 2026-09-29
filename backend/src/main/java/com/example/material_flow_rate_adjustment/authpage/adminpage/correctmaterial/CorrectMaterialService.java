@@ -40,13 +40,13 @@ public class CorrectMaterialService {
 	}
 	
 	MaterialHistorySQL createHistorySQL(MaterialSQL material) {
-		MaterialHistorySQL newHistory = new MaterialHistorySQL();
-		newHistory.setOldName(material.getName());
-		newHistory.setOldDestination(material.getDestination());
-		newHistory.setOldBase(material.getBase());
-		newHistory.setOldUnit(material.getUnit());
-		newHistory.setHasDeletedOld(material.getHasDeleted());
-		return newHistory;
+		return MaterialHistorySQL.builder()
+				.oldName(material.getName())
+				.oldDestination(material.getDestination())
+				.oldBase(material.getBase())
+				.oldUnit(material.getUnit())
+				.hasDeletedOld(material.getHasDeleted())
+				.build();
 	}
 	
 	void setName(MaterialSQL material, MaterialHistorySQL newHistory, String newName) {

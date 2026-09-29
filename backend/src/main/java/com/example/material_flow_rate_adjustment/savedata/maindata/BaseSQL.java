@@ -16,11 +16,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @MappedSuperclass
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 public abstract class BaseSQL {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

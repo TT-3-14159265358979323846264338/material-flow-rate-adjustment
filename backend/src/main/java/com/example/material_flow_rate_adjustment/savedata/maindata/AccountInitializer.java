@@ -29,7 +29,7 @@ public class AccountInitializer implements CommandLineRunner{
 	
 	@Override
 	public void run(String... args) throws Exception {
-		if (!accountRepository.existsByRole(AccountRole.ADMIN.name())) {
+		if (!accountRepository.existsByRole(AccountRole.ADMIN)) {
 			AccountSQL newAccount = createAdminAccount();
 			accountRepository.save(newAccount);
 			AccountHistorySQL newHistory = createHistory(newAccount);
@@ -38,25 +38,25 @@ public class AccountInitializer implements CommandLineRunner{
 	}
 	
 	AccountSQL createAdminAccount() {
-		AccountSQL newAccount = new AccountSQL();
-		newAccount.setLoginUser(user);
-		newAccount.setDisplayedUser("初期管理者");
-		newAccount.setPassword(passwordEncoder.encode(password));
-		newAccount.setRole(AccountRole.ADMIN.name());
-		newAccount.setHasDeleted(false);
-		return newAccount;
+		return AccountSQL.builder()
+				.loginUser(user)
+				.displayedUser("初期管理者")
+				.password(passwordEncoder.encode(password))
+				.role(AccountRole.ADMIN)
+				.hasDeleted(false)
+				.build();
 	}
 	
 	AccountHistorySQL createHistory(AccountSQL newAccount) {
-		AccountHistorySQL newHistory = new AccountHistorySQL();
-		newHistory.setTargetId(newAccount.getId());
-		newHistory.setNewLoginUser(newAccount.getLoginUser());
-		newHistory.setNewDisplayedUser(newAccount.getDisplayedUser());
-		newHistory.setNewRole(newAccount.getRole());
-		newHistory.setHasDeletedNew(newAccount.getHasDeleted());
-		newHistory.setAction(HistoryEnum.CREATE.name());
-		newHistory.setActionId(0);
-		newHistory.setActionUser("システム自動");
-		return newHistory;
+		return AccountHistorySQL.builder()
+				.targetId(newAccount.getId())
+				.newLoginUser(newAccount.getLoginUser())
+				.newDisplayedUser(newAccount.getDisplayedUser())
+				.newRole(newAccount.getRole().name())
+				.hasDeletedNew(newAccount.getHasDeleted())
+				.action(HistoryEnum.CREATE.name())
+				.actionId(0)
+				.actionUser("システム自動")
+				.build();
 	}
 }

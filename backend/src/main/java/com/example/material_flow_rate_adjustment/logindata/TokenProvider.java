@@ -46,7 +46,7 @@ public class TokenProvider {
 				.expiration(new Date(nowDate.getTime() + period.toMillis()))
 				.signWith(key)
 				.compact();
-		return new Token(token, account.getRole());
+		return new Token(token, account.getRole().name());
     }
 	
 	record Token(String token, String role) {};
@@ -59,7 +59,7 @@ public class TokenProvider {
 		int id = Integer.parseInt(getUser(token));
 		AccountSQL account = accountRepository.findById(id)
 				.orElseThrow(() -> new UsernameNotFoundException("アカウントはあるのにIDの取り込みに失敗しました。"));
-		return account.getRole();
+		return account.getRole().name();
 	}
 	
 	public boolean validateToken(String token) {

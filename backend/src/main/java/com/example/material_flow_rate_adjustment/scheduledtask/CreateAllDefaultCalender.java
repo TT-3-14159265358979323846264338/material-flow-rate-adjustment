@@ -6,6 +6,7 @@ import java.util.stream.IntStream;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.material_flow_rate_adjustment.savedata.maindata.AccountSQL;
 import com.example.material_flow_rate_adjustment.savedata.maindata.MaterialRepository;
 import com.example.material_flow_rate_adjustment.savedata.maindata.MaterialSQL;
 
@@ -40,8 +41,8 @@ public class CreateAllDefaultCalender {
 	/*
 	 * Transactional内で呼び出すこと
 	 */
-	public void createCalender(MaterialSQL material) {
+	public void createCalender(MaterialSQL material, AccountSQL account) {
 		YearMonth now = YearMonth.now();
-		IntStream.range(0, PLUS_MONTH + 1).mapToObj(i -> now.plusMonths(i)).forEach(i -> createDefaultCalender.createCalender(material, i));
+		IntStream.range(0, PLUS_MONTH + 1).mapToObj(i -> now.plusMonths(i)).forEach(i -> createDefaultCalender.createCalender(material, i, account));
 	}
 }

@@ -15,11 +15,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @MappedSuperclass
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 public abstract class BaseHistorySQL {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +29,7 @@ public abstract class BaseHistorySQL {
 	@Setter(AccessLevel.NONE)
 	private Integer id;
 	
-	@Column(name = "target_id", columnDefinition = "INT UNSIGNED", nullable = false, updatable = false)
+	@Column(name = "target_id", nullable = false, updatable = false)
 	private Integer targetId;
 	
 	@Column(name = "has_deleted_old", updatable = false)

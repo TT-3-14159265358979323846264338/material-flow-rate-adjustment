@@ -40,7 +40,7 @@ public class GetUserService {
 	}
 	
 	Account createAccount(AccountSQL account) {
-		return new Account(account.getId(), account.getLoginUser(), account.getDisplayedUser(), account.getRole());
+		return new Account(account.getId(), account.getLoginUser(), account.getDisplayedUser(), account.getRole().name());
 	}
 	
 	record Account(int id, String loginName, String displayedName, String role) {};

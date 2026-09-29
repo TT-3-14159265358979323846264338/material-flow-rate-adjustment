@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.material_flow_rate_adjustment.authpage.UtilityService;
+import com.example.material_flow_rate_adjustment.savedata.historydata.BaseMaterialHistory;
 import com.example.material_flow_rate_adjustment.savedata.historydata.PlanHistoryRepository;
 import com.example.material_flow_rate_adjustment.savedata.historydata.PlanHistorySQL;
 import com.example.material_flow_rate_adjustment.savedata.maindata.AccountSQL;
@@ -43,19 +44,21 @@ public class CorrectPlanService {
 	}
 	
 	PlanHistorySQL createHistorySQL(MonthPlanSQL plan) {
-		PlanHistorySQL newHistory = new PlanHistorySQL();
-		newHistory.setOldMaterialId(plan.getMaterial().getId());
-		newHistory.setOldName(plan.getMaterial().getName());
-		newHistory.setOldDestination(plan.getMaterial().getDestination());
-		newHistory.setOldYear(plan.getYear());
-		newHistory.setOldMonth(plan.getMonth());
-		newHistory.setOldFlow(plan.getFlow());
-		newHistory.setOldAchievement(plan.getAchievement());
-		newHistory.setOldShipping(plan.getShipping());
-		newHistory.setOldAdjustment(plan.getAdjustment());
-		newHistory.setOldRemaining(plan.getRemaining());
-		newHistory.setHasDeletedOld(plan.getHasDeleted());
-		return newHistory;
+		return PlanHistorySQL.builder()
+				.baseMaterialHistory(BaseMaterialHistory.builder()
+						.oldMaterialId(plan.getMaterial().getId())
+						.oldName(plan.getMaterial().getName())
+						.oldDestination(plan.getMaterial().getDestination())
+						.build())
+				.oldYear(plan.getYear())
+				.oldMonth(plan.getMonth())
+				.oldFlow(plan.getFlow())
+				.oldAchievement(plan.getAchievement())
+				.oldShipping(plan.getShipping())
+				.oldAdjustment(plan.getAdjustment())
+				.oldRemaining(plan.getRemaining())
+				.hasDeletedOld(plan.getHasDeleted())
+				.build();
 	}
 	
 	void setMaterial(MonthPlanSQL plan, PlanHistorySQL newHistory, Integer materialId) {

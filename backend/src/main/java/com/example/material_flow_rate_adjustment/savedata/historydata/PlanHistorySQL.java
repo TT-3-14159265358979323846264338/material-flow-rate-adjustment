@@ -1,15 +1,20 @@
 package com.example.material_flow_rate_adjustment.savedata.historydata;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+
+import org.hibernate.annotations.Immutable;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.Delegate;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "plan_history", indexes = {
@@ -18,26 +23,14 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@Immutable
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 public class PlanHistorySQL extends BaseHistorySQL{
-	@Column(name = "old_material_id", columnDefinition = "INT UNSIGNED", updatable = false)
-	private Integer oldMaterialId;
-	
-	@Column(name = "new_material_id", columnDefinition = "INT UNSIGNED", updatable = false)
-	private Integer newMaterialId;
-	
-	@Column(name = "old_material_name", length = 10, updatable = false)
-	private String oldName;
-	
-	@Column(name = "new_material_name", length = 10, updatable = false)
-	private String newName;
-	
-	@Column(name = "old_material_destination", length = 10, updatable = false)
-	private String oldDestination;
-	
-	@Column(name = "new_material_destination", length = 10, updatable = false)
-	private String newDestination;
+	@Embedded
+	@Delegate
+	private BaseMaterialHistory baseMaterialHistory;
 	
 	@Column(name = "old_year", columnDefinition = "INT UNSIGNED", updatable = false)
 	private Integer oldYear;

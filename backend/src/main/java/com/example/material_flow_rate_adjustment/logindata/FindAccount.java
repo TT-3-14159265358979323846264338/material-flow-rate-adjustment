@@ -22,7 +22,7 @@ public class FindAccount implements UserDetailsService {
 				.orElseThrow(() -> new UsernameNotFoundException(username + "が登録されていません"));
 		return User.withUsername(account.getLoginUser())
 				.password(account.getPassword())
-				.roles(account.getRole())
+				.roles(account.getRole().name())
 				.build();
 	}
 }

@@ -38,12 +38,12 @@ public class CorrectUserService {
 	}
 	
 	AccountHistorySQL createHistorySQL(AccountSQL targetAccount) {
-		AccountHistorySQL newHistory = new AccountHistorySQL();
-		newHistory.setOldLoginUser(targetAccount.getLoginUser());
-		newHistory.setOldDisplayedUser(targetAccount.getDisplayedUser());
-		newHistory.setOldRole(targetAccount.getRole());
-		newHistory.setHasDeletedOld(targetAccount.getHasDeleted());
-		return newHistory;
+		return AccountHistorySQL.builder()
+				.oldLoginUser(targetAccount.getLoginUser())
+				.oldDisplayedUser(targetAccount.getDisplayedUser())
+				.oldRole(targetAccount.getRole().name())
+				.hasDeletedOld(targetAccount.getHasDeleted())
+				.build();
 	}
 	
 	void setLoginName(AccountSQL targetAccount, AccountHistorySQL newHistory, String newLoginName) {
@@ -77,7 +77,7 @@ public class CorrectUserService {
 	}
 	
 	void setRole(AccountSQL targetAccount, AccountSQL loginAccount, AccountHistorySQL newHistory, AccountRole role) {
-		if(targetAccount.getRole().equals(role.name())) {
+		if(targetAccount.getRole().equals(role)) {
 			return;
 		}
 		if(isFinalAdmin(targetAccount, loginAccount)) {
@@ -85,12 +85,12 @@ public class CorrectUserService {
 		}
 		newHistory.setTargetId(targetAccount.getId());
 		newHistory.setNewRole(role.name());
-		targetAccount.setRole(role.name());
+		targetAccount.setRole(role);
 	}
 	
 	boolean isFinalAdmin(AccountSQL targetAccount, AccountSQL loginAccount) {
 		if(targetAccount.equals(loginAccount)) {
-			return repository.countByRole(AccountRole.ADMIN.name()) == 1;
+			return repository.countByRole(AccountRole.ADMIN) == 1;
 		}
 		return false;
 	}

@@ -1,1 +1,0 @@
-export const dateView = (date: string) => date.replace("T", " ").split(".")[0];

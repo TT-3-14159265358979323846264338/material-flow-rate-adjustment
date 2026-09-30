@@ -14,6 +14,7 @@ export type PlanSortConfig = DateRangeConfig &
 
 const defaultMinTerm = () => {
   const date = new Date();
+  date.setDate(1);
   date.setMonth(date.getMonth() - 6);
   return {
     minYear: String(date.getFullYear()),

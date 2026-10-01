@@ -16,15 +16,19 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class GetCarenderService {
+	private static final List<Holidays> DEFAULT_HOLIDAY = List.of(new Holidays(-1, LocalDate.now(), 0));
 	private final CalendarRepository calendarRepository;
 	private final TransformService transform;
 	
 	@Transactional(readOnly = true)
-	public List<Holidays> getCarender(GetCarenderRecord carenderSort, int id){
+	public List<Holidays> getCarender(GetCarenderRecord carenderSort){
+		if(carenderSort.material() == null) {
+			return DEFAULT_HOLIDAY;
+		}
 		return calendarRepository.findByHolidayBetweenAndMaterial_IdAndHasDeletedFalse(
 										transform.minDate(carenderSort.year(), carenderSort.month()), 
 										transform.maxDate(carenderSort.year(), carenderSort.month()), 
-										id,
+										carenderSort.material(),
 										Sort.by(Sort.Direction.ASC, "holiday"))
 								.stream()
 								.map(this::createHolidays)

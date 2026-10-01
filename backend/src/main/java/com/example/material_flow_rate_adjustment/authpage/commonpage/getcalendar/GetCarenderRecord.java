@@ -2,4 +2,5 @@ package com.example.material_flow_rate_adjustment.authpage.commonpage.getcalenda
 
 record GetCarenderRecord(
 		Integer year,
-		Integer month) {}
+		Integer month,
+		Integer material) {}

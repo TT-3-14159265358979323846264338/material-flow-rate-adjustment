@@ -3,7 +3,6 @@ package com.example.material_flow_rate_adjustment.authpage.commonpage.getcalenda
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -13,9 +12,9 @@ import lombok.RequiredArgsConstructor;
 public class GetCarenderController {
 	private final GetCarenderService getCarenderService;
 	
-	@GetMapping("/api/carender/{id}")
+	@GetMapping("/api/carender")
 	@PreAuthorize("hasRole('USER') or hasRole('MANAGER')")
-	public ResponseEntity<?> getCarender(GetCarenderRecord carenderSort, @PathVariable int id) {
-		return ResponseEntity.ok(getCarenderService.getCarender(carenderSort, id));
+	public ResponseEntity<?> getCarender(GetCarenderRecord carenderSort) {
+		return ResponseEntity.ok(getCarenderService.getCarender(carenderSort));
 	}
 }

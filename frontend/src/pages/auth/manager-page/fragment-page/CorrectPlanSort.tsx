@@ -1,9 +1,9 @@
 import CommonSort from "../../components/CommonSort";
 import PossibleEmptyDateRange from "../../components/PossibleEmptyDateRange";
 import Dropdown from "../../components/Dropdown";
-import { useMemo } from "react";
 import { MaterialResponse } from "../../types/materialResponse";
 import { InitialPlanSort, PLAN_SORT_CODE, PlanSortConfig } from "../types/planSortConfig";
+import { useMaterialView } from "../../hooks/useMaterialView";
 
 type CorrentPlanSortProps = {
   finalSort: PlanSortConfig;
@@ -15,8 +15,6 @@ type CorrentPlanSortProps = {
   materialArray: MaterialResponse[];
 };
 
-const noSort = "指定なし";
-
 const CorrectPlanSort = ({
   finalSort,
   setFinalSort,
@@ -26,11 +24,8 @@ const CorrectPlanSort = ({
   returnTop,
   materialArray,
 }: CorrentPlanSortProps) => {
-  const materialDropList = useMemo(() => [noSort, ...materialArray?.map((item) => item.name)], [materialArray]);
-  const material = useMemo(
-    () => materialArray?.find((item) => item.id === sortData.material)?.name ?? noSort,
-    [materialArray, sortData.material],
-  );
+  const { materialDropList, material } = useMaterialView<PlanSortConfig>({ materialArray, sortData });
+  
   return (
     <CommonSort
       sortCode={PLAN_SORT_CODE}

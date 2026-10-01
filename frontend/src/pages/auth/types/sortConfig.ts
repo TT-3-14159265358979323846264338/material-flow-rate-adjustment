@@ -7,6 +7,11 @@ export type SortConfig<T> = {
   setSort: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement, Element>) => void;
 };
 
+export type DateConfig = {
+  year: string;
+  month: string;
+};
+
 export type DateRangeConfig = {
   minYear: string;
   minMonth: string;

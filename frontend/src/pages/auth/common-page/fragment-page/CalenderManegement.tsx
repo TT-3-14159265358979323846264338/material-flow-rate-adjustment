@@ -1,12 +1,16 @@
-import { useCorrect } from "../../hooks/useCorrect";
+import DateDropdown from "../../components/DateDropDown";
+import DefaultButton from "../../components/DefaultButton";
+import DefaultModal from "../../components/DefaultModal";
+import Dropdown from "../../components/Dropdown";
 import { useGetMapping } from "../../hooks/useGetMapping";
+import { useMaterialView } from "../../hooks/useMaterialView";
 import { useSortGetMapping } from "../../hooks/useSortGetMapping";
 import { MaterialResponse } from "../../types/materialResponse";
 import { useCalenderSort } from "../hooks/useCalenderSort";
 import { CalenderResponse } from "../types/calenderResponse";
-import { CalenderSortConfig } from "../types/calenderSortConfig";
+import { CalenderSortConfig, InitialCalenderSort } from "../types/calenderSortConfig";
 
-type CalenderViewConfig = "Top" | "New" | "History";
+type CalenderViewConfig = "Top" | "History";
 
 const CalenderManegement = () => {
   const { data: materialArray } = useGetMapping<MaterialResponse>({ URL: "/api/material/all" });
@@ -28,20 +32,29 @@ const CalenderManegement = () => {
     useSort: () => useCalenderSort(materialArray),
     URL: "/api/calender",
   });
-  const {
-    selectedItem,
-    setSelectedItem,
-    isOpen: isOpenCorrect,
-    setIsOpen: setIsOpenCorrect,
-    correctHandle,
-    returnFromNotCorrect,
-    returnFromCorrect,
-  } = useCorrect<CalenderResponse>(getMappingData);
-
+  const { materialDropList, material } = useMaterialView<CalenderSortConfig>({ materialArray, sortData });
+  const sortHandle = () => {
+    setFinalSort(sortData);
+    setIsOpenSort(true);
+  };
 
   return (
-    <div>
+    <div className="flex flex-col items-stretch">
+      <h3 className="text-left ml-5">日程指定</h3>
+      <div className="flex justify-center gap-10 border rounded-md bg-white p-5 mb-3">
+        <Dropdown name="material" value={material} onChange={setSort} list={materialDropList}>
+          製品名
+        </Dropdown>
+        <DateDropdown sortData={sortData} setSort={setSort}></DateDropdown>
+      </div>
+      <div className="flex justify-center gap-5">
+        <DefaultButton onClick={sortHandle}>日程確認</DefaultButton>
+        <DefaultButton onClick={() => setSortData(InitialCalenderSort)}>リセット</DefaultButton>
+      </div>
 
+      <DefaultModal isOpen={isOpenSort} setIsOpen={setIsOpenSort}>
+        <div></div>
+      </DefaultModal>
     </div>
   );
 }

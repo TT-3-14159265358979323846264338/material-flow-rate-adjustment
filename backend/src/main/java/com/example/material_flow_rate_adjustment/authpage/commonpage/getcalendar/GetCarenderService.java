@@ -10,13 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.material_flow_rate_adjustment.authpage.TransformService;
 import com.example.material_flow_rate_adjustment.savedata.maindata.CalendarRepository;
 import com.example.material_flow_rate_adjustment.savedata.maindata.CalendarSQL;
+import com.example.material_flow_rate_adjustment.savedata.maindata.HolidayType;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class GetCarenderService {
-	private static final List<Holidays> DEFAULT_HOLIDAY = List.of(new Holidays(-1, LocalDate.now(), 0));
+	private static final List<Holidays> DEFAULT_HOLIDAY = List.of(new Holidays(-1, LocalDate.now(), HolidayType.ALL_DAY.name()));
 	private final CalendarRepository calendarRepository;
 	private final TransformService transform;
 	
@@ -38,12 +39,12 @@ public class GetCarenderService {
 	record Holidays(
 			int id,
 			LocalDate holiday,
-			double days) {}
+			String code) {}
 	
 	Holidays createHolidays(CalendarSQL calendar) {
 		return new Holidays(
 				calendar.getId(),
 				calendar.getHoliday(),
-				calendar.getType().getDays());
+				calendar.getType().name());
 	}
 }

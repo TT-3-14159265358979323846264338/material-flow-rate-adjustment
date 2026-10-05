@@ -29,8 +29,5 @@ export const useGetMapping = <T>({ URL, params }: UeGetMappingProps): UeGetMappi
     getData();
   }, [getData]);
 
-  return {
-    data,
-    getData,
-  };
+  return { data, getData, };
 };

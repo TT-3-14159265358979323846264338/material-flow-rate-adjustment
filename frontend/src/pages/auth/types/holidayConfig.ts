@@ -1,4 +1,4 @@
-import { CommentViewCode, CommentViewConfig, getCommentView } from "./commentView";
+import { CommentViewCode, CommentViewConfig, getAllCommentView, getCommentView, getCommentCode } from "./commentView";
 
 const HOLIDAY_CODE = [
   { code: "ALL_DAY", view: "全休" },
@@ -8,8 +8,12 @@ const HOLIDAY_CODE = [
 
 export type HolidayCodeConfig = CommentViewCode<typeof HOLIDAY_CODE>;
 
-export const HolidayView = (code: HolidayCodeConfig) => getCommentView(HOLIDAY_CODE, code);
+export const HolidayView = (code: string) => getCommentView(HOLIDAY_CODE, code);
 
-export const IsAllDayHoliday = (code: HolidayCodeConfig) => {
+export const HolidayList = () => getAllCommentView(HOLIDAY_CODE);
+
+export const HolidayCode = (view: string) => getCommentCode(HOLIDAY_CODE, view);
+
+export const IsAllDayHoliday = (code: string) => {
   return code === "ALL_DAY";
 }

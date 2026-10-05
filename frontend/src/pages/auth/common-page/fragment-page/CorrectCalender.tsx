@@ -7,7 +7,10 @@ import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import jaLocale from "@fullcalendar/core/locales/ja";
 import { useMemo, useState } from "react";
 import { EventInput } from "@fullcalendar/core/index.js";
-import { IsAllDayHoliday, HolidayView, HolidayCodeConfig } from "../../types/holidayConfig";
+import { IsAllDayHoliday, HolidayView } from "../../types/holidayConfig";
+import { useDialog } from "../../hooks/useDialog";
+import DefaultModal from "../../components/DefaultModal";
+import SelectHoliday from "../components/SelectHoliday";
 
 type CorrectCalenderProps = {
   calenderName: string;
@@ -19,7 +22,7 @@ type CorrectCalenderProps = {
 
 type Calender = {
   holiday: string;
-  code: HolidayCodeConfig;
+  code: string;
 };
 
 const CorrectCalender = ({
@@ -33,7 +36,7 @@ const CorrectCalender = ({
     () => calender.filter((i) => 0 <= i.id).map((i) => ({ holiday: i.holiday, code: i.code })),
     [calender],
   );
-  const [correctCalender, setcorrectCalender] = useState<Calender[]>(defaultCalender);
+  const [correctCalender, setCorrectCalender] = useState<Calender[]>(defaultCalender);
   const events: EventInput[] = useMemo(
     () =>
       correctCalender.map((i) => ({
@@ -45,8 +48,19 @@ const CorrectCalender = ({
       })),
     [correctCalender],
   );
-  const dateClick = (info: DateClickArg) => {
-    //setcorrectCalenderで日付の修正・追加処理
+  const { dialog, isOpen, value, setValue, confirmDialog, returnDialog } = useDialog<string>();
+  const dateClick = async(info: DateClickArg) => {
+    const isHoliday = (i: Calender) => i.holiday === info.dateStr;
+    const selectedDate = correctCalender.find(isHoliday);
+    const type = await dialog(selectedDate?.code);
+    if (!type) {
+      return;
+    }
+    setCorrectCalender((prev) =>
+      selectedDate
+        ? prev.map((i) => (isHoliday(i) ? { ...i, code: type } : i))
+        : [...prev, { holiday: info.dateStr, code: type }],
+    );
   };
   const correctCalenderHandle = async () => {
     //await post({ URL: `後で`, params, handle: returnFromCorrect });
@@ -66,9 +80,18 @@ const CorrectCalender = ({
 
       <div className="flex justify-center gap-5">
         <DefaultButton onClick={correctCalenderHandle}>登録修正</DefaultButton>
-        <DefaultButton onClick={() => setcorrectCalender(defaultCalender)}>リセット</DefaultButton>
+        <DefaultButton onClick={() => setCorrectCalender(defaultCalender)}>リセット</DefaultButton>
         <DefaultButton onClick={returnFromNotCorrect}>戻る</DefaultButton>
       </div>
+
+      <DefaultModal isOpen={isOpen}>
+        <SelectHoliday
+          value={value}
+          setValue={setValue}
+          confirmDialog={confirmDialog}
+          returnDialog={returnDialog}
+        ></SelectHoliday>
+      </DefaultModal>
     </div>
   );
 };

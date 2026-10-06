@@ -66,7 +66,7 @@ public class CreateDefaultCalender {
 	
 	Calender calenderHandle(LocalDate date, List<CalendarSQL> existingCalenders, MaterialSQL material) {
 		Optional<CalendarSQL> calender = existingCalenders.stream().filter(i -> i.getHoliday().equals(date)).findFirst();
-		return calender.isPresent()? changeCalender(calender.get()): newCalender(date, material);
+		return calender.map(this::changeCalender).orElse(newCalender(date, material));
 	}
 	
 	Calender changeCalender(CalendarSQL changeCalender) {

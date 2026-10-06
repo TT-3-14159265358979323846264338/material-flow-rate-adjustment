@@ -6,6 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum HolidayType {
+	WORKING(0),
 	ALL_DAY(1),
 	MORNING(0.5),
 	AFTERNOON(0.5);

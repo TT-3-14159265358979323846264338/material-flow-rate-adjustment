@@ -7,10 +7,11 @@ import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import jaLocale from "@fullcalendar/core/locales/ja";
 import { useMemo, useState } from "react";
 import { EventInput } from "@fullcalendar/core/index.js";
-import { IsAllDayHoliday, HolidayView } from "../../types/holidayConfig";
+import { HolidayView } from "../../types/holidayConfig";
 import { useDialog } from "../../hooks/useDialog";
 import DefaultModal from "../../components/DefaultModal";
 import SelectHoliday from "../components/SelectHoliday";
+import { useCommentPostMapping } from "../../hooks/useCommentPostMapping";
 
 type CorrectCalenderProps = {
   calenderName: string;
@@ -44,7 +45,7 @@ const CorrectCalender = ({
         start: i.holiday,
         borderColor: "transparent",
         textColor: "#000000",
-        backgroundColor: IsAllDayHoliday(i.code) ? "#FFB4B4" : "#FFE6E6",
+        backgroundColor: { ALL_DAY: "#FFB4B4", MORNING: "#FFE6E6", AFTERNOON: "#FFE6E6" }[i.code] ?? "#3788d8",
       })),
     [correctCalender],
   );
@@ -62,8 +63,19 @@ const CorrectCalender = ({
         : [...prev, { holiday: info.dateStr, code: type }],
     );
   };
+  const { post } = useCommentPostMapping();
   const correctCalenderHandle = async () => {
-    //await post({ URL: `後で`, params, handle: returnFromCorrect });
+    if (!correctCalender || correctCalender.length === 0) {
+      alert("休日を設定してください");
+      return;
+    }
+    const params = {
+      calenders: correctCalender,
+      year: targetCalender.year,
+      month: targetCalender.month,
+      material: targetCalender.material,
+    };
+    await post({ URL: `/api/calender`, params, handle: returnFromCorrect });
   };
 
   return (

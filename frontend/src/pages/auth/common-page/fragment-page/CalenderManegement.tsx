@@ -54,7 +54,10 @@ const CalenderManegement = () => {
     setFinalSort(sortData);
     setIsOpenCorrect(true);
   };
-
+  
+  if (view === "History") {
+    //後で変更履歴書く
+  }
   return (
     <div className="flex flex-col items-stretch">
       <h3 className="text-left ml-5">日程指定</h3>

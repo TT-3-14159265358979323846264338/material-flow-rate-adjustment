@@ -9,12 +9,12 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-public class GetCarenderController {
-	private final GetCarenderService getCarenderService;
+public class GetCalendarController {
+	private final GetCalendarService getCalendarService;
 	
-	@GetMapping("/api/carender")
+	@GetMapping("/api/calendar")
 	@PreAuthorize("hasRole('USER') or hasRole('MANAGER')")
-	public ResponseEntity<?> getCarender(GetCarenderRecord carenderSort) {
-		return ResponseEntity.ok(getCarenderService.getCarender(carenderSort));
+	public ResponseEntity<?> getCalendar(GetCalendarRecord calendarSort) {
+		return ResponseEntity.ok(getCalendarService.getCalendar(calendarSort));
 	}
 }

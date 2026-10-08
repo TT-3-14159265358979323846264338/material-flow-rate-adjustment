@@ -15,12 +15,12 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-public class CorrectCalenderController {
-	private final CorrectCalenderService correctCalenderService;
+public class CorrectCalendarController {
+	private final CorrectCalendarService correctCalendarService;
 	
-	@PostMapping("/api/calender")
+	@PostMapping("/api/calendar")
 	@PreAuthorize("hasRole('USER') or hasRole('MANAGER')")
-	public ResponseEntity<?> correctCalender(@Valid @RequestBody CorrectCalenderRecord data, @AuthenticationPrincipal String loginUser){
-		return ResponseEntity.ok(new CommentRecord(correctCalenderService.correctCalender(data, loginUser)));
+	public ResponseEntity<?> correctCalendar(@Valid @RequestBody CorrectCalendarRecord data, @AuthenticationPrincipal String loginUser){
+		return ResponseEntity.ok(new CommentRecord(correctCalendarService.correctCalendar(data, loginUser)));
 	}
 }

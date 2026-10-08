@@ -7,9 +7,9 @@ import jakarta.validation.constraints.NotNull;
 
 import com.example.material_flow_rate_adjustment.savedata.maindata.HolidayType;
 
-record CorrectCalenderRecord(
+record CorrectCalendarRecord(
 		@NotNull(message="カレンダーは必須入力です")
-		List<CalenderRecord> calenders,
+		List<CalendarRecord> calendars,
 		@NotNull(message="対象年は必須入力です")
 		Integer year,
 		@NotNull(message="対象月は必須入力です")
@@ -17,7 +17,7 @@ record CorrectCalenderRecord(
 		@NotNull(message="対象製品は必須入力です")
 		Integer material) {}
 
-record CalenderRecord(
+record CalendarRecord(
 		@NotNull(message="日付は必須入力です")
 		LocalDate holiday,
 		@NotNull(message="休日タイプは必須入力です")

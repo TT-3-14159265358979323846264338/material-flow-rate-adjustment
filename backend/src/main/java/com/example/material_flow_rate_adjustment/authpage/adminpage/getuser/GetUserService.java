@@ -26,16 +26,15 @@ public class GetUserService {
 						.toList();
 	}
 	
-	List<String> getTargetRole(GetUserRecord userSort){
+	List<AccountRole> getTargetRole(GetUserRecord userSort){
 		if(userSort.isAdmin() == userSort.isUser() && userSort.isAdmin() == userSort.isManager()) {
-			return Stream.of(AccountRole.values()).map(i -> i.name()).toList();
+			return List.of(AccountRole.values());
 		}
 		return Stream.of(
 					userSort.isAdmin()? AccountRole.ADMIN: null,
 					userSort.isUser()? AccountRole.USER: null,
 					userSort.isManager()? AccountRole.MANAGER: null)
 				.filter(Objects::nonNull)
-				.map(i -> i.name())
 				.toList();
 	}
 	

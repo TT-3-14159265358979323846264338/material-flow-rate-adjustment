@@ -1,6 +1,6 @@
 import { HolidayCodeConfig } from "../../types/holidayConfig";
 
-export type CalenderResponse = {
+export type CalendarResponse = {
   id: number;
   holiday: string;
   code: HolidayCodeConfig;

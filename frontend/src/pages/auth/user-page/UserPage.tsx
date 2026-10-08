@@ -2,7 +2,7 @@ import { useState } from 'react';
 import TopPageTab from '../components/TopPageTab';
 import { TabConfig } from '../types/tabConfig';
 import Logout from '../common-page/fragment-page/Logout';
-import CalenderManegement from '../common-page/fragment-page/CalenderManegement';
+import CalendarManegement from '../common-page/fragment-page/CalendarManegement';
 
 type TabKey =
   | "check-now-material"
@@ -39,7 +39,7 @@ const UserPage = () => {
     {
       id: "calendar-management",
       label: "日程修正",
-      content: <CalenderManegement></CalenderManegement>,
+      content: <CalendarManegement></CalendarManegement>,
     },
     {
       id: "account",

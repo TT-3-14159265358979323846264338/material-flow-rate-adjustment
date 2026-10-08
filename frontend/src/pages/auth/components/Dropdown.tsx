@@ -10,7 +10,7 @@ type DropdownProps = {
 
 const Dropdown = ({ name = "dropdown", children, value, onChange, list }: DropdownProps) => (
   <div className="flex flex-col items-stretch *:text-center">
-    <label>{children}</label>
+    <label className="block w-full">{children}</label>
     <select
       name={name}
       value={value ?? ""}

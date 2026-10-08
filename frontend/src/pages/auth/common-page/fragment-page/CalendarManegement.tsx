@@ -1,57 +1,34 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import DateDropdown from "../../components/DateDropDown";
 import DefaultButton from "../../components/DefaultButton";
 import DefaultModal from "../../components/DefaultModal";
 import Dropdown from "../../components/Dropdown";
 import { useGetMapping } from "../../hooks/useGetMapping";
 import { useMaterialView } from "../../hooks/useMaterialView";
-import { useSortGetMapping } from "../../hooks/useSortGetMapping";
 import { MaterialResponse } from "../../types/materialResponse";
-import { useCalenderSort } from "../hooks/useCalenderSort";
-import { CalenderResponse } from "../types/calenderResponse";
-import { CalenderSortConfig, InitialCalenderSort } from "../types/calenderSortConfig";
-import CorrectCalender from "./CorrectCalender";
-import { useCorrect } from "../../hooks/useCorrect";
+import { useCalendarSort } from "../hooks/useCalendarSort";
+import { CalendarSortConfig, InitialCalendarSort } from "../types/calendarSortConfig";
+import CorrectCalendar from "./CorrectCalendar";
+import { useView } from "../../hooks/useView";
 
-type CalenderViewConfig = "Top" | "History";
+type CalendarViewConfig = "Top" | "History";
 
-const CalenderManegement = () => {
-  const { data: materialArray } = useGetMapping<MaterialResponse>({ URL: "/api/material/all" });
-  const {
-    finalSort,
-    setFinalSort,
-    sortData,
-    setSortData,
-    setSort,
-    mappingData,
-    getMappingData,
-    view,
-    setView,
-    returnTop: returnFromHistory,
-  } = useSortGetMapping<CalenderSortConfig, CalenderResponse, CalenderViewConfig>({
-    useSort: () => useCalenderSort(materialArray),
-    URL: "/api/calender",
-  });
-  const {
-    isOpen: isOpenCorrect,
-    setIsOpen: setIsOpenCorrect,
-    returnFromNotCorrect,
-    returnFromCorrect,
-  } = useCorrect<CalenderResponse>(getMappingData);
-  const { materialDropList, material } = useMaterialView<CalenderSortConfig>({ materialArray, sortData });
-  const calenderName: string = useMemo(() => {
-    if (!finalSort.material || !materialArray[finalSort.material]) {
-      return "カレンダーの取り込みに失敗しました";
-    }
-    const material = materialArray[finalSort.material];
-    return `${finalSort.year}年${finalSort.month}月の${material.name}操業日程`;
-  }, [materialArray, finalSort]);
+const CalendarManegement = () => {
+  const { data: materialArray, getData: getMaterialArray } = useGetMapping<MaterialResponse>({ URL: "/api/material/all" });
+  const { sortData, setSortData, setSort } = useCalendarSort(materialArray);
+  const { view, setView, returnTop: returnFromHistory } = useView<CalendarViewConfig>({ getData: getMaterialArray });
+  const [isOpenCorrect, setIsOpenCorrect] = useState<boolean>(false);
+  const returnFromCorrect = () => setIsOpenCorrect(false);
+  const { materialDropList, material } = useMaterialView<CalendarSortConfig>({ materialArray, sortData });
+  const selectedMaterial: MaterialResponse | undefined = useMemo(
+    () => materialArray.find((i) => i.id === sortData.material),
+    [materialArray, sortData.material],
+  );
   const sortHandle = () => {
-    if (!materialArray[sortData.material?? -1]) {
+    if (!selectedMaterial) {
       alert("対象製品を入力してください");
       return;
     }
-    setFinalSort(sortData);
     setIsOpenCorrect(true);
   };
   
@@ -60,29 +37,27 @@ const CalenderManegement = () => {
   }
   return (
     <div className="flex flex-col items-stretch">
-      <h3 className="text-left ml-5">日程指定</h3>
-      <div className="flex justify-center gap-10 border rounded-md bg-white p-5 mb-3">
+      <h3 className="text-left ml-5">表示する日程</h3>
+      <div className="border rounded-md bg-white px-10 py-5 mb-3">
         <Dropdown name="material" value={material} onChange={setSort} list={materialDropList}>
           製品名
         </Dropdown>
-        <DateDropdown sortData={sortData} setSort={setSort}></DateDropdown>
       </div>
+      <DateDropdown sortData={sortData} setSort={setSort}></DateDropdown>
       <div className="flex justify-center gap-5">
         <DefaultButton onClick={sortHandle}>日程確認</DefaultButton>
-        <DefaultButton onClick={() => setSortData(InitialCalenderSort)}>リセット</DefaultButton>
+        <DefaultButton onClick={() => setSortData(InitialCalendarSort)}>リセット</DefaultButton>
       </div>
 
       <DefaultModal isOpen={isOpenCorrect} setIsOpen={setIsOpenCorrect}>
-        <CorrectCalender
-          calenderName={calenderName}
-          calender={mappingData}
-          targetCalender={finalSort}
-          returnFromNotCorrect={returnFromNotCorrect}
-          returnFromCorrect={returnFromCorrect}
-        ></CorrectCalender>
+        <CorrectCalendar
+          selectedMaterial={selectedMaterial}
+          sortData={sortData}
+          returnTop={returnFromCorrect}
+        ></CorrectCalendar>
       </DefaultModal>
     </div>
   );
 }
 
-export default CalenderManegement;
+export default CalendarManegement;

@@ -40,7 +40,7 @@ const CorrectPlanSort = ({
       <div>
         <h3 className="text-left ml-5">絞り込み</h3>
         <PossibleEmptyDateRange sortData={sortData} setSort={setSort}></PossibleEmptyDateRange>
-        <div className="flex justify-center gap-10 border rounded-md bg-white p-5 mb-3">
+        <div className="border rounded-md bg-white px-30 py-5 mb-3">
           <Dropdown name="material" value={material} onChange={setSort} list={materialDropList}>製品名</Dropdown>
         </div>
       </div>

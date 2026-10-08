@@ -1,6 +1,6 @@
 import { DateConfig } from "../../types/sortConfig";
 
-export type CalenderSortConfig = DateConfig & {
+export type CalendarSortConfig = DateConfig & {
     material: number | undefined;
   };
 
@@ -12,7 +12,7 @@ const defaultMinTerm = () => {
   };
 };
 
-export const InitialCalenderSort: CalenderSortConfig = {
+export const InitialCalendarSort: CalendarSortConfig = {
   year: defaultMinTerm().year,
   month: defaultMinTerm().month,
   material: undefined,

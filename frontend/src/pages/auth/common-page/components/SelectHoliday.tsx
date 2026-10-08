@@ -2,14 +2,14 @@ import DefaultButton from "../../components/DefaultButton";
 import Dropdown from "../../components/Dropdown";
 import { HolidayView, HolidayList, HolidayCode } from "../../types/holidayConfig";
 
-type ChangeCalenderProps = {
+type ChangeCalendarProps = {
   value: string | null;
   setValue: (newData: string) => void;
   confirmDialog: () => void;
   returnDialog: () => void;
 };
 
-const SelectHoliday = ({value, setValue, confirmDialog, returnDialog}: ChangeCalenderProps) => {
+const SelectHoliday = ({value, setValue, confirmDialog, returnDialog}: ChangeCalendarProps) => {
   return (
     <div className="flex flex-col items-stretch">
       <Dropdown

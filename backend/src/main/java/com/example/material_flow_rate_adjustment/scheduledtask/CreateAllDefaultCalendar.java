@@ -14,13 +14,13 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class CreateAllDefaultCalender {
+public class CreateAllDefaultCalendar {
 	private static final int PLUS_MONTH = 2;
 	private final MaterialRepository materialRepository;
-	private final CreateDefaultCalender createDefaultCalender;
+	private final CreateDefaultCalendar createDefaultCalendar;
 	
 	@Transactional(readOnly = true)
-	public void createCalender() {
+	public void createCalendar() {
 		try {
 			YearMonth targetMonth = YearMonth.now().plusMonths(PLUS_MONTH);
 			materialRepository.findByHasDeletedFalse().forEach(i -> handle(i.getId(), i.getName(), targetMonth));
@@ -32,7 +32,7 @@ public class CreateAllDefaultCalender {
 	
 	void handle(int materialId, String name, YearMonth targetMonth) {
 		try {
-			createDefaultCalender.createCalenderRollback(materialId, targetMonth);
+			createDefaultCalendar.createCalendarRollback(materialId, targetMonth);
 		}catch(Exception e) {
 			System.err.println("月初処理中に" + name + "の休日登録に失敗しました: " + e);
 		}
@@ -41,8 +41,8 @@ public class CreateAllDefaultCalender {
 	/*
 	 * Transactional内で呼び出すこと
 	 */
-	public void createCalender(MaterialSQL material, AccountSQL account) {
+	public void createCalendar(MaterialSQL material, AccountSQL account) {
 		YearMonth now = YearMonth.now();
-		IntStream.range(0, PLUS_MONTH + 1).mapToObj(i -> now.plusMonths(i)).forEach(i -> createDefaultCalender.createCalender(material, i, account));
+		IntStream.range(0, PLUS_MONTH + 1).mapToObj(i -> now.plusMonths(i)).forEach(i -> createDefaultCalendar.createCalendar(material, i, account));
 	}
 }

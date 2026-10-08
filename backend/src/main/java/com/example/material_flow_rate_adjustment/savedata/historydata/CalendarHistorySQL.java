@@ -19,8 +19,8 @@ import lombok.experimental.Delegate;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name = "alender_history", indexes = {
-		@Index(name = "idx_calender_history_date", columnList = "date")
+@Table(name = "calendar_history", indexes = {
+		@Index(name = "idx_calendar_history_date", columnList = "date")
 })
 @Data
 @ToString(callSuper = true)
@@ -29,7 +29,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class CalenderHistorySQL extends BaseHistorySQL{
+public class CalendarHistorySQL extends BaseHistorySQL{
 	@Embedded
 	@Delegate
 	private BaseMaterialHistory baseMaterialHistory;

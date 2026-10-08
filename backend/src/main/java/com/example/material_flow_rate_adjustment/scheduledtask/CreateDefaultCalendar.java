@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.material_flow_rate_adjustment.authpage.UtilityService;
 import com.example.material_flow_rate_adjustment.savedata.historydata.BaseMaterialHistory;
-import com.example.material_flow_rate_adjustment.savedata.historydata.CalenderHistoryRepository;
-import com.example.material_flow_rate_adjustment.savedata.historydata.CalenderHistorySQL;
+import com.example.material_flow_rate_adjustment.savedata.historydata.CalendarHistoryRepository;
+import com.example.material_flow_rate_adjustment.savedata.historydata.CalendarHistorySQL;
 import com.example.material_flow_rate_adjustment.savedata.historydata.HistoryEnum;
 import com.example.material_flow_rate_adjustment.savedata.maindata.AccountSQL;
 import com.example.material_flow_rate_adjustment.savedata.maindata.CalendarRepository;
@@ -26,30 +26,30 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class CreateDefaultCalender {
+public class CreateDefaultCalendar {
 	private static final Account DEFAULT_ACCOUNT = new Account(-1, "システム自動");
 	private final CalendarRepository calendarRepository;
-	private final CalenderHistoryRepository calenderHistoryRepository;
+	private final CalendarHistoryRepository calendarHistoryRepository;
 	private final UtilityService utility;
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public void createCalenderRollback(int materialId, YearMonth targetMonth) {
+	public void createCalendarRollback(int materialId, YearMonth targetMonth) {
 		MaterialSQL material = utility.getMaterialSQL(materialId);
-		createCalender(material, targetMonth, null);
+		createCalendar(material, targetMonth, null);
 	}
 	
-	void createCalender(MaterialSQL material, YearMonth targetMonth, AccountSQL loginUser) {
+	void createCalendar(MaterialSQL material, YearMonth targetMonth, AccountSQL loginUser) {
 		Account account = createAccount(loginUser);
 		LocalDate targetDate = targetMonth.atDay(1);
-		List<CalendarSQL> existingCalenders = calendarRepository.findByHolidayBetweenAndMaterial(targetDate, targetMonth.atEndOfMonth(), material);
-		List<Calender> calenders = targetDate.datesUntil(targetDate.plusMonths(1))
+		List<CalendarSQL> existingCalendars = calendarRepository.findByHolidayBetweenAndMaterial(targetDate, targetMonth.atEndOfMonth(), material);
+		List<Calendar> calendars = targetDate.datesUntil(targetDate.plusMonths(1))
 												.filter(this::holidayFilter)
-												.map(i -> calenderHandle(i, existingCalenders, material))
+												.map(i -> calendarHandle(i, existingCalendars, material))
 												.filter(Objects::nonNull)
 												.toList();
-		calendarRepository.saveAll(calenders.stream().map(Calender::calender).toList());
-		List<CalenderHistorySQL> histories = createHistories(calenders, account);
-		calenderHistoryRepository.saveAll(histories);
+		calendarRepository.saveAll(calendars.stream().map(Calendar::calendar).toList());
+		List<CalendarHistorySQL> histories = createHistories(calendars, account);
+		calendarHistoryRepository.saveAll(histories);
 	}
 	
 	record Account(int id, String name) {}
@@ -62,27 +62,27 @@ public class CreateDefaultCalender {
 		return date.getDayOfWeek().equals(DayOfWeek.SATURDAY) || date.getDayOfWeek().equals(DayOfWeek.SUNDAY);
 	}
 	
-	record Calender(CalendarSQL calender, boolean existsChange) {}
+	record Calendar(CalendarSQL calendar, boolean existsChange) {}
 	
-	Calender calenderHandle(LocalDate date, List<CalendarSQL> existingCalenders, MaterialSQL material) {
-		Optional<CalendarSQL> calender = existingCalenders.stream().filter(i -> i.getHoliday().equals(date)).findFirst();
-		return calender.map(this::changeCalender).orElse(newCalender(date, material));
+	Calendar calendarHandle(LocalDate date, List<CalendarSQL> existingCalendars, MaterialSQL material) {
+		Optional<CalendarSQL> calender = existingCalendars.stream().filter(i -> i.getHoliday().equals(date)).findFirst();
+		return calender.isPresent()? changeCalendar(calender.get()): newCalendar(date, material);
 	}
 	
-	Calender changeCalender(CalendarSQL changeCalender) {
-		if(!changeCalender.getHasDeleted()) {
+	Calendar changeCalendar(CalendarSQL changeCalendar) {
+		if(!changeCalendar.getHasDeleted()) {
 			return null;
 		}
-		changeCalender.setHasDeleted(false);
-		return new Calender(changeCalender, true);
+		changeCalendar.setHasDeleted(false);
+		return new Calendar(changeCalendar, true);
 	}
 	
-	Calender newCalender(LocalDate date, MaterialSQL material) {
-		CalendarSQL newCalender = createCalenderSQL(date, material);
-		return new Calender(newCalender, false);
+	Calendar newCalendar(LocalDate date, MaterialSQL material) {
+		CalendarSQL newCalendar = createCalendarSQL(date, material);
+		return new Calendar(newCalendar, false);
 	}
 	
-	CalendarSQL createCalenderSQL(LocalDate date, MaterialSQL material) {
+	CalendarSQL createCalendarSQL(LocalDate date, MaterialSQL material) {
 		return CalendarSQL.builder()
 				.material(material)
 				.holiday(date)
@@ -91,20 +91,20 @@ public class CreateDefaultCalender {
 				.build();
 	}
 	
-	List<CalenderHistorySQL> createHistories(List<Calender> calenders, Account account) {
-		return calenders.stream().map(i -> i.existsChange? createChangeCalenderHistory(i.calender, account): createNewCalenderHistory(i.calender, account)).toList();
+	List<CalendarHistorySQL> createHistories(List<Calendar> calenders, Account account) {
+		return calenders.stream().map(i -> i.existsChange? createChangeCalendarHistory(i.calendar, account): createNewCalendarHistory(i.calendar, account)).toList();
 	}
 	
-	CalenderHistorySQL createChangeCalenderHistory(CalendarSQL calender, Account account) {
-		return CalenderHistorySQL.builder()
-				.targetId(calender.getId())
+	CalendarHistorySQL createChangeCalendarHistory(CalendarSQL calendar, Account account) {
+		return CalendarHistorySQL.builder()
+				.targetId(calendar.getId())
 				.baseMaterialHistory(BaseMaterialHistory.builder()
-						.oldMaterialId(calender.getMaterial().getId())
-						.oldName(calender.getMaterial().getName())
-						.oldDestination(calender.getMaterial().getDestination())
+						.oldMaterialId(calendar.getMaterial().getId())
+						.oldName(calendar.getMaterial().getName())
+						.oldDestination(calendar.getMaterial().getDestination())
 						.build())
-				.oldHoliday(calender.getHoliday())
-				.oldType(calender.getType().name())
+				.oldHoliday(calendar.getHoliday())
+				.oldType(calendar.getType().name())
 				.hasDeletedOld(true)
 				.hasDeletedNew(false)
 				.action(HistoryEnum.CHANGE.name())
@@ -113,16 +113,16 @@ public class CreateDefaultCalender {
 				.build();
 	}
 	
-	CalenderHistorySQL createNewCalenderHistory(CalendarSQL calender, Account account) {
-		return CalenderHistorySQL.builder()
-				.targetId(calender.getId())
+	CalendarHistorySQL createNewCalendarHistory(CalendarSQL calendar, Account account) {
+		return CalendarHistorySQL.builder()
+				.targetId(calendar.getId())
 				.baseMaterialHistory(BaseMaterialHistory.builder()
-						.newMaterialId(calender.getMaterial().getId())
-						.newName(calender.getMaterial().getName())
-						.newDestination(calender.getMaterial().getDestination())
+						.newMaterialId(calendar.getMaterial().getId())
+						.newName(calendar.getMaterial().getName())
+						.newDestination(calendar.getMaterial().getDestination())
 						.build())
-				.newHoliday(calender.getHoliday())
-				.newType(calender.getType().name())
+				.newHoliday(calendar.getHoliday())
+				.newType(calendar.getType().name())
 				.hasDeletedNew(false)
 				.action(HistoryEnum.CREATE.name())
 				.actionId(account.id)

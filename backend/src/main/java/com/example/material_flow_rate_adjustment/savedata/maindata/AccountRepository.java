@@ -13,5 +13,5 @@ public interface AccountRepository extends BaseJpaRepository<AccountSQL, Integer
 	boolean existsByRole(AccountRole role);
 	long countByRole(AccountRole role);
 	Optional<AccountSQL> findByLoginUser(String user);
-	List<AccountSQL> findByRoleInAndHasDeletedFalse(List<String> roles, Sort sort);
+	List<AccountSQL> findByRoleInAndHasDeletedFalse(List<AccountRole> roles, Sort sort);
 }

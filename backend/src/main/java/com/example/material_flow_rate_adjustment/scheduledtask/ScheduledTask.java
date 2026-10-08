@@ -8,12 +8,12 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class ScheduledTask {
-	private final CreateAllDefaultCalender createAllDefaultCalender;
+	private final CreateAllDefaultCalendar createAllDefaultCalendar;
 	
 	@Scheduled(cron = "0 0 0 1 * *")
 	public void beginningOfMonthTask() {
 		try {
-			createAllDefaultCalender.createCalender();
+			createAllDefaultCalendar.createCalendar();
 		}catch(Exception e) {
 			System.err.println("月初処理中にエラーが発生しました: " + e);
 		}

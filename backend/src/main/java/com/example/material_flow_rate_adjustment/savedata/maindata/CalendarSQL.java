@@ -12,7 +12,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -25,12 +24,11 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "calendar", indexes = {
-		@Index(name = "idx_calendar_holiday_material", columnList = "holiday, material, has_deleted")
+		@Index(name = "idx_calendar_holiday_material", columnList = "holiday, material_id, has_deleted")
 })
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Immutable
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder

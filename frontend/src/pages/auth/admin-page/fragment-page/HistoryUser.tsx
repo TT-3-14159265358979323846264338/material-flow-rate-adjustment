@@ -9,15 +9,18 @@ import { useSortGetMapping } from "../../hooks/useSortGetMapping";
 import DefaultModal from "../../components/DefaultModal";
 import { HistorySortConfig, InitialHistorySort } from "../../types/historySortConfig";
 import { dateView } from "../../utils/dateView";
+import { DeletedView } from "../../types/deletedConfig";
 
 type HistoryUserResponse = {
   id: number;
-  oldLoginUser: string;
-  newLoginUser: string;
-  oldDisplayedUser: string;
-  newDisplayedUser: string;
-  oldRole: AuthorityCodeConfig;
-  newRole: AuthorityCodeConfig;
+  oldLoginUser: string | null;
+  newLoginUser: string | null;
+  oldDisplayedUser: string | null;
+  newDisplayedUser: string | null;
+  oldRole: AuthorityCodeConfig | null;
+  newRole: AuthorityCodeConfig | null;
+  hasDeletedOld: boolean | null;
+  hasDeletedNew: boolean | null;
   action: ActionCodeConfig;
   actionUser: string;
   date: string;
@@ -50,6 +53,10 @@ const HistoryUser = ({ returnTop }: ReturnProps) => {
                 <span className="border-b border-b-gray-200">前 権限</span>
                 <span>後 権限</span>
               </div>
+              <div className="w-20">
+                <span className="border-b border-b-gray-200">前 論理削除</span>
+                <span>後 論理削除</span>
+              </div>
               <span className="w-25">実行管理者</span>
               <span className="w-35">日付</span>
             </li>
@@ -73,6 +80,10 @@ const HistoryUser = ({ returnTop }: ReturnProps) => {
                 <div className="w-20">
                   <span className="border-b border-b-gray-200">{AuthorityView(item.oldRole)}</span>
                   <span>{AuthorityView(item.newRole)}</span>
+                </div>
+                <div className="w-20">
+                  <span className="border-b border-b-gray-200">{DeletedView(item.hasDeletedOld)}</span>
+                  <span>{DeletedView(item.hasDeletedNew)}</span>
                 </div>
                 <span className="w-25">{item.actionUser}</span>
                 <span className="w-35">{dateView(item.date)}</span>

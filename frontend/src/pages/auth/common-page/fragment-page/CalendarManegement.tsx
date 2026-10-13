@@ -10,6 +10,7 @@ import { useCalendarSort } from "../hooks/useCalendarSort";
 import { CalendarSortConfig, InitialCalendarSort } from "../types/calendarSortConfig";
 import CorrectCalendar from "./CorrectCalendar";
 import { useView } from "../../hooks/useView";
+import HistoryCalendar from "./HistoryCalendar";
 
 type CalendarViewConfig = "Top" | "History";
 
@@ -33,7 +34,7 @@ const CalendarManegement = () => {
   };
   
   if (view === "History") {
-    //後で変更履歴書く
+    return <HistoryCalendar returnTop={returnFromHistory}></HistoryCalendar>;
   }
   return (
     <div className="flex flex-col items-stretch">
@@ -47,14 +48,11 @@ const CalendarManegement = () => {
       <div className="flex justify-center gap-5">
         <DefaultButton onClick={sortHandle}>日程確認</DefaultButton>
         <DefaultButton onClick={() => setSortData(InitialCalendarSort)}>リセット</DefaultButton>
+        <DefaultButton onClick={() => setView("History")}>修正履歴</DefaultButton>
       </div>
 
       <DefaultModal isOpen={isOpenCorrect} setIsOpen={setIsOpenCorrect}>
-        <CorrectCalendar
-          selectedMaterial={selectedMaterial}
-          sortData={sortData}
-          returnTop={returnFromCorrect}
-        ></CorrectCalendar>
+        <CorrectCalendar selectedMaterial={selectedMaterial} sortData={sortData} returnTop={returnFromCorrect}></CorrectCalendar>
       </DefaultModal>
     </div>
   );

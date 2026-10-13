@@ -1,0 +1,1 @@
+export const DeletedView = (exists: boolean | null) => ({true: "論理削除", false: "有効"}[String(exists)] ?? "");

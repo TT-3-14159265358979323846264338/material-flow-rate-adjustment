@@ -1,4 +1,4 @@
-import { CommentViewCode, CommentViewConfig, getCommentView } from "./commentView";
+import { CommentViewCode, CommentViewConfig, GetCommentView } from "./commentView";
 
 export const ACTION_CODE = [
   { code: "CREATE", view: "新規作成" },
@@ -8,4 +8,4 @@ export const ACTION_CODE = [
 
 export type ActionCodeConfig = CommentViewCode<typeof ACTION_CODE>;
 
-export const ActionView = (code: string) => getCommentView(ACTION_CODE, code);
+export const ActionView = (code: string) => GetCommentView(ACTION_CODE, code);

@@ -8,27 +8,30 @@ import { HistorySortConfig, InitialHistorySort } from "../../types/historySortCo
 import { ReturnProps } from "../../types/returnProps";
 import HistoryPlanSort from "./HistoryPlanSort";
 import { dateView } from "../../utils/dateView";
+import { DeletedView } from "../../types/deletedConfig";
 
 type HistoryPlanResponse = {
   id: number;
-  oldName: string;
-  newName: string;
-  oldDestination: string;
-  newDestination: string;
-  oldYear: number;
-  newYear: number;
-  oldMonth: number;
-  newMonth: number;
-  oldFlow: number;
-  newFlow: number;
-  oldAchievement: number;
-  newAchievement: number;
-  oldShipping: number;
-  newShipping: number;
-  oldAdjustment: number;
-  newAdjustment: number;
-  oldRemaining: number;
-  newRemaining: number;
+  oldName: string | null;
+  newName: string | null;
+  oldDestination: string | null;
+  newDestination: string | null;
+  oldYear: number | null;
+  newYear: number | null;
+  oldMonth: number | null;
+  newMonth: number | null;
+  oldFlow: number | null;
+  newFlow: number | null;
+  oldAchievement: number | null;
+  newAchievement: number | null;
+  oldShipping: number | null;
+  newShipping: number | null;
+  oldAdjustment: number | null;
+  newAdjustment: number | null;
+  oldRemaining: number | null;
+  newRemaining: number | null;
+  hasDeletedOld: boolean | null;
+  hasDeletedNew: boolean | null;
   action: ActionCodeConfig;
   actionUser: string;
   date: string;
@@ -84,6 +87,10 @@ const HistoryPlan = ({ returnTop }: ReturnProps) => {
                 <span className="border-b border-b-gray-200">前 残数</span>
                 <span>後 残数</span>
               </div>
+              <div className="w-20">
+                <span className="border-b border-b-gray-200">前 論理削除</span>
+                <span>後 論理削除</span>
+              </div>
               <span className="w-35">実行管理者</span>
               <span className="w-35">日付</span>
             </li>
@@ -131,6 +138,10 @@ const HistoryPlan = ({ returnTop }: ReturnProps) => {
                 <div className="w-20">
                   <span className="border-b border-b-gray-200">{item.oldRemaining}</span>
                   <span>{item.newRemaining}</span>
+                </div>
+                <div className="w-20">
+                  <span className="border-b border-b-gray-200">{DeletedView(item.hasDeletedOld)}</span>
+                  <span>{DeletedView(item.hasDeletedNew)}</span>
                 </div>
                 <span className="w-35">{item.actionUser}</span>
                 <span className="w-35">{dateView(item.date)}</span>

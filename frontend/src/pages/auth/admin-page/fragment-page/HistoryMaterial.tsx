@@ -8,17 +8,20 @@ import { Base } from "../../hooks/useView";
 import DefaultModal from "../../components/DefaultModal";
 import HistoryMaterialSort from "./HistoryMaterialSort";
 import { dateView } from "../../utils/dateView";
+import { DeletedView } from "../../types/deletedConfig";
 
 type HistoryMaterialResponse = {
   id: number;
-  oldName: string;
-  newName: string;
-  oldDestination: string;
-  newDestination: string;
-  oldBase: string;
-  newBase: string;
-  oldUnit: string;
-  newUnit: string;
+  oldName: string | null;
+  newName: string | null;
+  oldDestination: string | null;
+  newDestination: string | null;
+  oldBase: string | null;
+  newBase: string | null;
+  oldUnit: string | null;
+  newUnit: string | null;
+  hasDeletedOld: boolean | null;
+  hasDeletedNew: boolean | null;
   action: ActionCodeConfig;
   actionUser: string;
   date: string;
@@ -55,6 +58,10 @@ const HistoryMaterial = ({ returnTop }: ReturnProps) => {
                 <span className="border-b border-b-gray-200">前 納入単位</span>
                 <span>後 納入単位</span>
               </div>
+              <div className="w-20">
+                <span className="border-b border-b-gray-200">前 論理削除</span>
+                <span>後 論理削除</span>
+              </div>
               <span className="w-35">実行管理者</span>
               <span className="w-35">日付</span>
             </li>
@@ -82,6 +89,10 @@ const HistoryMaterial = ({ returnTop }: ReturnProps) => {
                 <div className="w-20">
                   <span className="border-b border-b-gray-200">{item.oldUnit}</span>
                   <span>{item.newUnit}</span>
+                </div>
+                <div className="w-20">
+                  <span className="border-b border-b-gray-200">{DeletedView(item.hasDeletedOld)}</span>
+                  <span>{DeletedView(item.hasDeletedNew)}</span>
                 </div>
                 <span className="w-35">{item.actionUser}</span>
                 <span className="w-35">{dateView(item.date)}</span>

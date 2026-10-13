@@ -34,12 +34,15 @@ public class HistoryMaterialService {
 				history.getNewBase(),
 				history.getOldUnit(),
 				history.getNewUnit(),
+				history.getHasDeletedOld(),
+				history.getHasDeletedNew(),
 				history.getAction(),
 				history.getActionUser(),
 				history.getDate());
 	}
 	
-	record History(Integer id,
+	record History(
+			Integer id,
 			String oldName, 
 			String newName, 
 			String oldDestination, 
@@ -48,6 +51,8 @@ public class HistoryMaterialService {
 			Integer newBase, 
 			String oldUnit, 
 			String newUnit, 
+			Boolean hasDeletedOld,
+			Boolean hasDeletedNew,
 			String action, 
 			String actionUser, 
 			LocalDateTime date) {}

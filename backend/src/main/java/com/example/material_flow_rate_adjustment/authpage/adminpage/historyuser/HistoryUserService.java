@@ -32,18 +32,23 @@ public class HistoryUserService {
 				history.getNewDisplayedUser(),
 				history.getOldRole(),
 				history.getNewRole(),
+				history.getHasDeletedOld(),
+				history.getHasDeletedNew(),
 				history.getAction(),
 				history.getActionUser(),
 				history.getDate());
 	}
 	
-	record History(Integer id,
+	record History(
+			Integer id,
 			String oldLoginUser, 
 			String newLoginUser, 
 			String oldDisplayedUser, 
 			String newDisplayedUser, 
 			String oldRole, 
 			String newRole, 
+			Boolean hasDeletedOld,
+			Boolean hasDeletedNew,
 			String action, 
 			String actionUser, 
 			LocalDateTime date) {}

@@ -45,12 +45,15 @@ public class HistoryPlanService {
 				history.getNewAdjustment(),
 				history.getOldRemaining(),
 				history.getNewRemaining(),
+				history.getHasDeletedOld(),
+				history.getHasDeletedNew(),
 				history.getAction(),
 				history.getActionUser(),
 				history.getDate());
 	}
 	
-	record History(Integer id,
+	record History(
+			Integer id,
 			String oldName,
 			String newName,
 			String oldDestination,
@@ -69,6 +72,8 @@ public class HistoryPlanService {
 			Integer newAdjustment,
 			Integer oldRemaining,
 			Integer newRemaining,
+			Boolean hasDeletedOld,
+			Boolean hasDeletedNew,
 			String action, 
 			String actionUser, 
 			LocalDateTime date) {}

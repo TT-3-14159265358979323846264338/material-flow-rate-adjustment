@@ -3,6 +3,7 @@ import TopPageTab from '../components/TopPageTab';
 import { TabConfig } from '../types/tabConfig';
 import Logout from '../common-page/fragment-page/Logout';
 import CalendarManegement from '../common-page/fragment-page/CalendarManegement';
+import NewAchievement from './fragment-page/NewAchievement';
 
 type TabKey =
   | "check-now-material"
@@ -24,7 +25,7 @@ const UserPage = () => {
     {
       id: "achievement-registration",
       label: "実績登録",
-      content: <p>新規で実績を登録する</p>,
+      content: <NewAchievement></NewAchievement>,
     },
     {
       id: "change-achievement",

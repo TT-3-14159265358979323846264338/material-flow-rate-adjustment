@@ -1,7 +1,11 @@
 package com.example.material_flow_rate_adjustment.savedata.maindata;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -34,12 +38,16 @@ public class AchievementSQL extends BaseSQL{
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private MonthPlanSQL plan;
 	
+	@Column(nullable = false)
+	private LocalDate date;
+	
 	@Column(length = 30, nullable = false)
 	private String lot;
 	
 	@Column(columnDefinition = "INT UNSIGNED", nullable = false)
 	private Integer flow;
 	
-	@Column(name = "pass", nullable = false)
-	private Boolean hasPassed;
+	@Enumerated(EnumType.STRING)
+	@Column(length = 15, nullable = false)
+	private Inspection inspection;
 }

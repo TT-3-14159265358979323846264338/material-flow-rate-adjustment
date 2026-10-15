@@ -3,52 +3,35 @@ import TopPageTab from '../components/TopPageTab';
 import { TabConfig } from '../types/tabConfig';
 import Logout from '../common-page/fragment-page/Logout';
 import CalendarManegement from '../common-page/fragment-page/CalendarManegement';
-import NewAchievement from './fragment-page/NewAchievement';
+import UserAchievementManegement from './fragment-page/UserAchievementManagement';
 
-type TabKey =
-  | "check-now-material"
-  | "achievement-registration"
-  | "change-achievement"
-  | "check-achievement"
-  | "calendar-management"
-  | "account";
+type TabKey = "top" | "achievement-registration" | "calendar-management" | "account";
+
+const tabData: TabConfig<TabKey>[] = [
+  {
+    id: "top",
+    label: "トップ",
+    content: <p>トップ画面</p>,
+  },
+  {
+    id: "achievement-registration",
+    label: "実績確認",
+    content: <UserAchievementManegement></UserAchievementManegement>,
+  },
+  {
+    id: "calendar-management",
+    label: "日程修正",
+    content: <CalendarManegement></CalendarManegement>,
+  },
+  {
+    id: "account",
+    label: "アカウント",
+    content: <Logout></Logout>,
+  },
+];
 
 const UserPage = () => {
-  const [activeTab, setActiveTab] = useState<TabKey>('check-now-material');
-
-  const tabData: TabConfig<TabKey>[] = [
-    {
-      id: "check-now-material",
-      label: "流動確認",
-      content: <p>現在の流動状況確認画面</p>,
-    },
-    {
-      id: "achievement-registration",
-      label: "実績登録",
-      content: <NewAchievement></NewAchievement>,
-    },
-    {
-      id: "change-achievement",
-      label: "実績修正",
-      content: <p>既存の実績を修正する</p>,
-    },
-    {
-      id: "check-achievement",
-      label: "実績確認",
-      content: <p>既存の実績を確認する</p>,
-    },
-    {
-      id: "calendar-management",
-      label: "日程修正",
-      content: <CalendarManegement></CalendarManegement>,
-    },
-    {
-      id: "account",
-      label: "アカウント",
-      content: <Logout></Logout>,
-    },
-  ];
-
+  const [activeTab, setActiveTab] = useState<TabKey>('top');
   return (
     <TopPageTab activeTab={activeTab} setActiveTab={setActiveTab} tabData={tabData}></TopPageTab>
   );

@@ -4,19 +4,20 @@ import { TabConfig } from '../types/tabConfig';
 import Logout from '../common-page/fragment-page/Logout';
 import MaterialManegement from './fragment-page/MaterialManagement';
 import UserManegement from './fragment-page/UserManegement';
+import AchievementManegement from '../common-page/fragment-page/AchievementManagement';
 
-type TabKey = "check-now-material" | "check-achievement" | "material-management" | "user-management" | "account";
+type TabKey = "top" | "check-achievement" | "material-management" | "user-management" | "account";
 
 const tabData: TabConfig<TabKey>[] = [
   {
-    id: "check-now-material",
-    label: "流動確認",
-    content: <p>現在の流動状況確認画面</p>,
+    id: "top",
+    label: "トップ",
+    content: <p>トップ画面</p>,
   },
   {
     id: "check-achievement",
     label: "実績確認",
-    content: <p>既存の実績を確認する</p>,
+    content: <AchievementManegement></AchievementManegement>,
   },
   {
     id: "material-management",
@@ -36,7 +37,7 @@ const tabData: TabConfig<TabKey>[] = [
 ];
 
 const AdminPage = () => {
-  const [activeTab, setActiveTab] = useState<TabKey>('check-now-material');
+  const [activeTab, setActiveTab] = useState<TabKey>('top');
   return (
     <TopPageTab activeTab={activeTab} setActiveTab={setActiveTab} tabData={tabData}></TopPageTab>
   );

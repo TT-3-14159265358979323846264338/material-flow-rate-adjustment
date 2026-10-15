@@ -13,6 +13,7 @@ import SelectHoliday from "../components/SelectHoliday";
 import { useCommentPostMapping } from "../../hooks/useCommentPostMapping";
 import { MaterialResponse } from "../../types/materialResponse";
 import { useGetMapping } from "../../hooks/useGetMapping";
+import { CalendarConfig } from "../types/calendarResponse";
 
 type CorrectCalendarProps = {
   selectedMaterial: MaterialResponse | undefined;
@@ -20,14 +21,9 @@ type CorrectCalendarProps = {
   returnTop: () => void;
 };
 
-type Calendar = {
-  holiday: string;
-  code: string;
-};
-
 const CorrectCalendar = ({ selectedMaterial, sortData, returnTop}: CorrectCalendarProps) => {
-  const { data: calendarArray } = useGetMapping<Calendar>({ URL: "/api/calendar", params: sortData });
-  const [correctCalendar, setCorrectCalendar] = useState<Calendar[]>(calendarArray);
+  const { data: calendarArray } = useGetMapping<CalendarConfig>({ URL: "/api/calendar", params: sortData });
+  const [correctCalendar, setCorrectCalendar] = useState<CalendarConfig[]>(calendarArray);
   useEffect(() => setCorrectCalendar(calendarArray), [calendarArray]);
   const events: EventInput[] = useMemo(
     () =>
@@ -45,7 +41,7 @@ const CorrectCalendar = ({ selectedMaterial, sortData, returnTop}: CorrectCalend
   const { dialog, isOpen, value, setValue, confirmDialog, returnDialog } = useDialog<string>();
   const clickHandle = async (info: DateClickArg | EventClickArg) => {
     const day = "dateStr" in info ? info.dateStr : info.event.startStr;
-    const isHoliday = (i: Calendar) => i.holiday === day;
+    const isHoliday = (i: CalendarConfig) => i.holiday === day;
     const selectedDate = correctCalendar.find(isHoliday);
     const type = await dialog(selectedDate?.code);
     if (!type) {
@@ -85,7 +81,7 @@ const CorrectCalendar = ({ selectedMaterial, sortData, returnTop}: CorrectCalend
           events={events}
           dateClick={clickHandle}
           eventClick={clickHandle}
-          dayCellClassNames={(arg) => (!arg.isOther ? ["cursor-pointer"] : "")}
+          dayCellClassNames={(arg) => (!arg.isOther ? ["cursor-pointer"] : [])}
         ></FullCalendar>
       </div>
 

@@ -5,3 +5,8 @@ export type CalendarResponse = {
   holiday: string;
   code: HolidayCodeConfig;
 };
+
+export type CalendarConfig = {
+  holiday: string;
+  code: string;
+};

@@ -4,7 +4,7 @@ export type CalendarSortConfig = DateConfig & {
     material: number | undefined;
   };
 
-const defaultMinTerm = () => {
+const defaultDate = () => {
   const date = new Date();
   return {
     year: String(date.getFullYear()),
@@ -13,7 +13,7 @@ const defaultMinTerm = () => {
 };
 
 export const InitialCalendarSort: CalendarSortConfig = {
-  year: defaultMinTerm().year,
-  month: defaultMinTerm().month,
+  year: defaultDate().year,
+  month: defaultDate().month,
   material: undefined,
 };

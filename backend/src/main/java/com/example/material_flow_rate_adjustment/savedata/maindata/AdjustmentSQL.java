@@ -28,7 +28,7 @@ import lombok.ToString;
 public class AdjustmentSQL extends BaseSQL{
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adjustment_id", referencedColumnName = "id", columnDefinition = "INT UNSIGNED", nullable = false)
-	@OnDelete(action = OnDeleteAction.CASCADE)
+	@OnDelete(action = OnDeleteAction.RESTRICT)
 	private MonthPlanSQL monthAdjustment;
 	
 	@Column(columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP", nullable = false, insertable = false, updatable = false)

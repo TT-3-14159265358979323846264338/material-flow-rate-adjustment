@@ -1,7 +1,5 @@
 package com.example.material_flow_rate_adjustment.savedata.maindata;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -28,22 +26,19 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 public class AchievementSQL extends BaseSQL{
-	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "adjustment_id", referencedColumnName = "id", columnDefinition = "INT UNSIGNED", nullable = false)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private MonthPlanSQL monthAdjustment;
+	@Column(length = 10, nullable = false)
+	private String userName;
 	
-	@Column(columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP", nullable = false, insertable = false, updatable = false)
-	private LocalDateTime date;
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "plan_id", referencedColumnName = "id", columnDefinition = "INT UNSIGNED", nullable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private MonthPlanSQL plan;
 	
 	@Column(length = 30, nullable = false)
 	private String lot;
 	
 	@Column(columnDefinition = "INT UNSIGNED", nullable = false)
 	private Integer flow;
-	
-	@Column(length = 10, nullable = false)
-	private String user;
 	
 	@Column(name = "pass", nullable = false)
 	private Boolean hasPassed;

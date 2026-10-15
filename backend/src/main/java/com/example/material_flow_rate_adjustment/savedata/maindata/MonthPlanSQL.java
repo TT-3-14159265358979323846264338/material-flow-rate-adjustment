@@ -33,7 +33,7 @@ import lombok.experimental.SuperBuilder;
 public class MonthPlanSQL extends BaseSQL{
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "material_id", referencedColumnName = "id", columnDefinition = "INT UNSIGNED", nullable = false)
-	@OnDelete(action = OnDeleteAction.CASCADE)
+	@OnDelete(action = OnDeleteAction.RESTRICT)
 	private MaterialSQL material;
 	
 	@Column(columnDefinition = "INT UNSIGNED", nullable = false)

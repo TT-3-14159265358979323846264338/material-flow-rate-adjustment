@@ -2,15 +2,25 @@ import Modal from "react-modal";
 
 type DefaultModalProps = {
   isOpen?: boolean;
-  setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen?: React.Dispatch<React.SetStateAction<boolean>> | (() => void);
   children: React.ReactElement;
 };
 
 const DefaultModal = ({ isOpen = false, setIsOpen, children }: DefaultModalProps) => {
+  const onRequestClose = () => {
+    if (!setIsOpen) {
+      return;
+    }
+    if (setIsOpen.length === 1) {
+      (setIsOpen as React.Dispatch<React.SetStateAction<boolean>>)(false);
+    }else{
+      (setIsOpen as () => void)();
+    }
+  };
   return (
     <Modal
       isOpen={isOpen}
-      onRequestClose={() => setIsOpen?.(false)}
+      onRequestClose={onRequestClose}
       contentLabel="default_modal"
       style={{
         overlay: {

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useCalendarSort } from "../hooks/useCalendarSort";
 import { CalendarSortConfig, InitialCalendarSort } from "../types/calendarSortConfig";
 import DateDropdown from "../../components/DateDropDown";
@@ -17,8 +17,8 @@ import { AchievementConfig } from "../../types/achievementConfig";
 type AchievementViewConfig = "Top" | "Achievement";
 
 type AchievementManegementProps = {
-  newHandle?: (date: string) => boolean;
-  correctHandle?: (achievement: AchievementConfig) => boolean;
+  newHandle?: (planId: number, unit: string, date: string) => Promise<boolean>;
+  correctHandle?: (planId: number, unit: string, achievement: AchievementConfig) => Promise<boolean>;
 };
 
 const AchievementManegement = ({ newHandle, correctHandle }: AchievementManegementProps) => {
@@ -26,31 +26,24 @@ const AchievementManegement = ({ newHandle, correctHandle }: AchievementManegeme
   const { sortData, setSortData, setSort } = useCalendarSort(materialArray);
   const { view, setView, returnTop } = useView<AchievementViewConfig>({ getData: getMaterialArray });
   const { materialDropList, material } = useMaterialView<CalendarSortConfig>({ materialArray, sortData });
-  const selectedMaterial: MaterialResponse | undefined = useMemo(
-    () => materialArray.find((i) => i.id === sortData.material),
-    [materialArray, sortData.material],
-  );
   const [plan, usePlan] = useState<PlanResponse | null>(null);
   const sortHandle = async () => {
-    if (!sortData.material || !selectedMaterial) {
+    if (!sortData.material || !materialArray.find((i) => i.id === sortData.material)) {
       alert("対象製品を入力してください");
       return;
     }
     try {
       const params = { year: sortData.year, month: sortData.month };
-      const response = await axios.get<PlanResponse | null>(
+      const response = await axios.get<PlanResponse>(
         `${import.meta.env.VITE_BACK_BASE_API}/api/plan/${sortData.material}`,
         {
           params,
         },
       );
-      if (!response) {
-        alert("指定の計画が存在しません");
-        return;
-      }
       usePlan(response.data);
       setView("Achievement");
     } catch (error) {
+      usePlan(null);
       errorHandling(error);
     }
   };
@@ -58,7 +51,6 @@ const AchievementManegement = ({ newHandle, correctHandle }: AchievementManegeme
   if (view === "Achievement") {
     return (
       <AchievementCalendar
-        material={selectedMaterial}
         plan={plan}
         newHandle={newHandle}
         correctHandle={correctHandle}

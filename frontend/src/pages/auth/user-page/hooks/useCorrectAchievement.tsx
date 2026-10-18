@@ -1,15 +1,15 @@
 import { useStateElements } from "../../hooks/useStateElements";
+import { AchivementConfig } from "../types/achievementConfig";
 
-export type CorrectAchievementConfig = {
-
+const initialAchievement: AchivementConfig = {
+  date: "",
+  lot: "",
+  flow: "",
+  inspection: "",
 };
 
-const initialAchievement: CorrectAchievementConfig = {
-
-};
-
-export const useCorrectAchievement = (initial?: CorrectAchievementConfig) => {
-  const { data: achievement, setData, setState: setAchievement } = useStateElements<CorrectAchievementConfig>(initial ?? initialAchievement);
+export const useCorrectAchievement = (initial?: AchivementConfig) => {
+  const { data: achievement, setData, setState: setAchievement } = useStateElements<AchivementConfig>(initial ?? initialAchievement);
   const reset = () => setData(initial ?? initialAchievement);
   return { achievement, setAchievement, reset };
 };

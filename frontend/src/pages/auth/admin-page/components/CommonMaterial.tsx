@@ -22,7 +22,7 @@ const CommonMaterial = ({ material, setMaterial }: CommonMaterialProps) => {
           <TextInput
             name="base"
             value={material.base}
-            maxLength={5}
+            maxLength={10}
             onChange={(e) => setMaterial(defaultEvent(e, onlyNumber))}
           >
             基本製造量

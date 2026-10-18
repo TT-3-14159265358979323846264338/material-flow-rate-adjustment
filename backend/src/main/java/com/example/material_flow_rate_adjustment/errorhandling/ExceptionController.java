@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class ExceptionController {
@@ -21,6 +22,16 @@ public class ExceptionController {
 	public ResponseEntity<Map<String, String>> handleHttpMessageNotReadable(HttpMessageNotReadableException e) {
 		Map<String, String> error = new HashMap<>();
 		error.put("error", "不適切な値が入力されました。");
+		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(error);
+	}
+	
+	/**
+	 * Controllerに送られたPathVariableなどに不備がある場合、エラー番号422を返却
+	 */
+	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
+	public ResponseEntity<Map<String, String>> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException e) {
+		Map<String, String> error = new HashMap<>();
+		error.put("error", "不適切なパラメータが入力されました。");
 		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(error);
 	}
 	

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.material_flow_rate_adjustment.authpage.TransformService;
 import com.example.material_flow_rate_adjustment.savedata.maindata.CalendarRepository;
 import com.example.material_flow_rate_adjustment.savedata.maindata.CalendarSQL;
+import com.example.material_flow_rate_adjustment.savedata.maindata.HolidayType;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,11 +37,11 @@ public class GetCalendarService {
 	
 	record Holidays(
 			LocalDate holiday,
-			String code) {}
+			HolidayType code) {}
 	
 	Holidays createHolidays(CalendarSQL calendar) {
 		return new Holidays(
 				calendar.getHoliday(),
-				calendar.getType().name());
+				calendar.getType());
 	}
 }

@@ -5,16 +5,19 @@ import java.util.List;
 
 import jakarta.validation.constraints.NotNull;
 
+import com.example.material_flow_rate_adjustment.customannotations.ValidMaterialId;
+import com.example.material_flow_rate_adjustment.customannotations.ValidMonth;
+import com.example.material_flow_rate_adjustment.customannotations.ValidYear;
 import com.example.material_flow_rate_adjustment.savedata.maindata.HolidayType;
 
 record CorrectCalendarRecord(
 		@NotNull(message="カレンダーは必須入力です")
 		List<CalendarRecord> calendars,
-		@NotNull(message="対象年は必須入力です")
+		@ValidYear
 		Integer year,
-		@NotNull(message="対象月は必須入力です")
+		@ValidMonth
 		Integer month,
-		@NotNull(message="対象製品は必須入力です")
+		@ValidMaterialId
 		Integer material) {}
 
 record CalendarRecord(

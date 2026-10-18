@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 
@@ -15,7 +16,13 @@ public class GetPlanController {
 	
 	@GetMapping("/api/plan")
 	@PreAuthorize("hasRole('MANAGER')")
-	public ResponseEntity<?> managerGetPlan(@Valid GetPlanRecord getPlanRecord) {
-		return ResponseEntity.ok(getPlanService.getPlan(getPlanRecord));
+	public ResponseEntity<?> getSortPlan(@Valid GetPlanRecord getPlanRecord) {
+		return ResponseEntity.ok(getPlanService.getSortPlan(getPlanRecord));
+	}
+	
+	@GetMapping("/api/plan/{id}")
+	@PreAuthorize("hasRole('USER') or hasRole('MANAGER')")
+	public ResponseEntity<?> getDesignatedPlan(@PathVariable int id, @Valid GetDesignatedRecord getDesignatedRecord) {
+		return ResponseEntity.ok(getPlanService.getDesignatedPlan(id, getDesignatedRecord));
 	}
 }

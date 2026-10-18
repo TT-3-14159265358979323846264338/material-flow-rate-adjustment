@@ -32,14 +32,16 @@ public class GetMaterialService {
 	}
 	
 	public Material createMaterial(MaterialSQL material) {
-		return new Material(material.getId(), 
+		return new Material(
+				material.getId(), 
 				material.getName(), 
 				material.getDestination(), 
 				material.getBase(), 
 				material.getUnit());
 	}
 	
-	public record Material(int id, 
+	public record Material(
+			Integer id, 
 			String name, 
 			String destination, 
 			Integer base, 

@@ -2,12 +2,16 @@ package com.example.material_flow_rate_adjustment.authpage.managerpage.newplan;
 
 import jakarta.validation.constraints.NotNull;
 
+import com.example.material_flow_rate_adjustment.customannotations.ValidMaterialId;
+import com.example.material_flow_rate_adjustment.customannotations.ValidMonth;
+import com.example.material_flow_rate_adjustment.customannotations.ValidYear;
+
 record NewPlan(
-		@NotNull(message = "製品が選択されていません")
+		@ValidMaterialId
 		Integer materialId,
-		@NotNull(message = "登録する年がありません")
+		@ValidYear
 		Integer year,
-		@NotNull(message = "登録する月がありません")
+		@ValidMonth
 		Integer month,
 		@NotNull(message = "予定数量が入力されていません")
 		Integer flow) {}

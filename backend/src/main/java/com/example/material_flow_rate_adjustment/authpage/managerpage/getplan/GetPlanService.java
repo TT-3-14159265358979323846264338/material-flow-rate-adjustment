@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.material_flow_rate_adjustment.authpage.TransformService;
 import com.example.material_flow_rate_adjustment.authpage.adminpage.getMaterial.GetMaterialService;
 import com.example.material_flow_rate_adjustment.authpage.adminpage.getMaterial.GetMaterialService.Material;
+import com.example.material_flow_rate_adjustment.errorhandling.NotFindException;
 import com.example.material_flow_rate_adjustment.savedata.maindata.MonthPlanRepository;
 import com.example.material_flow_rate_adjustment.savedata.maindata.MonthPlanSQL;
 
@@ -22,7 +23,7 @@ public class GetPlanService {
 	private final TransformService transform;
 	
 	@Transactional(readOnly = true)
-	public List<Plan> getPlan(GetPlanRecord getPlanRecord) {
+	public List<Plan> getSortPlan(GetPlanRecord getPlanRecord) {
 		return planRepository.findByPlanDateBetweenAndHasDeletedFalse(
 								transform.minDate(getPlanRecord.minYear(), getPlanRecord.minMonth()), 
 								transform.maxDate(getPlanRecord.maxYear(), getPlanRecord.maxMonth()),
@@ -31,6 +32,13 @@ public class GetPlanService {
 							.filter(filter(getPlanRecord.material()))
 							.map(this::createPlan)
 							.toList();
+	}
+	
+	@Transactional(readOnly = true)
+	public Plan getDesignatedPlan(int id, GetDesignatedRecord getDesignatedRecord) {
+		return planRepository.findByMaterial_IdAndYearAndMonthAndHasDeletedFalse(id, getDesignatedRecord.year(), getDesignatedRecord.month())
+							.map(this::createPlan)
+							.orElseThrow(() -> new NotFindException("指定の計画が存在しません"));
 	}
 	
 	Predicate<MonthPlanSQL> filter(Integer material){
@@ -52,14 +60,14 @@ public class GetPlanService {
 				);
 	}
 	
-	record Plan(int id,
+	record Plan(Integer id,
 			Material material,
-			int year,
-			int month,
-			int flow,
-			int achievement,
-			int shipping,
-			int adjustment,
-			int remaining
+			Integer year,
+			Integer month,
+			Integer flow,
+			Integer achievement,
+			Integer shipping,
+			Integer adjustment,
+			Integer remaining
 			) {}
 }

@@ -1,5 +1,6 @@
 package com.example.material_flow_rate_adjustment.authpage.adminpage.correctmaterial;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 import org.springframework.stereotype.Service;
@@ -23,20 +24,20 @@ public class CorrectMaterialService {
 	private final UtilityService utility;
 	
 	@Transactional
-	public boolean adminCorrectMaterialData(int id, CorrectMaterialRecord data, String loginUser) {
+	public String correctMaterial(int id, CorrectMaterialRecord data, String loginUser) {
 		AccountSQL account = utility.getAccountSQL(loginUser);
 		MaterialSQL material = utility.getMaterialSQL(id);
 		MaterialHistorySQL newHistory = createHistorySQL(material);
 		if(data.isDeleted()) {
 			delete(account, material, newHistory);
-			return true;
+			return "製品情報を削除しました";
 		}
 		setName(material, newHistory, data.newName());
 		setDestination(material, newHistory, data.newDestination());
 		setBase(material, newHistory, data.newBase());
 		setUnit(material, newHistory, data.newUnit());
 		saveData(account, material, newHistory);
-		return false;
+		return "製品情報を修正しました";
 	}
 	
 	MaterialHistorySQL createHistorySQL(MaterialSQL material) {
@@ -73,7 +74,7 @@ public class CorrectMaterialService {
 		material.setDestination(destination);
 	}
 	
-	void setBase(MaterialSQL material, MaterialHistorySQL newHistory, Integer base) {
+	void setBase(MaterialSQL material, MaterialHistorySQL newHistory, BigDecimal base) {
 		if(Objects.equals(material.getBase(), base)) {
 			return;
 		}

@@ -24,12 +24,12 @@ public class NewUserService {
 	private final UtilityService utility;
 	
 	@Transactional
-	public String createNewUser(NewUser data, String loginUser){
+	public String newUser(NewUser data, String loginUser){
 		if(repository.existsByLoginUser(data.loginName())) {
-			throw new DataBaseException("同名のログインユーザーは登録できません。");
+			throw new DataBaseException("同名のログインユーザーは登録できません");
 		}
 		if(repository.existsByDisplayedUser(data.displayedName())) {
-			throw new DataBaseException("同名の表示ユーザーは登録できません。");
+			throw new DataBaseException("同名の表示ユーザーは登録できません");
 		}
 		//初期パスワードはユーザーにしている。最終的にはランダム生成にする。
 		AccountSQL newAccount = createNewAccount(data.loginName(), data.displayedName(), data.loginName(), data.role());

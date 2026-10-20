@@ -15,7 +15,7 @@ public class GetAchievementController {
 	
 	@GetMapping("/api/achievement/{id}")
 	@PreAuthorize("hasRole('USER') or hasRole('MANAGER')")
-	public ResponseEntity<?> getAchievement(@PathVariable int id) {
-		return ResponseEntity.ok(getAchievementService.getAchievementService(id));
+	public ResponseEntity<?> achievementGetMapping(@PathVariable int id) {
+		return ResponseEntity.ok(getAchievementService.getAchievement(id));
 	}
 }

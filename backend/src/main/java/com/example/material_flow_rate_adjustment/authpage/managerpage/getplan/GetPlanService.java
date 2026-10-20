@@ -1,5 +1,6 @@
 package com.example.material_flow_rate_adjustment.authpage.managerpage.getplan;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -64,10 +65,10 @@ public class GetPlanService {
 			Material material,
 			Integer year,
 			Integer month,
-			Integer flow,
-			Integer achievement,
-			Integer shipping,
-			Integer adjustment,
-			Integer remaining
+			BigDecimal flow,
+			BigDecimal achievement,
+			BigDecimal shipping,
+			BigDecimal adjustment,
+			BigDecimal remaining
 			) {}
 }

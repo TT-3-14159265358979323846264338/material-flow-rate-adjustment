@@ -18,7 +18,7 @@ public class HistoryPlanController {
 	
 	@GetMapping("/api/history/plan")
 	@PreAuthorize("hasRole('MANAGER')")
-	public ResponseEntity<?> planHistory(@Valid DefaultHistoryFilterRecord filter) {
-		return ResponseEntity.ok(historyPlanService.getHistory(filter));
+	public ResponseEntity<?> planHistoryGetMapping(@Valid DefaultHistoryFilterRecord filter) {
+		return ResponseEntity.ok(historyPlanService.getPlanHistory(filter));
 	}
 }

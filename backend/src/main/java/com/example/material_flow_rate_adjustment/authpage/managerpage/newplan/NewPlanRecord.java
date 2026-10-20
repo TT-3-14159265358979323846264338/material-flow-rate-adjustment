@@ -1,17 +1,18 @@
 package com.example.material_flow_rate_adjustment.authpage.managerpage.newplan;
 
-import jakarta.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
-import com.example.material_flow_rate_adjustment.customannotations.ValidMaterialId;
-import com.example.material_flow_rate_adjustment.customannotations.ValidMonth;
-import com.example.material_flow_rate_adjustment.customannotations.ValidYear;
+import com.example.material_flow_rate_adjustment.customannotations.ValidFlowNotNull;
+import com.example.material_flow_rate_adjustment.customannotations.ValidMaterialIdNotNull;
+import com.example.material_flow_rate_adjustment.customannotations.ValidMonthNotNull;
+import com.example.material_flow_rate_adjustment.customannotations.ValidYearNotNull;
 
 record NewPlan(
-		@ValidMaterialId
+		@ValidMaterialIdNotNull
 		Integer materialId,
-		@ValidYear
+		@ValidYearNotNull
 		Integer year,
-		@ValidMonth
+		@ValidMonthNotNull
 		Integer month,
-		@NotNull(message = "予定数量が入力されていません")
-		Integer flow) {}
+		@ValidFlowNotNull
+		BigDecimal flow) {}

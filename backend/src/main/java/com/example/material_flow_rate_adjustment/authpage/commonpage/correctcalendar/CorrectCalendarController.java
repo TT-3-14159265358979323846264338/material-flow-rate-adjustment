@@ -20,7 +20,7 @@ public class CorrectCalendarController {
 	
 	@PostMapping("/api/calendar")
 	@PreAuthorize("hasRole('USER') or hasRole('MANAGER')")
-	public ResponseEntity<?> correctCalendar(@Valid @RequestBody CorrectCalendarRecord data, @AuthenticationPrincipal String loginUser){
+	public ResponseEntity<?> correctCalendarPostMapping(@Valid @RequestBody CorrectCalendarRecord data, @AuthenticationPrincipal String loginUser){
 		return ResponseEntity.ok(new CommentRecord(correctCalendarService.correctCalendar(data, loginUser)));
 	}
 }

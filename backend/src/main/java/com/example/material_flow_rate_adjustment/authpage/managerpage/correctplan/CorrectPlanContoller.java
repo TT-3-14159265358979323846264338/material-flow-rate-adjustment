@@ -21,8 +21,7 @@ public class CorrectPlanContoller {
 	
 	@PostMapping("/api/plan/{id}")
 	@PreAuthorize("hasRole('MANAGER')")
-	public ResponseEntity<?> correctPlanRecord(@PathVariable int id, @Valid @RequestBody CorrectPlanRecord data, @AuthenticationPrincipal String loginUser){
-		boolean hasDeleted = correctPlanService.correctPlanData(id, data, loginUser);
-		return ResponseEntity.ok(new CommentRecord(hasDeleted? "計画情報を削除しました。": "計画情報を修正しました。"));
+	public ResponseEntity<?> correctPlanPostMapping(@PathVariable int id, @Valid @RequestBody CorrectPlanRecord data, @AuthenticationPrincipal String loginUser){
+		return ResponseEntity.ok(new CommentRecord(correctPlanService.correctPlan(id, data, loginUser)));
 	}
 }

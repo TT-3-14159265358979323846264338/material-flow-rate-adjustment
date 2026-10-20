@@ -18,9 +18,10 @@ public class CorrectPasswordService {
 	private final PasswordEncoder passwordEncoder;
 	
 	@Transactional
-	public void userCorrectPassword(NewPass data, String loginUser) {
+	public String correctPassword(NewPass data, String loginUser) {
 		AccountSQL account = utility.getAccountSQL(loginUser);
 		setPassword(account, data.oldPass(), data.newPass());
+		return "パスワードを変更しました";
 	}
 	
 	void setPassword(AccountSQL targetAccount, String oldPass, String newPass) {
@@ -28,7 +29,7 @@ public class CorrectPasswordService {
 			if(passwordEncoder.matches(oldPass, targetAccount.getPassword())) {
 				targetAccount.setPassword(passwordEncoder.encode(newPass));
 			}else {
-				throw new DataBaseException("以前のパスワードが一致しないため、処理を停止しました。");
+				throw new DataBaseException("以前のパスワードが一致しないため、処理を停止しました");
 			}
 		}
 	}

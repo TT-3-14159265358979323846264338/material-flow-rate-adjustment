@@ -20,7 +20,7 @@ public class HistoryUserService {
 	private final HistoryService historyService;
 	
 	@Transactional(readOnly = true)
-	public List<History> getHistory(DefaultHistoryFilterRecord filter) {
+	public List<History> getUserHistory(DefaultHistoryFilterRecord filter) {
 		return historyService.getHistory(filter, repository).map(this::createHistory).toList();
 	}
 	

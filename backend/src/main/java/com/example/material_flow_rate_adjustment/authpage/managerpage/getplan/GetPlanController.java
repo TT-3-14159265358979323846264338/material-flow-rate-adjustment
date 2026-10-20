@@ -16,13 +16,13 @@ public class GetPlanController {
 	
 	@GetMapping("/api/plan")
 	@PreAuthorize("hasRole('MANAGER')")
-	public ResponseEntity<?> getSortPlan(@Valid GetPlanRecord getPlanRecord) {
+	public ResponseEntity<?> sortPlanGetMapping(@Valid GetPlanRecord getPlanRecord) {
 		return ResponseEntity.ok(getPlanService.getSortPlan(getPlanRecord));
 	}
 	
 	@GetMapping("/api/plan/{id}")
 	@PreAuthorize("hasRole('USER') or hasRole('MANAGER')")
-	public ResponseEntity<?> getDesignatedPlan(@PathVariable int id, @Valid GetDesignatedRecord getDesignatedRecord) {
+	public ResponseEntity<?> designatedPlanGetMapping(@PathVariable int id, @Valid GetDesignatedRecord getDesignatedRecord) {
 		return ResponseEntity.ok(getPlanService.getDesignatedPlan(id, getDesignatedRecord));
 	}
 }

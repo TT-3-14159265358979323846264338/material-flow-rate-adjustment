@@ -21,8 +21,7 @@ public class CorrectUserController {
 	
 	@PostMapping("/api/user/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> adminCorrectUser(@PathVariable int id, @Valid @RequestBody CorrectUserRecord data, @AuthenticationPrincipal String loginUser){
-		boolean isDeleted = correctUserService.correctUserRecord(id, data, loginUser);
-		return ResponseEntity.ok(new CommentRecord(isDeleted? "対象のアカウントを削除しました。": "対象のアカウントを修正しました。"));
+	public ResponseEntity<?> correctUserPostMapping(@PathVariable int id, @Valid @RequestBody CorrectUserRecord data, @AuthenticationPrincipal String loginUser){
+		return ResponseEntity.ok(new CommentRecord(correctUserService.correctUser(id, data, loginUser)));
 	}
 }

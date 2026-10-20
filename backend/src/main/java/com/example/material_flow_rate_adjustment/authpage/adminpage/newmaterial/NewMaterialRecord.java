@@ -1,20 +1,19 @@
 package com.example.material_flow_rate_adjustment.authpage.adminpage.newmaterial;
 
-import jakarta.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
-import com.example.material_flow_rate_adjustment.customannotations.ValidMaterialDestination;
-import com.example.material_flow_rate_adjustment.customannotations.ValidMaterialName;
-import com.example.material_flow_rate_adjustment.customannotations.ValidMaterialUnit;
+import com.example.material_flow_rate_adjustment.customannotations.ValidBaseNullable;
+import com.example.material_flow_rate_adjustment.customannotations.ValidMaterialDestinationNotNull;
+import com.example.material_flow_rate_adjustment.customannotations.ValidMaterialNameNotNull;
+import com.example.material_flow_rate_adjustment.customannotations.ValidMaterialUnitNotNull;
 
 record NewMaterial(
-		@NotNull(message = "製品名は必須入力です")
-		@ValidMaterialName
+		@ValidMaterialNameNotNull
 		String name, 
-		@NotNull(message = "向け先は必須入力です")
-		@ValidMaterialDestination
+		@ValidMaterialDestinationNotNull
 		String destination,
-		Integer base,
-		@NotNull(message = "納入単位は必須入力です")
-		@ValidMaterialUnit
+		@ValidBaseNullable
+		BigDecimal base,
+		@ValidMaterialUnitNotNull
 		String unit
 		) {}

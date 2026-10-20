@@ -18,8 +18,7 @@ public class CorrectPasswordController {
 	private final CorrectPasswordService correctPasswordService;
 	
 	@PostMapping("/api/password")
-	public ResponseEntity<?> userCorrectPassword(@Valid @RequestBody NewPass data, @AuthenticationPrincipal String loginUser){
-		correctPasswordService.userCorrectPassword(data, loginUser);
-		return ResponseEntity.ok(new CommentRecord("パスワードを変更しました。"));
+	public ResponseEntity<?> correctPasswordPostMapping(@Valid @RequestBody NewPass data, @AuthenticationPrincipal String loginUser){
+		return ResponseEntity.ok(new CommentRecord(correctPasswordService.correctPassword(data, loginUser)));
 	}
 }

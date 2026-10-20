@@ -19,7 +19,7 @@ public class NewUserController {
 	@PostMapping("/api/user")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> newUserPostMapping(@Valid @RequestBody NewUser newUser, @AuthenticationPrincipal String loginUser) {
-		String password = newUserService.createNewUser(newUser, loginUser);
+		String password = newUserService.newUser(newUser, loginUser);
 		return ResponseEntity.ok(new Password(password));
 	}
 }

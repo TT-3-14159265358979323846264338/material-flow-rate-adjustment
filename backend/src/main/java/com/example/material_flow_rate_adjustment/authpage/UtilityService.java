@@ -29,15 +29,15 @@ public class UtilityService {
 	}
 	
 	public AccountSQL getAccountSQL(int userId) {
-		return accountRepository.findById(userId).orElseThrow(() -> new NotFindException("ユーザーが見つかりません。"));
+		return accountRepository.findById(userId).orElseThrow(() -> new NotFindException("ユーザーが見つかりません"));
 	}
 	
 	public MaterialSQL getMaterialSQL(int id) {
-		return materialRepository.findById(id).orElseThrow(() -> new NotFindException("製品が見つかりません。"));
+		return materialRepository.findById(id).orElseThrow(() -> new NotFindException("製品が見つかりません"));
 	}
 	
 	public MonthPlanSQL getMonthPlanSQL(int id) {
-		return monthPlanRepository.findById(id).orElseThrow(() -> new NotFindException("計画が見つかりません。"));
+		return monthPlanRepository.findById(id).orElseThrow(() -> new NotFindException("計画が見つかりません"));
 	}
 	
 	public <T extends BaseSQL, U extends BaseHistorySQL> 

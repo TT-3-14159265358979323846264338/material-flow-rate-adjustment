@@ -2,13 +2,13 @@ package com.example.material_flow_rate_adjustment.authpage.commonpage.correctpas
 
 import jakarta.validation.constraints.NotNull;
 
-import com.example.material_flow_rate_adjustment.customannotations.ValidPassword;
+import com.example.material_flow_rate_adjustment.customannotations.ValidPasswordNullable;
 
 record NewPass(
 		@NotNull(message="以前のパスワードは必須入力です")
-		@ValidPassword
+		@ValidPasswordNullable
 		String oldPass, 
 		@NotNull(message="新規のパスワードは必須入力です")
-		@ValidPassword
+		@ValidPasswordNullable
 		String newPass
 		) {}

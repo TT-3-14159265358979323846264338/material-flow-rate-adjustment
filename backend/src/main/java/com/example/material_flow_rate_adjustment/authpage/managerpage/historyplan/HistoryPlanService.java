@@ -1,5 +1,6 @@
 package com.example.material_flow_rate_adjustment.authpage.managerpage.historyplan;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class HistoryPlanService {
 	private final HistoryService historyService;
 	
 	@Transactional(readOnly = true)
-	public List<History> getHistory(DefaultHistoryFilterRecord filter) {
+	public List<History> getPlanHistory(DefaultHistoryFilterRecord filter) {
 		return historyService.getHistory(filter, repository).map(this::createHistory).toList();
 	}
 	
@@ -62,16 +63,16 @@ public class HistoryPlanService {
 			Integer newYear,
 			Integer oldMonth,
 			Integer newMonth,
-			Integer oldFlow,
-			Integer newFlow,
-			Integer oldAchievement,
-			Integer newAchievement,
-			Integer oldShipping,
-			Integer newShipping,
-			Integer oldAdjustment,
-			Integer newAdjustment,
-			Integer oldRemaining,
-			Integer newRemaining,
+			BigDecimal oldFlow,
+			BigDecimal newFlow,
+			BigDecimal oldAchievement,
+			BigDecimal newAchievement,
+			BigDecimal oldShipping,
+			BigDecimal newShipping,
+			BigDecimal oldAdjustment,
+			BigDecimal newAdjustment,
+			BigDecimal oldRemaining,
+			BigDecimal newRemaining,
 			Boolean hasDeletedOld,
 			Boolean hasDeletedNew,
 			String action, 

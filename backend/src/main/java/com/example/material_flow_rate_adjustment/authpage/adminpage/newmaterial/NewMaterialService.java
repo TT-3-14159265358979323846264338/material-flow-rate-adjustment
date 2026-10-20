@@ -1,5 +1,7 @@
 package com.example.material_flow_rate_adjustment.authpage.adminpage.newmaterial;
 
+import java.math.BigDecimal;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,17 +25,17 @@ public class NewMaterialService {
 	private final CreateAllDefaultCalendar createAllDefaultCalendar;
 	
 	@Transactional
-	public String createNewMaterial(NewMaterial data, String loginUser){
+	public String newMaterial(NewMaterial data, String loginUser){
 		AccountSQL account = utility.getAccountSQL(loginUser);
 		MaterialSQL newMaterial = createMaterialSQL(data.name(), data.destination(), data.base(), data.unit());
 		materialRepository.save(newMaterial);
 		MaterialHistorySQL newHistory = createMaterialHistorySQL(newMaterial, account);
 		historyRepository.save(newHistory);
 		createAllDefaultCalendar.createCalendar(newMaterial, account);
-		return "新規製品を登録しました。";
+		return "新規製品を登録しました";
 	}
 	
-	MaterialSQL createMaterialSQL(String name, String destination, Integer base, String unit) {
+	MaterialSQL createMaterialSQL(String name, String destination, BigDecimal base, String unit) {
 		return MaterialSQL.builder()
 				.name(name)
 				.destination(destination)

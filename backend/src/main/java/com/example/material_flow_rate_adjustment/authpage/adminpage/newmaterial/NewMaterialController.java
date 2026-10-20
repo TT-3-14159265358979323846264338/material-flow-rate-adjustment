@@ -21,7 +21,7 @@ public class NewMaterialController {
 	@PostMapping("/api/material")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> newMaterialPostMapping(@Valid @RequestBody NewMaterial newMaterial, @AuthenticationPrincipal String loginUser) {
-		String comment = newMaterialService.createNewMaterial(newMaterial, loginUser);
+		String comment = newMaterialService.newMaterial(newMaterial, loginUser);
 		return ResponseEntity.ok(new CommentRecord(comment));
 	}
 }

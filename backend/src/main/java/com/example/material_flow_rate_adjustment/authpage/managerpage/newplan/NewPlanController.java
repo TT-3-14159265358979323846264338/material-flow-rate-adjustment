@@ -21,7 +21,6 @@ public class NewPlanController {
 	@PostMapping("/api/plan")
 	@PreAuthorize("hasRole('MANAGER')")
 	public ResponseEntity<?> newMaterialPostMapping(@Valid @RequestBody NewPlan newPlan, @AuthenticationPrincipal String loginUser) {
-		String comment = newPlanService.createNewPlan(newPlan, loginUser);
-		return ResponseEntity.ok(new CommentRecord(comment));
+		return ResponseEntity.ok(new CommentRecord(newPlanService.newPlan(newPlan, loginUser)));
 	}
 }

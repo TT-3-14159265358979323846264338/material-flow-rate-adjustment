@@ -1,5 +1,6 @@
 package com.example.material_flow_rate_adjustment.authpage.commonpage.getAchievement;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class GetAchievementService {
 	private final AchievementRepository achievementRepository;
 	
 	@Transactional(readOnly = true)
-	public List<Achievement> getAchievementService(int id){
+	public List<Achievement> getAchievement(int id){
 		return achievementRepository.findByPlan_IdAndHasDeletedFalse(id)
 									.stream()
 									.map(this::createAchievement)
@@ -30,7 +31,7 @@ public class GetAchievementService {
 			String name,
 			LocalDate date,
 			String lot,
-			Integer flow,
+			BigDecimal flow,
 			Inspection inspection) {}
 	
 	Achievement createAchievement(AchievementSQL achievement) {

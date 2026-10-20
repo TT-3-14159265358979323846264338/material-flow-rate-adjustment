@@ -1,5 +1,6 @@
 package com.example.material_flow_rate_adjustment.authpage.managerpage.newplan;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import org.springframework.stereotype.Service;
@@ -24,25 +25,25 @@ public class NewPlanService {
 	private final UtilityService utility;
 	
 	@Transactional
-	public String createNewPlan(NewPlan newPlan, String loginUser){
+	public String newPlan(NewPlan newPlan, String loginUser){
 		MonthPlanSQL newMonthPlan = createPlan(utility.getMaterialSQL(newPlan.materialId()), newPlan.year(), newPlan.month(), newPlan.flow());
 		monthPlanRepository.save(newMonthPlan);
 		PlanHistorySQL newHistory = createNewHistory(newMonthPlan, loginUser);
 		historyRepository.save(newHistory);
-		return "新規計画を登録しました。";
+		return "新規計画を登録しました";
 	}
 	
-	MonthPlanSQL createPlan(MaterialSQL material, int year, int month, int flow) {
+	MonthPlanSQL createPlan(MaterialSQL material, int year, int month, BigDecimal flow) {
 		return MonthPlanSQL.builder()
 				.material(material)
 				.year(year)
 				.month(month)
 				.planDate(LocalDate.of(year, month, 1))
 				.flow(flow)
-				.achievement(0)
-				.shipping(0)
-				.adjustment(0)
-				.remaining(0)
+				.achievement(BigDecimal.ZERO)
+				.shipping(BigDecimal.ZERO)
+				.adjustment(BigDecimal.ZERO)
+				.remaining(BigDecimal.ZERO)
 				.hasDeleted(false)
 				.build();
 	}

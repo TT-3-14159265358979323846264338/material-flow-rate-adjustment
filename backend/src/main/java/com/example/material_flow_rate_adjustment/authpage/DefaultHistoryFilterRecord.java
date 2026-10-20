@@ -1,14 +1,14 @@
 package com.example.material_flow_rate_adjustment.authpage;
 
-import com.example.material_flow_rate_adjustment.customannotations.ValidSortOrder;
-import com.example.material_flow_rate_adjustment.customannotations.ValidSortTarget;
+import com.example.material_flow_rate_adjustment.customannotations.ValidSortOrderNotNull;
+import com.example.material_flow_rate_adjustment.customannotations.ValidSortTargetNotNull;
 
 public record DefaultHistoryFilterRecord(
 		Integer minYear,
 		Integer minMonth,
 		Integer maxYear,
 		Integer maxMonth,
-		@ValidSortOrder
+		@ValidSortOrderNotNull
 		OrderSortEnum order,
-		@ValidSortTarget
+		@ValidSortTargetNotNull
 		DefaultHistorySortEnum target) {}

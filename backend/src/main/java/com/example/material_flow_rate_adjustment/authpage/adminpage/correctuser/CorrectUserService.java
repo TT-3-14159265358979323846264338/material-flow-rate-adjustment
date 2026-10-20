@@ -22,19 +22,19 @@ public class CorrectUserService {
 	private final UtilityService utility;
 	
 	@Transactional
-	public boolean correctUserRecord(int id, CorrectUserRecord data, String loginUser) {
+	public String correctUser(int id, CorrectUserRecord data, String loginUser) {
 		AccountSQL targetAccount = utility.getAccountSQL(id);
 		AccountSQL loginAccount = utility.getAccountSQL(loginUser);
 		AccountHistorySQL newHistory = createHistorySQL(targetAccount);
 		if(data.isDeleted()) {
 			delete(targetAccount, loginAccount, newHistory);
-			return true;
+			return "対象のアカウントを削除しました";
 		}
 		setLoginName(targetAccount, newHistory, data.newLoginName());
 		setDisplayedName(targetAccount, newHistory, data.newDisplayedName());
 		setRole(targetAccount, loginAccount, newHistory, data.newRole());
 		saveData(targetAccount, loginAccount, newHistory);
-		return false;
+		return "対象のアカウントを修正しました";
 	}
 	
 	AccountHistorySQL createHistorySQL(AccountSQL targetAccount) {

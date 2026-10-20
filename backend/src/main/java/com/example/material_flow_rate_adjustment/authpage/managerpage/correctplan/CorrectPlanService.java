@@ -1,5 +1,6 @@
 package com.example.material_flow_rate_adjustment.authpage.managerpage.correctplan;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -27,20 +28,20 @@ public class CorrectPlanService {
 	private final UtilityService utility;
 	
 	@Transactional
-	public boolean correctPlanData(int id, CorrectPlanRecord data, String loginUser) {
+	public String correctPlan(int id, CorrectPlanRecord data, String loginUser) {
 		AccountSQL account = utility.getAccountSQL(loginUser);
 		MonthPlanSQL plan = utility.getMonthPlanSQL(id);
 		PlanHistorySQL newHistory = createHistorySQL(plan);
 		if(data.isDeleted()) {
 			delete(account, plan, newHistory);
-			return true;
+			return "計画情報を削除しました";
 		}
 		setMaterial(plan, newHistory, data.materialId());
 		setYear(plan, newHistory, data.year());
 		setMonth(plan, newHistory, data.month());
 		setFlow(plan, newHistory, data.flow());
 		saveData(account, plan, newHistory);
-		return false;
+		return "計画情報を修正しました";
 	}
 	
 	PlanHistorySQL createHistorySQL(MonthPlanSQL plan) {
@@ -97,7 +98,7 @@ public class CorrectPlanService {
 		plan.setPlanDate(LocalDate.of(plan.getYear(), month, 1));
 	}
 	
-	void setFlow(MonthPlanSQL plan, PlanHistorySQL newHistory, Integer flow) {
+	void setFlow(MonthPlanSQL plan, PlanHistorySQL newHistory, BigDecimal flow) {
 		if(flow == null || plan.getFlow().equals(flow)) {
 			return;
 		}

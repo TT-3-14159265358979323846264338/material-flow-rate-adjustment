@@ -1,5 +1,6 @@
 package com.example.material_flow_rate_adjustment.authpage.adminpage.getMaterial;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -44,6 +45,6 @@ public class GetMaterialService {
 			Integer id, 
 			String name, 
 			String destination, 
-			Integer base, 
+			BigDecimal base, 
 			String unit) {}
 }

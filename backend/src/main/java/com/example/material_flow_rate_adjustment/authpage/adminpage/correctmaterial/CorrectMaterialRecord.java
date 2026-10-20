@@ -1,16 +1,20 @@
 package com.example.material_flow_rate_adjustment.authpage.adminpage.correctmaterial;
 
-import com.example.material_flow_rate_adjustment.customannotations.ValidMaterialDestination;
-import com.example.material_flow_rate_adjustment.customannotations.ValidMaterialName;
-import com.example.material_flow_rate_adjustment.customannotations.ValidMaterialUnit;
+import java.math.BigDecimal;
+
+import com.example.material_flow_rate_adjustment.customannotations.ValidBaseNullable;
+import com.example.material_flow_rate_adjustment.customannotations.ValidMaterialDestinationNullable;
+import com.example.material_flow_rate_adjustment.customannotations.ValidMaterialNameNullable;
+import com.example.material_flow_rate_adjustment.customannotations.ValidMaterialUnitNullable;
 
 record CorrectMaterialRecord(
-		@ValidMaterialName
+		@ValidMaterialNameNullable
 		String newName,
-		@ValidMaterialDestination
+		@ValidMaterialDestinationNullable
 		String newDestination,
-		Integer newBase,
-		@ValidMaterialUnit
+		@ValidBaseNullable
+		BigDecimal newBase,
+		@ValidMaterialUnitNullable
 		String newUnit,
 		boolean isDeleted
 		) {}

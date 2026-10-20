@@ -18,7 +18,7 @@ public class HistoryCalendarController {
 	
 	@GetMapping("/api/history/calendar")
 	@PreAuthorize("hasRole('USER') or hasRole('MANAGER')")
-	public ResponseEntity<?> calendarHistory(@Valid DefaultHistoryFilterRecord filter) {
-		return ResponseEntity.ok(historyCalendarService.getHistory(filter));
+	public ResponseEntity<?> calendarHistoryGetMapping(@Valid DefaultHistoryFilterRecord filter) {
+		return ResponseEntity.ok(historyCalendarService.getCalendarHistory(filter));
 	}
 }

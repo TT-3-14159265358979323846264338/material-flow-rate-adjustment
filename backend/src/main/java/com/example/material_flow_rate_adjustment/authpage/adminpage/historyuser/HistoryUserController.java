@@ -18,7 +18,7 @@ public class HistoryUserController {
 	
 	@GetMapping("/api/history/user")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> userHistory(@Valid DefaultHistoryFilterRecord filter) {
-		return ResponseEntity.ok(historyUserService.getHistory(filter));
+	public ResponseEntity<?> userHistoryGetMapping(@Valid DefaultHistoryFilterRecord filter) {
+		return ResponseEntity.ok(historyUserService.getUserHistory(filter));
 	}
 }

@@ -1,20 +1,16 @@
 package com.example.material_flow_rate_adjustment.authpage.adminpage.newuser;
 
-import jakarta.validation.constraints.NotNull;
-
-import com.example.material_flow_rate_adjustment.customannotations.ValidRole;
+import com.example.material_flow_rate_adjustment.customannotations.ValidRoleNotNull;
 import com.example.material_flow_rate_adjustment.savedata.maindata.AccountRole;
-import com.example.material_flow_rate_adjustment.customannotations.ValidDisplayedUserName;
-import com.example.material_flow_rate_adjustment.customannotations.ValidLoginUserName;
+import com.example.material_flow_rate_adjustment.customannotations.ValidDisplayedUserNameNotNull;
+import com.example.material_flow_rate_adjustment.customannotations.ValidLoginUserNameNotNull;
 
 record NewUser(
-		@NotNull(message = "ログイン用ユーザー名は必須入力です")
-		@ValidLoginUserName
+		@ValidLoginUserNameNotNull
 		String loginName, 
-		@NotNull(message = "表示用ユーザー名は必須入力です")
-		@ValidDisplayedUserName
+		@ValidDisplayedUserNameNotNull
 		String displayedName,
-		@ValidRole
+		@ValidRoleNotNull
 		AccountRole role
 		) {}
 

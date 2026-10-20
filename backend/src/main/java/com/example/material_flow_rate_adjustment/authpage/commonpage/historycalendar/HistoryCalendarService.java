@@ -21,7 +21,7 @@ public class HistoryCalendarService {
 	private final HistoryService historyService;
 	
 	@Transactional(readOnly = true)
-	public List<History> getHistory(DefaultHistoryFilterRecord filter) {
+	public List<History> getCalendarHistory(DefaultHistoryFilterRecord filter) {
 		return historyService.getHistory(filter, repository).map(this::createHistory).toList();
 	}
 	

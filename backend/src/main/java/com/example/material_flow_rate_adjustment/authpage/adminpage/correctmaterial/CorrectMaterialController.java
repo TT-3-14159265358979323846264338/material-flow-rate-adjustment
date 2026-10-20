@@ -21,8 +21,7 @@ public class CorrectMaterialController {
 	
 	@PostMapping("/api/material/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> correctMaterialRecord(@PathVariable int id, @Valid @RequestBody CorrectMaterialRecord data, @AuthenticationPrincipal String loginUser){
-		boolean hasDeleted = correctMaterialService.adminCorrectMaterialData(id, data, loginUser);
-		return ResponseEntity.ok(new CommentRecord(hasDeleted? "製品情報を削除しました。": "製品情報を修正しました。"));
+	public ResponseEntity<?> correctMaterialPostMapping(@PathVariable int id, @Valid @RequestBody CorrectMaterialRecord data, @AuthenticationPrincipal String loginUser){
+		return ResponseEntity.ok(new CommentRecord(correctMaterialService.correctMaterial(id, data, loginUser)));
 	}
 }

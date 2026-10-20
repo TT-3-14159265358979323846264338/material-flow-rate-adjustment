@@ -1,5 +1,6 @@
 package com.example.material_flow_rate_adjustment.authpage.adminpage.historymaterial;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class HistoryMaterialService {
 	private final HistoryService historyService;
 	
 	@Transactional(readOnly = true)
-	public List<History> getHistory(DefaultHistoryFilterRecord filter) {
+	public List<History> getMaterialHistory(DefaultHistoryFilterRecord filter) {
 		return historyService.getHistory(filter, repository).map(this::createHistory).toList();
 	}
 	
@@ -47,8 +48,8 @@ public class HistoryMaterialService {
 			String newName, 
 			String oldDestination, 
 			String newDestination, 
-			Integer oldBase, 
-			Integer newBase, 
+			BigDecimal oldBase, 
+			BigDecimal newBase, 
 			String oldUnit, 
 			String newUnit, 
 			Boolean hasDeletedOld,

@@ -7,7 +7,7 @@
 React+TypeScript+Javaでシステム開発を勉強するために、新規作成する。今回は前職にてVBAで作成したシステムの内、ノウハウに関わらない部分のみ再現を目指す。  
   
 **♦環境♦**  
-**言語:**　　　　　　　Java 25, JavaScript ES6+, TypeScript  
+**言語:**　　　　　　　Java 25, JavaScript, TypeScript  
 **フレームワーク:**　　Spring boot 4.0.6, Spring Security  
 **ライブラリ:**　　　　React 19.2.5, React Router 7, React Modal, FullCalendar  
 **データベース:**　　　MySQL 9.6  

@@ -1,5 +1,6 @@
 package com.example.material_flow_rate_adjustment.savedata.maindata;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import jakarta.persistence.Column;
@@ -44,8 +45,8 @@ public class AchievementSQL extends BaseSQL{
 	@Column(length = 30, nullable = false)
 	private String lot;
 	
-	@Column(columnDefinition = "INT UNSIGNED", nullable = false)
-	private Integer flow;
+	@Column(precision = 8, scale = 3, nullable = false)
+	private BigDecimal flow;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(length = 15, nullable = false)

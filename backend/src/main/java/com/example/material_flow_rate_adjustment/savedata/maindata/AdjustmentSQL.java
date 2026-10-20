@@ -1,5 +1,6 @@
 package com.example.material_flow_rate_adjustment.savedata.maindata;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -34,8 +35,8 @@ public class AdjustmentSQL extends BaseSQL{
 	@Column(columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP", nullable = false, insertable = false, updatable = false)
 	private LocalDateTime date;
 	
-	@Column(columnDefinition = "INT UNSIGNED", nullable = false)
-	private Integer quantity;
+	@Column(precision = 12, scale = 3, nullable = false)
+	private BigDecimal quantity;
 	
 	@Column(length = 10, nullable = false)
 	private String user;

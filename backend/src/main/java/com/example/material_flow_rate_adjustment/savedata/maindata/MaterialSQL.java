@@ -1,5 +1,7 @@
 package com.example.material_flow_rate_adjustment.savedata.maindata;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
@@ -29,8 +31,8 @@ public class MaterialSQL extends BaseSQL{
 	@Column(length = 10, nullable = false)
 	private String destination;
 	
-	@Column(columnDefinition = "INT UNSIGNED")
-	private Integer base;
+	@Column(precision = 8, scale = 3, nullable = false)
+	private BigDecimal base;
 	
 	@Column(length = 5, nullable = false)
 	private String unit;

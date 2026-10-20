@@ -39,7 +39,7 @@ public class TokenProvider {
 	public Token createToken(Authentication authentication) {
 		Date nowDate = new Date();
 		AccountSQL account = accountRepository.findByLoginUser(authentication.getName())
-				.orElseThrow(() -> new UsernameNotFoundException("アカウントはあるのにIDの取り込みに失敗しました。"));
+				.orElseThrow(() -> new UsernameNotFoundException("アカウントはあるのにIDの取り込みに失敗しました"));
 		String token = Jwts.builder()
 				.subject(account.getId().toString())
 				.issuedAt(nowDate)
@@ -58,7 +58,7 @@ public class TokenProvider {
 	public String getRole(String token) {
 		int id = Integer.parseInt(getUser(token));
 		AccountSQL account = accountRepository.findById(id)
-				.orElseThrow(() -> new UsernameNotFoundException("アカウントはあるのにIDの取り込みに失敗しました。"));
+				.orElseThrow(() -> new UsernameNotFoundException("アカウントはあるのにIDの取り込みに失敗しました"));
 		return account.getRole().name();
 	}
 	

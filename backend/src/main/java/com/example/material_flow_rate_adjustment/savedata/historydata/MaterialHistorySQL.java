@@ -1,5 +1,7 @@
 package com.example.material_flow_rate_adjustment.savedata.historydata;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
@@ -38,11 +40,11 @@ public class MaterialHistorySQL extends BaseHistorySQL{
 	@Column(name = "new_material_destination", length = 10, updatable = false)
 	private String newDestination;
 	
-	@Column(name = "old_base", columnDefinition = "INT UNSIGNED", updatable = false)
-	private Integer oldBase;
+	@Column(name = "old_base", precision = 8, scale = 3, nullable = false)
+	private BigDecimal oldBase;
 	
-	@Column(name = "new_base", columnDefinition = "INT UNSIGNED", updatable = false)
-	private Integer newBase;
+	@Column(name = "new_base", precision = 8, scale = 3, nullable = false)
+	private BigDecimal newBase;
 	
 	@Column(name = "old_unit", length = 10, updatable = false)
 	private String oldUnit;

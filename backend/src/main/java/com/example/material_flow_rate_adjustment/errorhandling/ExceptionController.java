@@ -21,7 +21,7 @@ public class ExceptionController {
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<Map<String, String>> handleHttpMessageNotReadable(HttpMessageNotReadableException e) {
 		Map<String, String> error = new HashMap<>();
-		error.put("error", "不適切な値が入力されました。");
+		error.put("error", "不適切な値が入力されました");
 		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(error);
 	}
 	
@@ -31,7 +31,7 @@ public class ExceptionController {
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
 	public ResponseEntity<Map<String, String>> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException e) {
 		Map<String, String> error = new HashMap<>();
-		error.put("error", "不適切なパラメータが入力されました。");
+		error.put("error", "不適切なパラメータが入力されました");
 		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(error);
 	}
 	

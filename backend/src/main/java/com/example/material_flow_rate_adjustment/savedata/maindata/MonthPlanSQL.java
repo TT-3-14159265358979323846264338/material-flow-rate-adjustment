@@ -1,5 +1,6 @@
 package com.example.material_flow_rate_adjustment.savedata.maindata;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import jakarta.persistence.Column;
@@ -45,18 +46,18 @@ public class MonthPlanSQL extends BaseSQL{
 	@Column(name = "plan_date", nullable = false)
 	private LocalDate planDate;
 	
-	@Column(columnDefinition = "INT UNSIGNED", nullable = false)
-	private Integer flow;
+	@Column(precision = 12, scale = 3, nullable = false)
+	private BigDecimal flow;
 	
-	@Column(columnDefinition = "INT UNSIGNED", nullable = false)
-	private Integer achievement;
+	@Column(precision = 12, scale = 3, nullable = false)
+	private BigDecimal achievement;
 	
-	@Column(columnDefinition = "INT UNSIGNED", nullable = false)
-	private Integer shipping;
+	@Column(precision = 12, scale = 3, nullable = false)
+	private BigDecimal shipping;
 	
-	@Column(nullable = false)
-	private Integer adjustment;
+	@Column(precision = 12, scale = 3, nullable = false)
+	private BigDecimal adjustment;
 	
-	@Column(columnDefinition = "INT UNSIGNED", nullable = false)
-	private Integer remaining;
+	@Column(precision = 12, scale = 3, nullable = false)
+	private BigDecimal remaining;
 }

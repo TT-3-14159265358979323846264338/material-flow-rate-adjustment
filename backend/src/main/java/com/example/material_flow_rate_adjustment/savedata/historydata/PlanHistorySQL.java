@@ -1,5 +1,7 @@
 package com.example.material_flow_rate_adjustment.savedata.historydata;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -44,33 +46,33 @@ public class PlanHistorySQL extends BaseHistorySQL{
 	@Column(name = "new_month", columnDefinition = "INT UNSIGNED", updatable = false)
 	private Integer newMonth;
 	
-	@Column(name = "old_flow", columnDefinition = "INT UNSIGNED", updatable = false)
-	private Integer oldFlow;
+	@Column(name = "old_flow", precision = 12, scale = 3, updatable = false)
+	private BigDecimal oldFlow;
 	
-	@Column(name = "new_flow", columnDefinition = "INT UNSIGNED", updatable = false)
-	private Integer newFlow;
+	@Column(name = "new_flow", precision = 12, scale = 3, updatable = false)
+	private BigDecimal newFlow;
 	
-	@Column(name = "old_achievement", columnDefinition = "INT UNSIGNED", updatable = false)
-	private Integer oldAchievement;
+	@Column(name = "old_achievement", precision = 12, scale = 3, updatable = false)
+	private BigDecimal oldAchievement;
 	
-	@Column(name = "new_achievement", columnDefinition = "INT UNSIGNED", updatable = false)
-	private Integer newAchievement;
+	@Column(name = "new_achievement", precision = 12, scale = 3, updatable = false)
+	private BigDecimal newAchievement;
 	
-	@Column(name = "old_shipping", columnDefinition = "INT UNSIGNED", updatable = false)
-	private Integer oldShipping;
+	@Column(name = "old_shipping", precision = 12, scale = 3, updatable = false)
+	private BigDecimal oldShipping;
 	
-	@Column(name = "new_shipping", columnDefinition = "INT UNSIGNED", updatable = false)
-	private Integer newShipping;
+	@Column(name = "new_shipping", precision = 12, scale = 3, updatable = false)
+	private BigDecimal newShipping;
 	
-	@Column(name = "old_adjustment", updatable = false)
-	private Integer oldAdjustment;
+	@Column(name = "old_adjustment", precision = 12, scale = 3, updatable = false)
+	private BigDecimal oldAdjustment;
 	
-	@Column(name = "new_adjustment", updatable = false)
-	private Integer newAdjustment;
+	@Column(name = "new_adjustment", precision = 12, scale = 3, updatable = false)
+	private BigDecimal newAdjustment;
 	
-	@Column(name = "old_remaining", columnDefinition = "INT UNSIGNED", updatable = false)
-	private Integer oldRemaining;
+	@Column(name = "old_remaining", precision = 12, scale = 3, updatable = false)
+	private BigDecimal oldRemaining;
 	
-	@Column(name = "new_remaining", columnDefinition = "INT UNSIGNED", updatable = false)
-	private Integer newRemaining;
+	@Column(name = "new_remaining", precision = 12, scale = 3, updatable = false)
+	private BigDecimal newRemaining;
 }

@@ -29,8 +29,8 @@ const CorrectPlan = ({ selectedPlan, returnFromNotCorrect, returnFromCorrect, ma
       return;
     }
     const canCorrect = plan.isDeleted
-      ? confirm("対象の計画削除を本当に実行してもよいですか。")
-      : confirm("対象の計画を修正しますか。");
+      ? confirm("対象の計画削除を本当に実行してもよいですか")
+      : confirm("対象の計画を修正しますか");
     if (!canCorrect) {
       return;
     }

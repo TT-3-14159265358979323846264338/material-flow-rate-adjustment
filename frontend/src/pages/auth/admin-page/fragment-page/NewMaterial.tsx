@@ -9,10 +9,10 @@ const NewMaterial = ({ returnTop }: ReturnProps) => {
   const {post} = useCommentPostMapping();
   const newMaterialHandle = async () => {
     if (material.name.trim().length === 0 || material.destination.trim().length === 0 || material.unit.trim().length === 0) {
-      alert("製品名・向け先・納入単位を入力してください。");
+      alert("製品名・向け先・納入単位を入力してください");
       return;
     }
-    if (!confirm(material.destination + "向け" + material.name + "を新規登録しますか。")) {
+    if (!confirm(material.destination + "向け" + material.name + "を新規登録しますか")) {
       return;
     }
     const params = {

@@ -28,8 +28,8 @@ const CorrectMatterial = ({ selectedMaterial, returnFromNotCorrect, returnFromCo
       return;
     }
     const canCorrect = material.isDeleted
-      ? confirm("対象の製品削除を本当に実行してもよいですか。")
-      : confirm("対象の製品を修正しますか。");
+      ? confirm("対象の製品削除を本当に実行してもよいですか")
+      : confirm("対象の製品を修正しますか");
     if (!canCorrect) {
       return;
     }

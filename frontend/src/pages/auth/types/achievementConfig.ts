@@ -5,6 +5,6 @@ export type AchievementConfig = {
   name: string;
   date: string;
   lot: string;
-  flow: number;
+  flow: string;
   inspection: InspectionCodeConfig;
 };

@@ -12,7 +12,7 @@ const Logout = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const logoutHandle = () => {
-    if (!confirm("ログアウトしますか？")) {
+    if (!confirm("ログアウトしますか")) {
       return;
     }
     if(isSubmitting){

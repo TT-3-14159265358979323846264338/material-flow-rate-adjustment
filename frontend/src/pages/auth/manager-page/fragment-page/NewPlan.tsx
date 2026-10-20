@@ -14,10 +14,10 @@ const NewPlan = ({ materialData, returnTop }: NewPlanProps) => {
   const { post } = useCommentPostMapping();
   const newPlanHandle = async () => {
     if (!plan.material || plan.year.trim().length === 0 || plan.month.trim().length === 0 || plan.flow.trim().length === 0) {
-      alert("全項目を入力してください。");
+      alert("全項目を入力してください");
       return;
     }
-    if (!confirm(`${plan.year}/${plan.month}の${plan.material.name}を新規登録しますか。`)) {
+    if (!confirm(`${plan.year}/${plan.month}の${plan.material.name}を新規登録しますか`)) {
       return;
     }
     const params = {

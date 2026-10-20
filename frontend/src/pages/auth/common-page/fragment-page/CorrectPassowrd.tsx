@@ -14,10 +14,10 @@ const CorrectPassword = ({ returnTop }: CorrectPasswordProps) => {
 
   const passwordHandle = async () => {
     if (newPass.trim().length === 0 || oldPass.trim().length === 0) {
-      alert("以前のパスワードと新規のパスワードを共に入力してください。");
+      alert("以前のパスワードと新規のパスワードを共に入力してください");
       return;
     }
-    if (!confirm("パスワードを変更しますか。")) {
+    if (!confirm("パスワードを変更しますか")) {
       return;
     }
     const params = {

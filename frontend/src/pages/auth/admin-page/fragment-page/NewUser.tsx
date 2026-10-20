@@ -14,10 +14,10 @@ const NewUser = ({returnTop}: ReturnProps) => {
   const { post } = usePostMapping<NewUserResponse>();
   const newUserHandle = async () => {
     if (user.loginName.trim().length === 0 || user.displayedName.trim().length === 0) {
-      alert("ユーザー名を入力してください。");
+      alert("ユーザー名を入力してください");
       return;
     }
-    if (!confirm(user.loginName + "に" + user.role + "権限付与して新規登録しますか。")) {
+    if (!confirm(user.loginName + "に" + user.role + "権限付与して新規登録しますか")) {
       return;
     }
     const params = { loginName: user.loginName, displayedName: user.displayedName, role: user.role };

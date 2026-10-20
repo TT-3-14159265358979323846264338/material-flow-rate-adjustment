@@ -27,8 +27,8 @@ const CorrectUser = ({ selectedUser, returnFromNotCorrect, returnFromCorrect }: 
       return;
     }
     const canCorrect = user.isDeleted
-      ? confirm("対象のアカウント削除を本当に実行してもよいですか。")
-      : confirm("対象のアカウントを修正しますか。");
+      ? confirm("対象のアカウント削除を本当に実行してもよいですか")
+      : confirm("対象のアカウントを修正しますか");
     if (!canCorrect) {
       return;
     }

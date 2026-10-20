@@ -56,7 +56,7 @@ const NewAchievement = ({ value, confirmDialog, returnDialog }: NewAchievementPr
           <TextInput
             name="flow"
             value={achievement.flow}
-            maxLength={10}
+            maxLength={9}
             onChange={(e) => setAchievement(defaultEvent(e, onlyNumber))}
           >
             製造数量

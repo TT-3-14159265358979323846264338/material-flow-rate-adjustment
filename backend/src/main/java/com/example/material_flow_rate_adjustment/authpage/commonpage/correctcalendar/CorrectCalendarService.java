@@ -33,7 +33,7 @@ public class CorrectCalendarService {
 		AccountSQL account = utility.getAccountSQL(loginUser);
 		MaterialSQL material = utility.getMaterialSQL(data.material());
 		YearMonth targetMonth = YearMonth.of(data.year(), data.month());
-		List<CalendarSQL> existingCalendars = calendarRepository.findByHolidayBetweenAndMaterial(targetMonth.atDay(1), targetMonth.atEndOfMonth(), material);
+		List<CalendarSQL> existingCalendars = calendarRepository.findWithEntityGraphByHolidayBetweenAndMaterial(targetMonth.atDay(1), targetMonth.atEndOfMonth(), material);
 		List<Calendar> calendars = data.calendars().stream()
 												.map(i -> calendarHandle(i, existingCalendars, material))
 												.filter(Objects::nonNull)

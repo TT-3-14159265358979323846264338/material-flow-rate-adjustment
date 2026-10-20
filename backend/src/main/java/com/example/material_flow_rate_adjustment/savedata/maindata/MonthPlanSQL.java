@@ -43,6 +43,7 @@ public class MonthPlanSQL extends BaseSQL{
 	@Column(columnDefinition = "INT UNSIGNED", nullable = false)
 	private Integer month;
 	
+	//year, monthから作成したLocalDate。Integerで使用したいときとLocalDateで使用したいときが多々あるので、2重にカラムを作っている。
 	@Column(name = "plan_date", nullable = false)
 	private LocalDate planDate;
 	

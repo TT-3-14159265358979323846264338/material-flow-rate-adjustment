@@ -25,7 +25,7 @@ public class GetPlanService {
 	
 	@Transactional(readOnly = true)
 	public List<Plan> getSortPlan(GetPlanRecord getPlanRecord) {
-		return planRepository.findByPlanDateBetweenAndHasDeletedFalse(
+		return planRepository.findWithEntityGraphByPlanDateBetweenAndHasDeletedFalse(
 								transform.minDate(getPlanRecord.minYear(), getPlanRecord.minMonth()), 
 								transform.maxDate(getPlanRecord.maxYear(), getPlanRecord.maxMonth()),
 								getPlanRecord.target().getPlanSort(getPlanRecord.order()))
@@ -37,7 +37,7 @@ public class GetPlanService {
 	
 	@Transactional(readOnly = true)
 	public Plan getDesignatedPlan(int id, GetDesignatedRecord getDesignatedRecord) {
-		return planRepository.findByMaterial_IdAndYearAndMonthAndHasDeletedFalse(id, getDesignatedRecord.year(), getDesignatedRecord.month())
+		return planRepository.findWithEntityGraphByMaterial_IdAndYearAndMonthAndHasDeletedFalse(id, getDesignatedRecord.year(), getDesignatedRecord.month())
 							.map(this::createPlan)
 							.orElseThrow(() -> new NotFindException("指定の計画が存在しません"));
 	}

@@ -31,7 +31,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 public class AchievementSQL extends BaseSQL{
-	@Column(length = 10, nullable = false)
+	@Column(name = "user_name", length = 10, nullable = false)
 	private String userName;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

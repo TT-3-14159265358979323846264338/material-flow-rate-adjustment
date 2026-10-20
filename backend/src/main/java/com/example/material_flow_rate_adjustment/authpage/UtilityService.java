@@ -9,6 +9,8 @@ import com.example.material_flow_rate_adjustment.savedata.historydata.BaseHistor
 import com.example.material_flow_rate_adjustment.savedata.historydata.HistoryEnum;
 import com.example.material_flow_rate_adjustment.savedata.maindata.AccountRepository;
 import com.example.material_flow_rate_adjustment.savedata.maindata.AccountSQL;
+import com.example.material_flow_rate_adjustment.savedata.maindata.AchievementRepository;
+import com.example.material_flow_rate_adjustment.savedata.maindata.AchievementSQL;
 import com.example.material_flow_rate_adjustment.savedata.maindata.BaseSQL;
 import com.example.material_flow_rate_adjustment.savedata.maindata.MaterialRepository;
 import com.example.material_flow_rate_adjustment.savedata.maindata.MaterialSQL;
@@ -23,6 +25,7 @@ public class UtilityService {
 	private final AccountRepository accountRepository;
 	private final MaterialRepository materialRepository;
 	private final MonthPlanRepository monthPlanRepository;
+	private final AchievementRepository achievementRepository;
 	
 	public AccountSQL getAccountSQL(String loginUser) {
 		return getAccountSQL(Integer.parseInt(loginUser));
@@ -37,7 +40,11 @@ public class UtilityService {
 	}
 	
 	public MonthPlanSQL getMonthPlanSQL(int id) {
-		return monthPlanRepository.findById(id).orElseThrow(() -> new NotFindException("計画が見つかりません"));
+		return monthPlanRepository.findWithEntityGraphById(id).orElseThrow(() -> new NotFindException("計画が見つかりません"));
+	}
+	
+	public AchievementSQL getAchievementSQL(int id) {
+		return achievementRepository.findWithEntityGraphById(id).orElseThrow(() -> new NotFindException("実績が見つかりません"));
 	}
 	
 	public <T extends BaseSQL, U extends BaseHistorySQL> 

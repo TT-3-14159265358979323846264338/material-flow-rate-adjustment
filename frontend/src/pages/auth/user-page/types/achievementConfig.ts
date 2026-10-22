@@ -1,4 +1,4 @@
-import { AchievementConfig } from "../../types/achievementConfig";
+import { AchievementResponse } from "../../types/achievementConfig";
 
 export type NewAchivementConfig = {
   planId: number;
@@ -9,12 +9,13 @@ export type NewAchivementConfig = {
 export type CorrectAchivementConfig = {
   planId: number;
   unit: string;
-  achievement: AchievementConfig;
+  achievement: AchievementResponse;
 };
 
-export type AchivementConfig = {
+export type AchievementConfig = {
   date: string;
   lot: string;
   flow: string;
   inspection: string;
+  isDeleted: boolean;
 };

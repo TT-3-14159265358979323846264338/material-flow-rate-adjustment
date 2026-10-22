@@ -9,12 +9,12 @@ import { PlanResponse } from "../../manager-page/types/planResponse";
 import { CalendarConfig } from "../types/calendarResponse";
 import { useMemo } from "react";
 import { HolidayView } from "../../types/holidayConfig";
-import { AchievementConfig } from "../../types/achievementConfig";
+import { AchievementResponse } from "../../types/achievementConfig";
 
 type CorrectCalendarProps = {
   plan: PlanResponse | null;
   newHandle?: (planId: number, unit: string, date: string) => Promise<boolean>;
-  correctHandle?: (planId: number, unit: string, achievement: AchievementConfig) => Promise<boolean>;
+  correctHandle?: (planId: number, unit: string, achievement: AchievementResponse) => Promise<boolean>;
   returnTop: () => void;
 };
 
@@ -23,7 +23,7 @@ const AchievementCalendar = ({ plan, newHandle, correctHandle, returnTop }: Corr
     URL: "/api/calendar",
     params: { year: plan?.year, month: plan?.month, material: plan?.material },
   });
-  const { data: achievement, getData: getAchievement } = useGetMapping<AchievementConfig>({
+  const { data: achievement, getData: getAchievement } = useGetMapping<AchievementResponse>({
     URL: `/api/achievement/${plan?.id}`,
   });
   const events: EventInput[] = useMemo(
@@ -59,7 +59,7 @@ const AchievementCalendar = ({ plan, newHandle, correctHandle, returnTop }: Corr
     if ((!info.event.extendedProps.existsClickHandle as boolean) || !plan) {
       return;
     }
-    if (await correctHandle?.(plan.id, plan.material.unit, info.event.extendedProps.achievement as AchievementConfig)) {
+    if (await correctHandle?.(plan.id, plan.material.unit, info.event.extendedProps.achievement as AchievementResponse)) {
       getAchievement();
     }
   };

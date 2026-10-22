@@ -49,7 +49,7 @@ const CorrectUser = ({ selectedUser, returnFromNotCorrect, returnFromCorrect }: 
         <div className="*:mb-5">
           <CommonUser user={user} setUser={setUser}></CommonUser>
           <div className="flex justify-center">
-            <CheckInput isChecked={user.isDeleted} setChecked={setUser}>
+            <CheckInput name="isDeleted" isChecked={user.isDeleted} setChecked={setUser}>
               アカウント削除
             </CheckInput>
           </div>

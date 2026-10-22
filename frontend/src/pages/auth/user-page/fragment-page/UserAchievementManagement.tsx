@@ -1,9 +1,10 @@
 import AchievementManegement from "../../common-page/fragment-page/AchievementManagement";
-import { AchievementConfig } from "../../types/achievementConfig";
+import { AchievementResponse } from "../../types/achievementConfig";
 import DefaultModal from "../../components/DefaultModal";
 import NewAchievement from "./NewAchievement";
 import { useDialog } from "../../hooks/useDialog";
 import { CorrectAchivementConfig, NewAchivementConfig } from "../types/achievementConfig";
+import CorrectAchievement from "./CorrectAchievement";
 
 const UserAchievementManegement = () => {
   const {
@@ -23,7 +24,7 @@ const UserAchievementManegement = () => {
   const newHandle = async (planId: number, unit: string, date: string) => {
     return (await newDialog({ planId, unit, date })) != null;
   };
-  const correctHandle = async (planId: number, unit: string, achievement: AchievementConfig) => {
+  const correctHandle = async (planId: number, unit: string, achievement: AchievementResponse) => {
     return (await correctDialog({ planId, unit, achievement })) != null;
   };
 
@@ -32,10 +33,18 @@ const UserAchievementManegement = () => {
       <AchievementManegement newHandle={newHandle} correctHandle={correctHandle}></AchievementManegement>
 
       <DefaultModal isOpen={isOpenNew} setIsOpen={returnNewDialog}>
-        <NewAchievement value={newValue} confirmDialog={confirmNewDialog} returnDialog={returnNewDialog}></NewAchievement>
+        <NewAchievement 
+          value={newValue} 
+          confirmDialog={confirmNewDialog} 
+          returnDialog={returnNewDialog}
+          ></NewAchievement>
       </DefaultModal>
       <DefaultModal isOpen={isOpenCorrect} setIsOpen={returnCorrectDialog}>
-        <div></div>
+        <CorrectAchievement
+          value={correctValue}
+          confirmDialog={confirmCorrectDialog}
+          returnDialog={returnCorrectDialog}
+        ></CorrectAchievement>
       </DefaultModal>
     </div>
   );

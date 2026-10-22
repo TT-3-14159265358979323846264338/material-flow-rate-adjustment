@@ -1,6 +1,6 @@
 import { InspectionCodeConfig } from "../common-page/types/inspectionConfig";
 
-export type AchievementConfig = {
+export type AchievementResponse = {
   id: number;
   name: string;
   date: string;

@@ -51,7 +51,7 @@ const CorrectMatterial = ({ selectedMaterial, returnFromNotCorrect, returnFromCo
         <div className="*:mb-5">
           <CommonMaterial material={material} setMaterial={setMaterial}></CommonMaterial>
           <div className="flex justify-center">
-            <CheckInput isChecked={material.isDeleted} setChecked={setMaterial}>
+            <CheckInput name="isDeleted" isChecked={material.isDeleted} setChecked={setMaterial}>
               製品削除
             </CheckInput>
           </div>

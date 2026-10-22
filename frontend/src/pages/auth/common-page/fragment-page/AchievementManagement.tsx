@@ -12,13 +12,13 @@ import { PlanResponse } from "../../manager-page/types/planResponse";
 import axios from "axios";
 import { errorHandling } from "../../../utils/errorHandling";
 import AchievementCalendar from "./AchievementCalendar";
-import { AchievementConfig } from "../../types/achievementConfig";
+import { AchievementResponse } from "../../types/achievementConfig";
 
 type AchievementViewConfig = "Top" | "Achievement";
 
 type AchievementManegementProps = {
   newHandle?: (planId: number, unit: string, date: string) => Promise<boolean>;
-  correctHandle?: (planId: number, unit: string, achievement: AchievementConfig) => Promise<boolean>;
+  correctHandle?: (planId: number, unit: string, achievement: AchievementResponse) => Promise<boolean>;
 };
 
 const AchievementManegement = ({ newHandle, correctHandle }: AchievementManegementProps) => {

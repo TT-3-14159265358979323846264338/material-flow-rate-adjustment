@@ -2,6 +2,7 @@ package com.example.material_flow_rate_adjustment.authpage;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.example.material_flow_rate_adjustment.errorhandling.NotFindException;
 import com.example.material_flow_rate_adjustment.errorhandling.SentenceException;
@@ -47,6 +48,18 @@ public class UtilityService {
 		return achievementRepository.findWithEntityGraphById(id).orElseThrow(() -> new NotFindException("実績が見つかりません"));
 	}
 	
+	public boolean isNotChanged(String base, String target) {
+		return !StringUtils.hasLength(target) || base.equals(target);
+	}
+	
+	public <T> boolean isNotChanged(T base, T target) {
+		return target == null || base.equals(target);
+	}
+	
+	public <T extends BaseSQL, U extends BaseHistorySQL> void setTargetId(T dataSQL, U newHistory) {
+		newHistory.setTargetId(dataSQL.getId());
+	}
+	
 	public <T extends BaseSQL, U extends BaseHistorySQL> 
 	void changeData(AccountSQL loginAccount, T dataSQL, JpaRepository<T, Integer> dataRepository, U newHistory, JpaRepository<U, Integer> historyRepository) {
 		if(newHistory.getTargetId() == null) {
@@ -59,7 +72,7 @@ public class UtilityService {
 	public <T extends BaseSQL, U extends BaseHistorySQL> 
 	void deleteData(AccountSQL loginAccount, T dataSQL, JpaRepository<T, Integer> dataRepository, U newHistory, JpaRepository<U, Integer> historyRepository) {
 		dataSQL.setHasDeleted(true);
-		newHistory.setTargetId(dataSQL.getId());
+		setTargetId(dataSQL, newHistory);
 		newHistory.setHasDeletedNew(true);
 		dataRepository.save(dataSQL);
 		saveHistory(loginAccount, newHistory, historyRepository, HistoryEnum.DELETE);

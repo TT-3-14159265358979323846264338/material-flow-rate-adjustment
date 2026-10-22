@@ -5,7 +5,6 @@ import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import com.example.material_flow_rate_adjustment.authpage.UtilityService;
 import com.example.material_flow_rate_adjustment.savedata.historydata.MaterialHistoryRepository;
@@ -51,25 +50,19 @@ public class CorrectMaterialService {
 	}
 	
 	void setName(MaterialSQL material, MaterialHistorySQL newHistory, String newName) {
-		if(!StringUtils.hasLength(newName)) {
+		if(utility.isNotChanged(material.getName(), newName)) {
 			return;
 		}
-		if(material.getName().equals(newName)) {
-			return;
-		}
-		newHistory.setTargetId(material.getId());
+		utility.setTargetId(material, newHistory);
 		newHistory.setNewName(newName);
 		material.setName(newName);
 	}
 	
 	void setDestination(MaterialSQL material, MaterialHistorySQL newHistory, String destination) {
-		if(!StringUtils.hasLength(destination)) {
+		if(utility.isNotChanged(material.getDestination(), destination)) {
 			return;
 		}
-		if(material.getDestination().equals(destination)) {
-			return;
-		}
-		newHistory.setTargetId(material.getId());
+		utility.setTargetId(material, newHistory);
 		newHistory.setNewDestination(destination);
 		material.setDestination(destination);
 	}
@@ -78,19 +71,16 @@ public class CorrectMaterialService {
 		if(Objects.equals(material.getBase(), base)) {
 			return;
 		}
-		newHistory.setTargetId(material.getId());
+		utility.setTargetId(material, newHistory);
 		newHistory.setNewBase(base);
 		material.setBase(base);
 	}
 	
 	void setUnit(MaterialSQL material, MaterialHistorySQL newHistory, String unit) {
-		if(!StringUtils.hasLength(unit)) {
+		if(utility.isNotChanged(material.getUnit(), unit)) {
 			return;
 		}
-		if(material.getUnit().equals(unit)) {
-			return;
-		}
-		newHistory.setTargetId(material.getId());
+		utility.setTargetId(material, newHistory);
 		newHistory.setNewUnit(unit);
 		material.setUnit(unit);
 	}

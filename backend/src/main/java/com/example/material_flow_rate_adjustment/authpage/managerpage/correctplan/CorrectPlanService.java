@@ -71,7 +71,7 @@ public class CorrectPlanService {
 		if(material.equals(plan.getMaterial())) {
 			return;
 		}
-		newHistory.setTargetId(plan.getId());
+		utility.setTargetId(plan, newHistory);
 		newHistory.setNewMaterialId(material.getId());
 		newHistory.setNewName(material.getName());
 		newHistory.setNewDestination(material.getDestination());
@@ -79,30 +79,30 @@ public class CorrectPlanService {
 	}
 	
 	void setYear(MonthPlanSQL plan, PlanHistorySQL newHistory, Integer year) {
-		if(year == null || plan.getYear().equals(year)) {
+		if(utility.isNotChanged(plan.getYear(), year)) {
 			return;
 		}
-		newHistory.setTargetId(plan.getId());
+		utility.setTargetId(plan, newHistory);
 		newHistory.setNewYear(year);
 		plan.setYear(year);
 		plan.setPlanDate(LocalDate.of(year, plan.getMonth(), 1));
 	}
 	
 	void setMonth(MonthPlanSQL plan, PlanHistorySQL newHistory, Integer month) {
-		if(month == null || plan.getMonth().equals(month)) {
+		if(utility.isNotChanged(plan.getMonth(), month)) {
 			return;
 		}
-		newHistory.setTargetId(plan.getId());
+		utility.setTargetId(plan, newHistory);
 		newHistory.setNewMonth(month);
 		plan.setMonth(month);
 		plan.setPlanDate(LocalDate.of(plan.getYear(), month, 1));
 	}
 	
 	void setFlow(MonthPlanSQL plan, PlanHistorySQL newHistory, BigDecimal flow) {
-		if(flow == null || plan.getFlow().equals(flow)) {
+		if(utility.isNotChanged(plan.getFlow(), flow)) {
 			return;
 		}
-		newHistory.setTargetId(plan.getId());
+		utility.setTargetId(plan, newHistory);
 		newHistory.setNewFlow(flow);
 		plan.setFlow(flow);
 	}

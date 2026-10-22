@@ -2,7 +2,6 @@ package com.example.material_flow_rate_adjustment.authpage.adminpage.correctuser
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import com.example.material_flow_rate_adjustment.authpage.UtilityService;
 import com.example.material_flow_rate_adjustment.errorhandling.DataBaseException;
@@ -47,43 +46,37 @@ public class CorrectUserService {
 	}
 	
 	void setLoginName(AccountSQL targetAccount, AccountHistorySQL newHistory, String newLoginName) {
-		if(!StringUtils.hasLength(newLoginName)) {
-			return;
-		}
-		if(targetAccount.getLoginUser().equals(newLoginName)) {
+		if(utility.isNotChanged(targetAccount.getLoginUser(), newLoginName)) {
 			return;
 		}
 		if(repository.existsByLoginUser(newLoginName)) {
 			throw new DataBaseException("同名のログインユーザーは登録できません。");
 		}
-		newHistory.setTargetId(targetAccount.getId());
+		utility.setTargetId(targetAccount, newHistory);
 		newHistory.setNewLoginUser(newLoginName);
 		targetAccount.setLoginUser(newLoginName);
 	}
 	
 	void setDisplayedName(AccountSQL targetAccount, AccountHistorySQL newHistory, String newDisplayedName) {
-		if(!StringUtils.hasLength(newDisplayedName)) {
-			return;
-		}
-		if(targetAccount.getDisplayedUser().equals(newDisplayedName)) {
+		if(utility.isNotChanged(targetAccount.getDisplayedUser(), newDisplayedName)) {
 			return;
 		}
 		if(repository.existsByDisplayedUser(newDisplayedName)) {
 			throw new DataBaseException("同名の表示ユーザーは登録できません。");
 		}
-		newHistory.setTargetId(targetAccount.getId());
+		utility.setTargetId(targetAccount, newHistory);
 		newHistory.setNewDisplayedUser(newDisplayedName);
 		targetAccount.setDisplayedUser(newDisplayedName);
 	}
 	
 	void setRole(AccountSQL targetAccount, AccountSQL loginAccount, AccountHistorySQL newHistory, AccountRole role) {
-		if(targetAccount.getRole().equals(role)) {
+		if(utility.isNotChanged(targetAccount.getRole(), role)) {
 			return;
 		}
 		if(isFinalAdmin(targetAccount, loginAccount)) {
 			throw new DataBaseException("最後の管理者ユーザーの権限を変更できません。");
 		}
-		newHistory.setTargetId(targetAccount.getId());
+		utility.setTargetId(targetAccount, newHistory);
 		newHistory.setNewRole(role.name());
 		targetAccount.setRole(role);
 	}

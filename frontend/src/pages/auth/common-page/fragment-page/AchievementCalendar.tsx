@@ -21,7 +21,7 @@ type CorrectCalendarProps = {
 const AchievementCalendar = ({ plan, newHandle, correctHandle, returnTop }: CorrectCalendarProps) => {
   const { data: calendar } = useGetMapping<CalendarConfig>({
     URL: "/api/calendar",
-    params: { year: plan?.year, month: plan?.month, material: plan?.material },
+    params: { year: plan?.year, month: plan?.month, material: plan?.material.id },
   });
   const { data: achievement, getData: getAchievement } = useGetMapping<AchievementResponse>({
     URL: `/api/achievement/${plan?.id}`,

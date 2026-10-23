@@ -40,10 +40,10 @@ public class MaterialHistorySQL extends BaseHistorySQL{
 	@Column(name = "new_material_destination", length = 10, updatable = false)
 	private String newDestination;
 	
-	@Column(name = "old_base", precision = 8, scale = 3, nullable = false)
+	@Column(name = "old_base", precision = 8, scale = 3)
 	private BigDecimal oldBase;
 	
-	@Column(name = "new_base", precision = 8, scale = 3, nullable = false)
+	@Column(name = "new_base", precision = 8, scale = 3)
 	private BigDecimal newBase;
 	
 	@Column(name = "old_unit", length = 10, updatable = false)

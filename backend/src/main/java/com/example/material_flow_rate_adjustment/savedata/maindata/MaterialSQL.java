@@ -31,7 +31,7 @@ public class MaterialSQL extends BaseSQL{
 	@Column(length = 10, nullable = false)
 	private String destination;
 	
-	@Column(precision = 8, scale = 3, nullable = false)
+	@Column(precision = 8, scale = 3)
 	private BigDecimal base;
 	
 	@Column(length = 5, nullable = false)

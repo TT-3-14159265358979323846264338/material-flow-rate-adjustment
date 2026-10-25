@@ -49,7 +49,7 @@ public class CorrectUserService {
 		if(utility.isNotChanged(targetAccount.getLoginUser(), newLoginName)) {
 			return;
 		}
-		if(repository.existsByLoginUser(newLoginName)) {
+		if(repository.existsByLoginUserAndHasDeletedFalse(newLoginName)) {
 			throw new DataBaseException("同名のログインユーザーは登録できません。");
 		}
 		utility.setTargetId(targetAccount, newHistory);
@@ -61,7 +61,7 @@ public class CorrectUserService {
 		if(utility.isNotChanged(targetAccount.getDisplayedUser(), newDisplayedName)) {
 			return;
 		}
-		if(repository.existsByDisplayedUser(newDisplayedName)) {
+		if(repository.existsByDisplayedUserAndHasDeletedFalse(newDisplayedName)) {
 			throw new DataBaseException("同名の表示ユーザーは登録できません。");
 		}
 		utility.setTargetId(targetAccount, newHistory);
@@ -83,7 +83,7 @@ public class CorrectUserService {
 	
 	boolean isFinalAdmin(AccountSQL targetAccount, AccountSQL loginAccount) {
 		if(targetAccount.equals(loginAccount)) {
-			return repository.countByRole(AccountRole.ADMIN) == 1;
+			return repository.countByRoleAndHasDeletedFalse(AccountRole.ADMIN) == 1;
 		}
 		return false;
 	}

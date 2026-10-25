@@ -21,7 +21,6 @@ public class GetMaterialController {
 	}
 	
 	@GetMapping("/api/material/all")
-	@PreAuthorize("hasRole('USER') or hasRole('MANAGER')")
 	public ResponseEntity<?> materialGetMapping() {
 		return ResponseEntity.ok(getMaterialService.getMaterial());
 	}

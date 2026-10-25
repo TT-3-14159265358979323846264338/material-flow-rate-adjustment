@@ -25,10 +25,10 @@ public class NewUserService {
 	
 	@Transactional
 	public String newUser(NewUser data, String loginUser){
-		if(repository.existsByLoginUser(data.loginName())) {
+		if(repository.existsByLoginUserAndHasDeletedFalse(data.loginName())) {
 			throw new DataBaseException("同名のログインユーザーは登録できません");
 		}
-		if(repository.existsByDisplayedUser(data.displayedName())) {
+		if(repository.existsByDisplayedUserAndHasDeletedFalse(data.displayedName())) {
 			throw new DataBaseException("同名の表示ユーザーは登録できません");
 		}
 		//初期パスワードはユーザーにしている。最終的にはランダム生成にする。

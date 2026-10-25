@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AchievementRepository extends BaseJpaRepository<AchievementSQL, Integer>{
-	@EntityGraph(attributePaths = {"plan, plan.material"})
+	@EntityGraph(attributePaths = {"plan", "plan.material"})
 	Optional<AchievementSQL> findWithEntityGraphById(int id);
 	List<AchievementSQL> findByPlan_IdAndHasDeletedFalse(int planId);
 }

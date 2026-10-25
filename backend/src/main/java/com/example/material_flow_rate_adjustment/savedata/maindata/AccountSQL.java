@@ -16,7 +16,9 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "account", indexes = {
-		@Index(name = "idx_account_role", columnList = "role, has_deleted")
+		@Index(name = "idx_account_role", columnList = "role, has_deleted"),
+		@Index(name = "idx_account_login_user", columnList = "login_user, has_deleted"),
+		@Index(name = "idx_account_displayed_user", columnList = "displayed_user, has_deleted")
 })
 @Data
 @ToString(callSuper = true)

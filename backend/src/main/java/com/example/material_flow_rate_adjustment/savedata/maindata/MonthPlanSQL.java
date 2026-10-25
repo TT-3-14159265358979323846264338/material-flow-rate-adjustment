@@ -23,7 +23,8 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "month_plan", indexes = {
-		@Index(name = "idx_plan_date_deleted", columnList = "plan_date, has_deleted")
+		@Index(name = "idx_plan_date", columnList = "plan_date, has_deleted"),
+		@Index(name = "idx_plan_material_year_month", columnList = "material_id, year, month, has_deleted")
 })
 @Data
 @ToString(callSuper = true)

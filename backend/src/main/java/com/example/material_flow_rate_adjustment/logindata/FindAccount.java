@@ -18,7 +18,7 @@ public class FindAccount implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		AccountSQL account = accountRepository.findByLoginUser(username)
+		AccountSQL account = accountRepository.findByLoginUserAndHasDeletedFalse(username)
 				.orElseThrow(() -> new UsernameNotFoundException(username + "が登録されていません"));
 		return User.withUsername(account.getLoginUser())
 				.password(account.getPassword())

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.material_flow_rate_adjustment.savedata.maindata.AccountRepository;
 import com.example.material_flow_rate_adjustment.savedata.maindata.AccountSQL;
@@ -36,10 +37,11 @@ public class TokenProvider {
 		key = Keys.hmacShaKeyFor(password.getBytes());
 	}
 	
+	@Transactional(readOnly = true)
 	public Token createToken(Authentication authentication) {
 		Date nowDate = new Date();
-		AccountSQL account = accountRepository.findByLoginUser(authentication.getName())
-				.orElseThrow(() -> new UsernameNotFoundException("アカウントはあるのにIDの取り込みに失敗しました"));
+		AccountSQL account = accountRepository.findByLoginUserAndHasDeletedFalse(authentication.getName())
+				.orElseThrow(() -> new UsernameNotFoundException("アカウントIDの取り込みに失敗しました"));
 		String token = Jwts.builder()
 				.subject(account.getId().toString())
 				.issuedAt(nowDate)
@@ -55,6 +57,7 @@ public class TokenProvider {
 		return getJws(token).getPayload().getSubject();
 	}
 	
+	@Transactional(readOnly = true)
 	public String getRole(String token) {
 		int id = Integer.parseInt(getUser(token));
 		AccountSQL account = accountRepository.findById(id)

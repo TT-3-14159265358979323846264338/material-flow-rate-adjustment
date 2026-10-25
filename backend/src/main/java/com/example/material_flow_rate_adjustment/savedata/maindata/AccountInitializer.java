@@ -29,7 +29,7 @@ public class AccountInitializer implements CommandLineRunner{
 	
 	@Override
 	public void run(String... args) throws Exception {
-		if (!accountRepository.existsByRole(AccountRole.ADMIN)) {
+		if (!accountRepository.existsByRoleAndHasDeletedFalse(AccountRole.ADMIN)) {
 			AccountSQL newAccount = createAdminAccount();
 			accountRepository.save(newAccount);
 			AccountHistorySQL newHistory = createHistory(newAccount);

@@ -41,7 +41,7 @@ public class CreateDefaultCalendar {
 	void createCalendar(MaterialSQL material, YearMonth targetMonth, AccountSQL loginUser) {
 		Account account = createAccount(loginUser);
 		LocalDate targetDate = targetMonth.atDay(1);
-		List<CalendarSQL> existingCalendars = calendarRepository.findByHolidayBetweenAndMaterial(targetDate, targetMonth.atEndOfMonth(), material);
+		List<CalendarSQL> existingCalendars = calendarRepository.findWithEntityGraphByHolidayBetweenAndMaterial(targetDate, targetMonth.atEndOfMonth(), material);
 		List<Calendar> calendars = targetDate.datesUntil(targetDate.plusMonths(1))
 												.filter(this::holidayFilter)
 												.map(i -> calendarHandle(i, existingCalendars, material))

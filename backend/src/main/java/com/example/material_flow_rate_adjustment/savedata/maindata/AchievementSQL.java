@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -23,7 +24,9 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name = "achievement")
+@Table(name = "achievement", indexes = {
+		@Index(name = "idx_achievement_plan", columnList = "plan_id, has_deleted")
+})
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)

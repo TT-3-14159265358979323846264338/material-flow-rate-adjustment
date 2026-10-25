@@ -8,10 +8,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AccountRepository extends BaseJpaRepository<AccountSQL, Integer>{
-	boolean existsByLoginUser(String user);
-	boolean existsByDisplayedUser(String user);
-	boolean existsByRole(AccountRole role);
-	long countByRole(AccountRole role);
-	Optional<AccountSQL> findByLoginUser(String user);
+	boolean existsByLoginUserAndHasDeletedFalse(String user);
+	boolean existsByDisplayedUserAndHasDeletedFalse(String user);
+	boolean existsByRoleAndHasDeletedFalse(AccountRole role);
+	long countByRoleAndHasDeletedFalse(AccountRole role);
+	Optional<AccountSQL> findByLoginUserAndHasDeletedFalse(String user);
 	List<AccountSQL> findByRoleInAndHasDeletedFalse(List<AccountRole> roles, Sort sort);
 }

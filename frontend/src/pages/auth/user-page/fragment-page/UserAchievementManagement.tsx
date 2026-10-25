@@ -21,8 +21,8 @@ const UserAchievementManegement = () => {
     confirmDialog: confirmCorrectDialog,
     returnDialog: returnCorrectDialog,
   } = useDialog<CorrectAchivementConfig>();
-  const newHandle = async (planId: number, unit: string, date: string) => {
-    return (await newDialog({ planId, unit, date })) != null;
+  const newHandle = async (planId: number, unit: string, date: string, base: string) => {
+    return (await newDialog({ planId, unit, date, base })) != null;
   };
   const correctHandle = async (planId: number, unit: string, achievement: AchievementResponse) => {
     return (await correctDialog({ planId, unit, achievement })) != null;

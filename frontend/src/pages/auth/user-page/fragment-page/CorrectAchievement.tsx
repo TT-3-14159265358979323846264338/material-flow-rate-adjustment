@@ -49,7 +49,7 @@ const CorrectAchievement = ({ value, confirmDialog, returnDialog }: CorrectAchie
         setAchievement={setAchievement}
         unit={value?.unit ?? "未定義"}
       ></CommonAchievement>
-      <div className="flex justify-center">
+      <div className="flex justify-center pt-3">
         <CheckInput name="isDeleted" isChecked={achievement.isDeleted} setChecked={setAchievement}>
           実績取り消し
         </CheckInput>

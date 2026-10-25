@@ -13,7 +13,7 @@ type NewAchievementProps = {
 
 const NewAchievement = ({ value, confirmDialog, returnDialog }: NewAchievementProps) => {
   const initialAchievement: AchievementConfig = useMemo(
-    () => ({ date: value?.date ?? "", lot: "", flow: "", inspection: "UNINSPECTION", isDeleted: false }),
+    () => ({ date: value?.date ?? "", lot: "", flow: value?.base ??"", inspection: "UNINSPECTION", isDeleted: false }),
     [value],
   );
   const { achievement, setAchievement, reset } = useCorrectAchievement(initialAchievement);

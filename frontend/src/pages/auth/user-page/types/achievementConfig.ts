@@ -4,6 +4,7 @@ export type NewAchivementConfig = {
   planId: number;
   unit: string;
   date: string;
+  base: string;
 };
 
 export type CorrectAchivementConfig = {

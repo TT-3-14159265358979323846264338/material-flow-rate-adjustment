@@ -14,10 +14,10 @@ import { errorHandling } from "../../../utils/errorHandling";
 import AchievementCalendar from "./AchievementCalendar";
 import { AchievementResponse } from "../../types/achievementConfig";
 
-type AchievementViewConfig = "Top" | "Achievement";
+type AchievementViewConfig = "Top" | "Achievement" | "history";
 
 type AchievementManegementProps = {
-  newHandle?: (planId: number, unit: string, date: string) => Promise<boolean>;
+  newHandle?: (planId: number, unit: string, date: string, base: string) => Promise<boolean>;
   correctHandle?: (planId: number, unit: string, achievement: AchievementResponse) => Promise<boolean>;
 };
 
@@ -58,6 +58,9 @@ const AchievementManegement = ({ newHandle, correctHandle }: AchievementManegeme
       ></AchievementCalendar>
     );
   }
+  if (view === "history") {
+    
+  }
   return (
     <div className="flex flex-col items-stretch">
       <h3 className="text-left ml-5">表示する実績</h3>
@@ -70,6 +73,7 @@ const AchievementManegement = ({ newHandle, correctHandle }: AchievementManegeme
       <div className="flex justify-center gap-5">
         <DefaultButton onClick={sortHandle}>実績確認</DefaultButton>
         <DefaultButton onClick={() => setSortData(InitialCalendarSort)}>リセット</DefaultButton>
+        <DefaultButton onClick={() => setView("history")}>修正履歴</DefaultButton>
       </div>
     </div>
   );

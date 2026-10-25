@@ -22,7 +22,7 @@ const CommonAchievement = ({ achievement, setAchievement, unit }: CommonAchievem
         Lot No
       </TextInput>
       <div className="flex justify-center items-center gap-3">
-        <div className="flex justify-center items-center gap-3">
+        <div className="flex justify-center items-center gap-3 w-2/3">
           <TextInput
             name="flow"
             value={achievement.flow}
@@ -36,14 +36,16 @@ const CommonAchievement = ({ achievement, setAchievement, unit }: CommonAchievem
             <span className="text-left">{unit}</span>
           </div>
         </div>
-        <Dropdown
-          name="inspection"
-          value={InspectionView(achievement.inspection)}
-          onChange={(e) => setAchievement(defaultEvent(e, InspectionCode))}
-          list={AllInspectionView()}
-        >
-          検査結果
-        </Dropdown>
+        <div className="w-1/3">
+          <Dropdown
+            name="inspection"
+            value={InspectionView(achievement.inspection)}
+            onChange={(e) => setAchievement(defaultEvent(e, InspectionCode))}
+            list={AllInspectionView()}
+          >
+            検査結果
+          </Dropdown>
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-import DefaultButton from "../../components/DefaultButton";
 import { ActionView, type ActionCodeConfig } from "../../types/actionConfig";
 import { AuthorityCodeConfig, AuthorityView } from "../../../types/roleConfig";
 import { ReturnProps } from "../../types/returnProps";
@@ -6,10 +5,12 @@ import HistoryUserSort from "./HistoryUserSort";
 import { useHistorySort } from "../hooks/useHistory";
 import { Base } from "../../hooks/useView";
 import { useSortGetMapping } from "../../hooks/useSortGetMapping";
-import DefaultModal from "../../components/DefaultModal";
 import { HistorySortConfig, InitialHistorySort } from "../../types/historySortConfig";
-import { dateView } from "../../utils/dateView";
+import { DateView } from "../../utils/dateView";
 import { DeletedView } from "../../types/deletedConfig";
+import HistoryComment from "../../components/HistoryComment";
+import HistoryData from "../../components/HistoryData";
+import CommonHistory from "../../components/CommonHistory";
 
 type HistoryUserResponse = {
   id: number;
@@ -34,71 +35,35 @@ const HistoryUser = ({ returnTop }: ReturnProps) => {
     });
     
   return (
-    <div className="flex flex-col">
-      <h2>ユーザー情報変更履歴</h2>
-      <div className="w-195 h-75 overflow-y-auto overflow-x-auto rounded-s-md bg-white">
-        <div className="min-w-max">
-          <ul className="sticky top-0 text-sm border rounded-t-md bg-white">
-            <li className="flex items-center ml-2 mr-2 *:ml-1 **:block">
-              <span className="w-20">修正内容</span>
-              <div className="w-50">
-                <span className="border-b border-b-gray-200">前 ログイン名</span>
-                <span>後 ログイン名</span>
-              </div>
-              <div className="w-35">
-                <span className="border-b border-b-gray-200">前 表示ユーザー名</span>
-                <span>後 表示ユーザー名</span>
-              </div>
-              <div className="w-20">
-                <span className="border-b border-b-gray-200">前 権限</span>
-                <span>後 権限</span>
-              </div>
-              <div className="w-20">
-                <span className="border-b border-b-gray-200">前 論理削除</span>
-                <span>後 論理削除</span>
-              </div>
-              <span className="w-25">実行管理者</span>
-              <span className="w-35">日付</span>
-            </li>
-          </ul>
-          <ul className="min-h-max text-xs border border-b-black rounded-b-md">
-            {mappingData.map((item) => (
-              <li
-                key={item.date}
-                className={`flex min-w-max ml-2 mr-2 items-center border-b border-b-gray-500 
-                  *:ml-1 **:block **:min-h-lh`}
-              >
-                <span className="w-20">{ActionView(item.action)}</span>
-                <div className="w-50">
-                  <span className="border-b border-b-gray-200">{item.oldLoginUser}</span>
-                  <span>{item.newLoginUser}</span>
-                </div>
-                <div className="w-35">
-                  <span className="border-b border-b-gray-200">{item.oldDisplayedUser}</span>
-                  <span>{item.newDisplayedUser}</span>
-                </div>
-                <div className="w-20">
-                  <span className="border-b border-b-gray-200">{AuthorityView(item.oldRole)}</span>
-                  <span>{AuthorityView(item.newRole)}</span>
-                </div>
-                <div className="w-20">
-                  <span className="border-b border-b-gray-200">{DeletedView(item.hasDeletedOld)}</span>
-                  <span>{DeletedView(item.hasDeletedNew)}</span>
-                </div>
-                <span className="w-25">{item.actionUser}</span>
-                <span className="w-35">{dateView(item.date)}</span>
-              </li>
-            ))}
-          </ul>
+    <CommonHistory
+      title="ユーザー情報変更履歴"
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
+      returnTop={returnTop}
+      mappingData={mappingData}
+      comment={
+        <div>
+          <span className="w-20">修正内容</span>
+          <HistoryComment w={50} comment="ログイン名"></HistoryComment>
+          <HistoryComment w={35} comment="ユーザー名"></HistoryComment>
+          <HistoryComment w={20} comment="権限"></HistoryComment>
+          <HistoryComment w={20} comment="論理削除"></HistoryComment>
+          <span className="w-25">実行管理者</span>
+          <span className="w-35">日付</span>
         </div>
-      </div>
-
-      <div className="flex justify-center gap-5">
-        <DefaultButton onClick={() => setIsOpen(true)}>ソート</DefaultButton>
-        <DefaultButton onClick={returnTop}>戻る</DefaultButton>
-      </div>
-
-      <DefaultModal isOpen={isOpen} setIsOpen={setIsOpen}>
+      }
+      data={(item: HistoryUserResponse) => (
+        <div>
+          <span className="w-20">{ActionView(item.action)}</span>
+          <HistoryData w={50} before={item.oldLoginUser} after={item.newLoginUser}></HistoryData>
+          <HistoryData w={35} before={item.oldDisplayedUser} after={item.newDisplayedUser}></HistoryData>
+          <HistoryData w={20} before={item.oldRole} after={item.newRole} trans={AuthorityView}></HistoryData>
+          <HistoryData w={20} before={item.hasDeletedOld} after={item.hasDeletedNew} trans={DeletedView}></HistoryData>
+          <span className="w-25">{item.actionUser}</span>
+          <span className="w-35">{DateView(item.date)}</span>
+        </div>
+      )}
+      modal={
         <HistoryUserSort
           finalSort={finalSort}
           setFinalSort={setFinalSort}
@@ -107,8 +72,8 @@ const HistoryUser = ({ returnTop }: ReturnProps) => {
           setSort={setSort}
           setIsOpen={setIsOpen}
         ></HistoryUserSort>
-      </DefaultModal>
-    </div>
+      }
+    ></CommonHistory>
   );
 };
 

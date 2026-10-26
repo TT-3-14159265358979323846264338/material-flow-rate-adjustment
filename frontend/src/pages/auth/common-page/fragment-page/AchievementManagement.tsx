@@ -13,6 +13,7 @@ import axios from "axios";
 import { errorHandling } from "../../../utils/errorHandling";
 import AchievementCalendar from "./AchievementCalendar";
 import { AchievementResponse } from "../../types/achievementConfig";
+import HistoryAchievement from "./HistoryAchievement";
 
 type AchievementViewConfig = "Top" | "Achievement" | "history";
 
@@ -59,7 +60,7 @@ const AchievementManegement = ({ newHandle, correctHandle }: AchievementManegeme
     );
   }
   if (view === "history") {
-    
+    return <HistoryAchievement returnTop={returnTop}></HistoryAchievement>;
   }
   return (
     <div className="flex flex-col items-stretch">

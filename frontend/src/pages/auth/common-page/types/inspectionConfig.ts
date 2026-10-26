@@ -10,6 +10,6 @@ export type InspectionCodeConfig = CommentViewCode<typeof INSPECTION_CODE>;
 
 export const InspectionCode = (view: string) => GetCommentCode(INSPECTION_CODE, view);
 
-export const InspectionView = (code: string) => GetCommentView(INSPECTION_CODE, code);
+export const InspectionView = (code: string | null) => GetCommentView(INSPECTION_CODE, code);
 
 export const AllInspectionView = () => GetAllCommentView(INSPECTION_CODE);

@@ -1,15 +1,14 @@
-import DefaultButton from "../../components/DefaultButton";
 import CorrectUserSort from "./CorrectUserSort";
 import NewUser from "./NewUser";
 import HistoryUser from "./HistoryUser";
 import { UserResponse } from "../types/userResponse";
 import { useUserSort } from "../hooks/useUserSort";
 import { AuthorityView } from "../../../types/roleConfig";
-import DefaultModal from "../../components/DefaultModal";
 import { useSortGetMapping } from "../../hooks/useSortGetMapping";
 import { useCorrect } from "../../hooks/useCorrect";
 import CorrectUser from "./CorrectUser";
 import { UserSortConfig } from "../types/userSortConfig";
+import CommonManegement from "../../components/CommonManegement";
 
 type UserViewConfig = "Top" | "New" | "History";
 
@@ -49,40 +48,32 @@ const UserManegement = () => {
     return <HistoryUser returnTop={returnFromHistory}></HistoryUser>;
   }
   return (
-    <div className="flex flex-col items-stretch">
-      <div className="flex flex-col h-83">
-        <h2>ユーザー一覧</h2>
-        <ul className="border rounded-t-md bg-white">
-          <li className="ml-2 mr-2 gap-2 flex items-center *:text-center *:block">
-            <span className="w-65">ログインユーザー名</span>
-            <span className="w-45">表示ユーザー名</span>
-            <span className="flex-1">権限</span>
-          </li>
-        </ul>
-        <ul className="flex-1 overflow-y-auto border border-b-black rounded-b-md bg-white">
-          {mappingData.map((data) => (
-            <li
-              key={data.id}
-              onClick={() => setSelectedItem(data)}
-              className={`ml-2 mr-2 gap-2 flex items-center border-b border-b-gray-300 cursor-pointer *:text-center *:block
-                  ${data.id === selectedItem?.id ? " bg-gray-200" : " bg-white"}`}
-            >
-              <span className="w-65">{data.loginName}</span>
-              <span className="w-45">{data.displayedName}</span>
-              <span className="flex-1">{AuthorityView(data.role)}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="flex justify-center gap-5">
-        <DefaultButton onClick={() => setIsOpenSort(true)}>ソート</DefaultButton>
-        <DefaultButton onClick={() => correctHandle()}>登録修正</DefaultButton>
-        <DefaultButton onClick={() => setView("New")}>新規登録</DefaultButton>
-        <DefaultButton onClick={() => setView("History")}>修正履歴</DefaultButton>
-      </div>
-
-      <DefaultModal isOpen={isOpenSort} setIsOpen={setIsOpenSort}>
+    <CommonManegement
+      title="ユーザー一覧"
+      selectedItem={selectedItem}
+      setSelectedItem={setSelectedItem}
+      isOpenSort={isOpenSort}
+      setIsOpenSort={setIsOpenSort}
+      isOpenCorrect={isOpenCorrect}
+      setIsOpenCorrect={setIsOpenCorrect}
+      setView={setView}
+      mappingData={mappingData}
+      correctHandle={correctHandle}
+      comment={
+        <div>
+          <span className="w-65">ログインユーザー名</span>
+          <span className="w-45">表示ユーザー名</span>
+          <span className="flex-1">権限</span>
+        </div>
+      }
+      data={(item: UserResponse) => (
+        <div>
+          <span className="w-65">{item.loginName}</span>
+          <span className="w-45">{item.displayedName}</span>
+          <span className="flex-1">{AuthorityView(item.role)}</span>
+        </div>
+      )}
+      sortModal={
         <CorrectUserSort
           finalSort={finalSort}
           setFinalSort={setFinalSort}
@@ -91,15 +82,15 @@ const UserManegement = () => {
           setSort={setSort}
           returnTop={() => setIsOpenSort(false)}
         ></CorrectUserSort>
-      </DefaultModal>
-      <DefaultModal isOpen={isOpenCorrect} setIsOpen={setIsOpenCorrect}>
+      }
+      correctModal={
         <CorrectUser
           selectedUser={selectedItem}
           returnFromNotCorrect={returnFromNotCorrect}
           returnFromCorrect={returnFromCorrect}
         ></CorrectUser>
-      </DefaultModal>
-    </div>
+      }
+    ></CommonManegement>
   );
 };
 

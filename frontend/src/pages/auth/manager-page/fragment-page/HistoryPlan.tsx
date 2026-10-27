@@ -52,12 +52,12 @@ const HistoryPlan = ({ returnTop }: ReturnProps) => {
       returnTop={returnTop}
       mappingData={mappingData}
       comment={
-        <div>
+        <>
           <span className="w-20">修正内容</span>
-          <HistoryComment w={35} comment="製品名"></HistoryComment>
-          <HistoryComment w={35} comment="向け先"></HistoryComment>
           <HistoryComment w={20} comment="計画年"></HistoryComment>
           <HistoryComment w={20} comment="計画月"></HistoryComment>
+          <HistoryComment w={35} comment="製品名"></HistoryComment>
+          <HistoryComment w={35} comment="向け先"></HistoryComment>
           <HistoryComment w={20} comment="計画量"></HistoryComment>
           <HistoryComment w={20} comment="実績"></HistoryComment>
           <HistoryComment w={20} comment="出荷量"></HistoryComment>
@@ -66,15 +66,15 @@ const HistoryPlan = ({ returnTop }: ReturnProps) => {
           <HistoryComment w={20} comment="論理削除"></HistoryComment>
           <span className="w-35">実行管理者</span>
           <span className="w-35">日付</span>
-        </div>
+        </>
       }
       data={(item: HistoryPlanResponse) => (
-        <div>
+        <>
           <span className="w-20">{ActionView(item.action)}</span>
-          <HistoryData w={35} before={item.oldName} after={item.newName}></HistoryData>
-          <HistoryData w={35} before={item.oldDestination} after={item.newDestination}></HistoryData>
           <HistoryData w={20} before={item.oldYear} after={item.newYear}></HistoryData>
           <HistoryData w={20} before={item.oldMonth} after={item.newMonth}></HistoryData>
+          <HistoryData w={35} before={item.oldName} after={item.newName}></HistoryData>
+          <HistoryData w={35} before={item.oldDestination} after={item.newDestination}></HistoryData>
           <HistoryData w={20} before={item.oldFlow} after={item.newFlow}></HistoryData>
           <HistoryData w={20} before={item.oldAchievement} after={item.newAchievement}></HistoryData>
           <HistoryData w={20} before={item.oldShipping} after={item.newShipping}></HistoryData>
@@ -83,7 +83,7 @@ const HistoryPlan = ({ returnTop }: ReturnProps) => {
           <HistoryData w={20} before={item.hasDeletedOld} after={item.hasDeletedNew} trans={DeletedView}></HistoryData>
           <span className="w-35">{item.actionUser}</span>
           <span className="w-35">{DateView(item.date)}</span>
-        </div>
+        </>
       )}
       modal={
         <HistoryPlanSort

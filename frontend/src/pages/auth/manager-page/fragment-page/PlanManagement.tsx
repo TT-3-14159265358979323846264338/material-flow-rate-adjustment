@@ -51,6 +51,7 @@ const PlanManagement = () => {
   }
   return (
     <CommonManegement
+      textFont="text-sm"
       title="計画一覧"
       selectedItem={selectedItem}
       setSelectedItem={setSelectedItem}
@@ -62,30 +63,30 @@ const PlanManagement = () => {
       mappingData={mappingData}
       correctHandle={correctHandle}
       comment={
-        <div>
-          <span className="w-35">製品名</span>
-          <span className="w-35">向け先</span>
+        <>
           <span className="w-10">年</span>
           <span className="w-10">月</span>
+          <span className="w-35">製品名</span>
+          <span className="w-35">向け先</span>
           <span className="w-15">予定数量</span>
           <span className="w-15">実績</span>
           <span className="w-20">月間出荷量</span>
           <span className="w-20">在庫調整分</span>
           <span className="flex-1">月末在庫</span>
-        </div>
+        </>
       }
       data={(item: PlanResponse) => (
-        <div>
-          <span className="w-35">{item.material.name}</span>
-          <span className="w-35">{item.material.destination}</span>
+        <>
           <span className="w-10">{item.year}</span>
           <span className="w-10">{item.month}</span>
+          <span className="w-35">{item.material.name}</span>
+          <span className="w-35">{item.material.destination}</span>
           <span className="w-15">{item.flow}</span>
           <span className="w-15">{item.achievement}</span>
           <span className="w-20">{item.shipping}</span>
           <span className="w-20">{item.adjustment}</span>
           <span className="flex-1">{item.remaining}</span>
-        </div>
+        </>
       )}
       sortModal={
         <CorrectPlanSort

@@ -19,11 +19,12 @@ public class GetAchievementService {
 	private final AchievementRepository achievementRepository;
 	
 	@Transactional(readOnly = true)
-	public List<Achievement> getAchievement(int id){
-		return achievementRepository.findByPlan_IdAndHasDeletedFalse(id)
-									.stream()
-									.map(this::createAchievement)
-									.toList();
+	public TotalAchievement getAchievement(int id){
+		List<Achievement> allAchievement = achievementRepository.findByPlan_IdAndHasDeletedFalse(id)
+				.stream()
+				.map(this::createAchievement)
+				.toList();
+		return createTotalAchievement(allAchievement);
 	}
 	
 	record Achievement(
@@ -42,5 +43,31 @@ public class GetAchievementService {
 				achievement.getLot(),
 				achievement.getFlow(),
 				achievement.getInspection());
+	}
+	
+	record TotalAchievement(
+			BigDecimal passed,
+			BigDecimal uninspection,
+			List<Achievement> allAchievement) {}
+	
+	TotalAchievement createTotalAchievement(List<Achievement> allAchievement) {
+		return new TotalAchievement(
+				getConfirmed(allAchievement),
+				getUninspected(allAchievement),
+				allAchievement);
+	}
+	
+	BigDecimal getConfirmed(List<Achievement> allAchievement) {
+		return getTotal(allAchievement, Inspection.PASSED);
+	}
+	
+	BigDecimal getUninspected(List<Achievement> allAchievement) {
+		return getTotal(allAchievement, Inspection.UNINSPECTION);
+	}
+	
+	BigDecimal getTotal(List<Achievement> allAchievement, Inspection targetInspection) {
+		return allAchievement.stream().filter(i -> i.inspection.equals(targetInspection))
+										.map(Achievement::flow)
+										.reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 }

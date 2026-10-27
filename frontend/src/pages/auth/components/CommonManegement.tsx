@@ -2,6 +2,7 @@ import DefaultButton from "./DefaultButton";
 import DefaultModal from "./DefaultModal";
 
 type CommonManegementProps<T, U> = {
+  textFont?: string; 
   title: string;
   selectedItem: T | undefined;
   setSelectedItem: React.Dispatch<React.SetStateAction<T | undefined>>;
@@ -19,6 +20,7 @@ type CommonManegementProps<T, U> = {
 };
 
 const CommonManegement = <T extends { id: number }, U extends "New" | "History" | string>({
+  textFont = "text-base",
   title,
   selectedItem,
   setSelectedItem,
@@ -35,17 +37,17 @@ const CommonManegement = <T extends { id: number }, U extends "New" | "History" 
   correctModal,
 }: CommonManegementProps<T, U>) => (
   <div className="flex flex-col items-stretch">
-    <div className="flex flex-col h-83">
+    <div className="flex flex-col h-113">
       <h2>{title}</h2>
       <ul className="border rounded-t-md bg-white">
-        <li className="ml-2 mr-2 gap-2 flex items-center *:text-center *:block">{comment}</li>
+        <li className={`${textFont} ml-2 mr-2 gap-2 flex items-center *:text-center *:block`}>{comment}</li>
       </ul>
       <ul className="flex-1 overflow-y-auto border border-b-black rounded-b-md bg-white">
         {mappingData.map((item) => (
           <li
             key={item.id}
             onClick={() => setSelectedItem(item)}
-            className={`ml-2 mr-2 gap-2 flex items-center border-b border-b-gray-300 cursor-pointer *:text-center *:block
+            className={`${textFont} ml-2 mr-2 gap-2 flex items-center border-b border-b-gray-300 cursor-pointer *:text-center *:block
                   ${item.id === selectedItem?.id ? " bg-gray-200" : " bg-white"}`}
           >
             {data(item)}
@@ -56,7 +58,7 @@ const CommonManegement = <T extends { id: number }, U extends "New" | "History" 
 
     <div className="flex justify-center gap-5">
       <DefaultButton onClick={() => setIsOpenSort(true)}>ソート</DefaultButton>
-      <DefaultButton onClick={correctHandle}>登録修正</DefaultButton>
+      <DefaultButton onClick={() => correctHandle()}>登録修正</DefaultButton>
       <DefaultButton onClick={() => setView("New" as U)}>新規登録</DefaultButton>
       <DefaultButton onClick={() => setView("History" as U)}>修正履歴</DefaultButton>
     </div>

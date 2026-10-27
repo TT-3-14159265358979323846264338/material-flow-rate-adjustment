@@ -2,17 +2,17 @@ import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { errorHandling } from "../../utils/errorHandling";
 
-type UeGetMappingProps = {
+type UseGetMappingProps = {
   URL: string;
   params?: Record<string, any>;
 };
 
-type UeGetMappingReturn<T> = {
+type UseGetMappingReturn<T> = {
   data: T[];
   getData: () => Promise<void>;
 };
 
-export const useGetMapping = <T>({ URL, params }: UeGetMappingProps): UeGetMappingReturn<T> => {
+export const useGetMapping = <T>({ URL, params }: UseGetMappingProps): UseGetMappingReturn<T> => {
   const [data, setData] = useState<T[]>([]);
   const paramsKey = JSON.stringify(params);
 

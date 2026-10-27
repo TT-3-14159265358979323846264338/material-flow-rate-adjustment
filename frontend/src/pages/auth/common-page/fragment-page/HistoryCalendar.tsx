@@ -46,7 +46,7 @@ const HistoryCalendar = ({ returnTop }: ReturnProps) => {
       returnTop={returnTop}
       mappingData={mappingData}
       comment={
-        <div>
+        <>
           <span className="w-20">修正内容</span>
           <HistoryComment w={35} comment="製品名"></HistoryComment>
           <HistoryComment w={35} comment="向け先"></HistoryComment>
@@ -55,10 +55,10 @@ const HistoryCalendar = ({ returnTop }: ReturnProps) => {
           <HistoryComment w={20} comment="論理削除"></HistoryComment>
           <span className="w-35">実行管理者</span>
           <span className="w-35">日付</span>
-        </div>
+        </>
       }
       data={(item: HistoryCalendarResponse) => (
-        <div>
+        <>
           <span className="w-20">{ActionView(item.action)}</span>
           <HistoryData w={35} before={item.oldName} after={item.newName}></HistoryData>
           <HistoryData w={35} before={item.oldDestination} after={item.newDestination}></HistoryData>
@@ -67,7 +67,7 @@ const HistoryCalendar = ({ returnTop }: ReturnProps) => {
           <HistoryData w={20} before={item.hasDeletedOld} after={item.hasDeletedNew} trans={DeletedView}></HistoryData>
           <span className="w-35">{item.actionUser}</span>
           <span className="w-35">{DateView(item.date)}</span>
-        </div>
+        </>
       )}
       modal={
         <HistoryCalendarSort

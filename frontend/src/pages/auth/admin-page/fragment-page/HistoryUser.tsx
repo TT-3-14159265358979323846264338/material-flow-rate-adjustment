@@ -42,7 +42,7 @@ const HistoryUser = ({ returnTop }: ReturnProps) => {
       returnTop={returnTop}
       mappingData={mappingData}
       comment={
-        <div>
+        <>
           <span className="w-20">修正内容</span>
           <HistoryComment w={50} comment="ログイン名"></HistoryComment>
           <HistoryComment w={35} comment="ユーザー名"></HistoryComment>
@@ -50,10 +50,10 @@ const HistoryUser = ({ returnTop }: ReturnProps) => {
           <HistoryComment w={20} comment="論理削除"></HistoryComment>
           <span className="w-25">実行管理者</span>
           <span className="w-35">日付</span>
-        </div>
+        </>
       }
       data={(item: HistoryUserResponse) => (
-        <div>
+        <>
           <span className="w-20">{ActionView(item.action)}</span>
           <HistoryData w={50} before={item.oldLoginUser} after={item.newLoginUser}></HistoryData>
           <HistoryData w={35} before={item.oldDisplayedUser} after={item.newDisplayedUser}></HistoryData>
@@ -61,7 +61,7 @@ const HistoryUser = ({ returnTop }: ReturnProps) => {
           <HistoryData w={20} before={item.hasDeletedOld} after={item.hasDeletedNew} trans={DeletedView}></HistoryData>
           <span className="w-25">{item.actionUser}</span>
           <span className="w-35">{DateView(item.date)}</span>
-        </div>
+        </>
       )}
       modal={
         <HistoryUserSort

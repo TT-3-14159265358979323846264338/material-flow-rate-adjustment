@@ -24,7 +24,7 @@ const CommonHistory = <T extends { id: number }>({
 }: CommonHistoryProps<T>) => (
   <div className="flex flex-col">
     <h2>{title}</h2>
-    <div className="w-195 h-75 overflow-y-auto overflow-x-auto rounded-s-md bg-white">
+    <div className="w-195 h-105 overflow-y-auto overflow-x-auto rounded-s-md bg-white">
       <div className="min-w-max">
         <ul className="sticky top-0 text-sm border rounded-t-md bg-white">
           <li className="flex items-center ml-2 mr-2 *:ml-1 **:block">{comment}</li>

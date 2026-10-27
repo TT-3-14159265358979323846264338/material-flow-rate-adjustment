@@ -59,16 +59,16 @@ const MaterialManegement = () => {
       mappingData={mappingData}
       correctHandle={correctHandle}
       comment={
-        <div>
+        <>
           <span className="block w-60">製品名</span>
           <span className="flex-1">向け先</span>
-        </div>
+        </>
       }
       data={(item: MaterialResponse) => (
-        <div>
+        <>
           <span className="block w-60">{item.name}</span>
           <span className="flex-1">{item.destination}</span>
-        </div>
+        </>
       )}
       sortModal={
         <CorrectMaterialSort

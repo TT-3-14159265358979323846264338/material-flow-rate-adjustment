@@ -60,18 +60,18 @@ const UserManegement = () => {
       mappingData={mappingData}
       correctHandle={correctHandle}
       comment={
-        <div>
+        <>
           <span className="w-65">ログインユーザー名</span>
           <span className="w-45">表示ユーザー名</span>
           <span className="flex-1">権限</span>
-        </div>
+        </>
       }
       data={(item: UserResponse) => (
-        <div>
+        <>
           <span className="w-65">{item.loginName}</span>
           <span className="w-45">{item.displayedName}</span>
           <span className="flex-1">{AuthorityView(item.role)}</span>
-        </div>
+        </>
       )}
       sortModal={
         <CorrectUserSort

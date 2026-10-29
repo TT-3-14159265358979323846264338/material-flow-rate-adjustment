@@ -36,6 +36,7 @@ public class CorrectAchievementService {
 		}
 		setDate(achievement, newHistory, data.date());
 		setLot(achievement, newHistory, data.lot());
+		utility.notNullMethod(newHistory, () -> utility.validAchievement(achievement.getLot(), achievement.getDate()));
 		setFlow(achievement, newHistory, data.flow());
 		setInspection(achievement, newHistory, data.inspection());
 		saveData(account, achievement, newHistory);

@@ -16,4 +16,5 @@ public interface MonthPlanRepository extends BaseJpaRepository<MonthPlanSQL, Int
 	List<MonthPlanSQL> findWithEntityGraphByPlanDateBetweenAndHasDeletedFalse(LocalDate minDate, LocalDate maxDate, Sort sort);
 	@EntityGraph(attributePaths = {"material"})
 	Optional<MonthPlanSQL> findWithEntityGraphByMaterial_IdAndYearAndMonthAndHasDeletedFalse(int id, int year, int month);
+	boolean existsByMaterial_IdAndYearAndMonthAndHasDeletedFalse(int id, int year, int month);
 }

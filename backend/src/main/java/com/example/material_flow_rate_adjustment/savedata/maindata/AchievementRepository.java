@@ -1,5 +1,6 @@
 package com.example.material_flow_rate_adjustment.savedata.maindata;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,5 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface AchievementRepository extends BaseJpaRepository<AchievementSQL, Integer>{
 	@EntityGraph(attributePaths = {"plan", "plan.material"})
 	Optional<AchievementSQL> findWithEntityGraphById(int id);
-	List<AchievementSQL> findByPlan_IdAndHasDeletedFalse(int planId);
+	List<AchievementSQL> findByPlanAndHasDeletedFalse(MonthPlanSQL plan);
+	boolean existsByLotAndDateBetweenAndHasDeletedFalse(String lot, LocalDate minDate, LocalDate maxDate);
 }

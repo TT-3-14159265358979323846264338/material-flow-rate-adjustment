@@ -26,6 +26,7 @@ public class NewMaterialService {
 	
 	@Transactional
 	public String newMaterial(NewMaterial data, String loginUser){
+		utility.validMaterial(data.name(), data.destination());
 		AccountSQL account = utility.getAccountSQL(loginUser);
 		MaterialSQL newMaterial = createMaterialSQL(data.name(), data.destination(), data.base(), data.unit());
 		materialRepository.save(newMaterial);

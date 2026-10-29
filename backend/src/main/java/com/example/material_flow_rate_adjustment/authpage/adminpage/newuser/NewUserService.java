@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.material_flow_rate_adjustment.authpage.UtilityService;
-import com.example.material_flow_rate_adjustment.errorhandling.DataBaseException;
 import com.example.material_flow_rate_adjustment.savedata.historydata.AccountHistoryRepository;
 import com.example.material_flow_rate_adjustment.savedata.historydata.AccountHistorySQL;
 import com.example.material_flow_rate_adjustment.savedata.historydata.HistoryEnum;
@@ -25,12 +24,8 @@ public class NewUserService {
 	
 	@Transactional
 	public String newUser(NewUser data, String loginUser){
-		if(repository.existsByLoginUserAndHasDeletedFalse(data.loginName())) {
-			throw new DataBaseException("同名のログインユーザーは登録できません");
-		}
-		if(repository.existsByDisplayedUserAndHasDeletedFalse(data.displayedName())) {
-			throw new DataBaseException("同名の表示ユーザーは登録できません");
-		}
+		utility.validLoginUser(data.loginName());
+		utility.validDisplayedUser(data.displayedName());
 		//初期パスワードはユーザーにしている。最終的にはランダム生成にする。
 		AccountSQL newAccount = createNewAccount(data.loginName(), data.displayedName(), data.loginName(), data.role());
 		repository.save(newAccount);

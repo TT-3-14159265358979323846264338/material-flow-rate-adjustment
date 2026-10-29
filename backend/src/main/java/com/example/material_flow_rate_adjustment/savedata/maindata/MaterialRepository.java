@@ -4,4 +4,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MaterialRepository extends BaseJpaRepository<MaterialSQL, Integer>{
+	boolean existsByNameAndDestinationAndHasDeletedFalse(String name, String destination);
 }

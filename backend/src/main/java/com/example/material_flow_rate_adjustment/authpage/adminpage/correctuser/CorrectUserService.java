@@ -49,9 +49,7 @@ public class CorrectUserService {
 		if(utility.isNotChanged(targetAccount.getLoginUser(), newLoginName)) {
 			return;
 		}
-		if(repository.existsByLoginUserAndHasDeletedFalse(newLoginName)) {
-			throw new DataBaseException("同名のログインユーザーは登録できません。");
-		}
+		utility.validLoginUser(newLoginName);
 		utility.setTargetId(targetAccount, newHistory);
 		newHistory.setNewLoginUser(newLoginName);
 		targetAccount.setLoginUser(newLoginName);
@@ -61,9 +59,7 @@ public class CorrectUserService {
 		if(utility.isNotChanged(targetAccount.getDisplayedUser(), newDisplayedName)) {
 			return;
 		}
-		if(repository.existsByDisplayedUserAndHasDeletedFalse(newDisplayedName)) {
-			throw new DataBaseException("同名の表示ユーザーは登録できません。");
-		}
+		utility.validDisplayedUser(newDisplayedName);
 		utility.setTargetId(targetAccount, newHistory);
 		newHistory.setNewDisplayedUser(newDisplayedName);
 		targetAccount.setDisplayedUser(newDisplayedName);

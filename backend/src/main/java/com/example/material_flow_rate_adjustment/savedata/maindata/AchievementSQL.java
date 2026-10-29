@@ -25,7 +25,8 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "achievement", indexes = {
-		@Index(name = "idx_achievement_plan", columnList = "plan_id, has_deleted")
+		@Index(name = "idx_achievement_plan", columnList = "plan_id, has_deleted"),
+		@Index(name = "idx_achievement_lot_date", columnList = "lot, date, has_deleted")
 })
 @Data
 @ToString(callSuper = true)

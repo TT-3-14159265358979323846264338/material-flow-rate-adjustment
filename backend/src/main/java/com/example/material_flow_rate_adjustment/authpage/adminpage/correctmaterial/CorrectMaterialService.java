@@ -33,6 +33,7 @@ public class CorrectMaterialService {
 		}
 		setName(material, newHistory, data.newName());
 		setDestination(material, newHistory, data.newDestination());
+		utility.notNullMethod(newHistory, () -> utility.validMaterial(material.getName(), material.getDestination()));
 		setBase(material, newHistory, data.newBase());
 		setUnit(material, newHistory, data.newUnit());
 		saveData(account, material, newHistory);

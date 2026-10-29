@@ -26,6 +26,7 @@ public class NewPlanService {
 	
 	@Transactional
 	public String newPlan(NewPlan newPlan, String loginUser){
+		utility.validPlan(newPlan.materialId(), newPlan.year(), newPlan.month());
 		MonthPlanSQL newMonthPlan = createPlan(utility.getMaterialSQL(newPlan.materialId()), newPlan.year(), newPlan.month(), newPlan.flow());
 		monthPlanRepository.save(newMonthPlan);
 		PlanHistorySQL newHistory = createNewHistory(newMonthPlan, loginUser);

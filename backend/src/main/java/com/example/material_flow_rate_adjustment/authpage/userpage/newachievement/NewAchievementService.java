@@ -26,6 +26,7 @@ public class NewAchievementService {
 	
 	@Transactional
 	public String newAchievement(NewAchievementRecord data, String loginUser) {
+		utility.validAchievement(data.lot(), data.date());
 		AccountSQL account = utility.getAccountSQL(loginUser);
 		MonthPlanSQL plan = utility.getMonthPlanSQL(data.plan());
 		AchievementSQL newAchievement = createAchievementSQL(account.getDisplayedUser(), plan, data);

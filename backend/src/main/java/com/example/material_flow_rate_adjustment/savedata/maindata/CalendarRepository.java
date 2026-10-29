@@ -12,4 +12,5 @@ public interface CalendarRepository extends BaseJpaRepository<CalendarSQL, Integ
 	List<CalendarSQL> findByHolidayBetweenAndMaterial_IdAndHasDeletedFalse(LocalDate minDate, LocalDate maxDate, int materialId, Sort sort);
 	@EntityGraph(attributePaths = {"material"})
 	List<CalendarSQL> findWithEntityGraphByHolidayBetweenAndMaterial(LocalDate minDate, LocalDate maxDate, MaterialSQL material);
+	List<CalendarSQL> findByHolidayBetweenAndMaterialAndHasDeletedFalse(LocalDate minDate, LocalDate maxDate, MaterialSQL material);
 }

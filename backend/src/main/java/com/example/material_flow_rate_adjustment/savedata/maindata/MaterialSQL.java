@@ -16,7 +16,8 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "material", indexes = {
-		@Index(name = "idx_material_deleted", columnList = "has_deleted")
+		@Index(name = "idx_material_deleted", columnList = "has_deleted"),
+		@Index(name = "idx_material_name_destination", columnList = "name, destination, has_deleted")
 })
 @Data
 @ToString(callSuper = true)

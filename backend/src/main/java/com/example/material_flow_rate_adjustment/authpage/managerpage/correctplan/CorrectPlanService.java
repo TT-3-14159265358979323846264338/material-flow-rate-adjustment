@@ -39,6 +39,7 @@ public class CorrectPlanService {
 		setMaterial(plan, newHistory, data.materialId());
 		setYear(plan, newHistory, data.year());
 		setMonth(plan, newHistory, data.month());
+		utility.notNullMethod(newHistory, () -> utility.validPlan(plan.getMaterial().getId(), plan.getYear(), plan.getMonth()));
 		setFlow(plan, newHistory, data.flow());
 		saveData(account, plan, newHistory);
 		return "計画情報を修正しました";

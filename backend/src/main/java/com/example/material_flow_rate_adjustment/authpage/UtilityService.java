@@ -1,9 +1,12 @@
 package com.example.material_flow_rate_adjustment.authpage;
 
+import java.time.LocalDate;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.example.material_flow_rate_adjustment.errorhandling.DataBaseException;
 import com.example.material_flow_rate_adjustment.errorhandling.NotFindException;
 import com.example.material_flow_rate_adjustment.errorhandling.SentenceException;
 import com.example.material_flow_rate_adjustment.savedata.historydata.BaseHistorySQL;
@@ -23,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UtilityService {
+	private static final int LOT_RANGE = 6;
 	private final AccountRepository accountRepository;
 	private final MaterialRepository materialRepository;
 	private final MonthPlanRepository monthPlanRepository;
@@ -36,16 +40,46 @@ public class UtilityService {
 		return accountRepository.findById(userId).orElseThrow(() -> new NotFindException("ユーザーが見つかりません"));
 	}
 	
+	public void validLoginUser(String user) {
+		if(accountRepository.existsByLoginUserAndHasDeletedFalse(user)) {
+			throw new DataBaseException("同名のログインユーザーは登録できません");
+		}
+	}
+	
+	public void validDisplayedUser(String user) {
+		if(accountRepository.existsByDisplayedUserAndHasDeletedFalse(user)) {
+			throw new DataBaseException("同名の表示ユーザーは登録できません");
+		}
+	}
+	
 	public MaterialSQL getMaterialSQL(int id) {
 		return materialRepository.findById(id).orElseThrow(() -> new NotFindException("製品が見つかりません"));
+	}
+	
+	public void validMaterial(String name, String destination) {
+		if(materialRepository.existsByNameAndDestinationAndHasDeletedFalse(name, destination)) {
+			throw new DataBaseException("同製品は登録できません");
+		}
 	}
 	
 	public MonthPlanSQL getMonthPlanSQL(int id) {
 		return monthPlanRepository.findWithEntityGraphById(id).orElseThrow(() -> new NotFindException("計画が見つかりません"));
 	}
 	
+	public void validPlan(int id, int year, int month) {
+		if(monthPlanRepository.existsByMaterial_IdAndYearAndMonthAndHasDeletedFalse(id, year, month)) {
+			throw new DataBaseException("同計画は登録できません");
+		}
+	}
+	
 	public AchievementSQL getAchievementSQL(int id) {
 		return achievementRepository.findWithEntityGraphById(id).orElseThrow(() -> new NotFindException("実績が見つかりません"));
+	}
+	
+	public void validAchievement(String lot, LocalDate date) {
+		if(achievementRepository.existsByLotAndDateBetweenAndHasDeletedFalse(lot, date.minusMonths(LOT_RANGE), date.plusMonths(LOT_RANGE))) {
+			throw new DataBaseException("1年以内の同Lotは登録できません");
+		}
 	}
 	
 	public boolean isNotChanged(String base, String target) {
@@ -58,6 +92,12 @@ public class UtilityService {
 	
 	public <T extends BaseSQL, U extends BaseHistorySQL> void setTargetId(T dataSQL, U newHistory) {
 		newHistory.setTargetId(dataSQL.getId());
+	}
+	
+	public <T extends BaseHistorySQL> void notNullMethod(T newHistory, Runnable method){
+		if(newHistory.getTargetId() != null) {
+			method.run();
+		}
 	}
 	
 	public <T extends BaseSQL, U extends BaseHistorySQL> 

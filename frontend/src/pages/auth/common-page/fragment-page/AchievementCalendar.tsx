@@ -24,12 +24,21 @@ type TotalAchievementResponse = {
   passed: string;
   uninspection: string;
   allAchievement: AchievementResponse[];
+  schedule: ScheduleConfig[];
+  unit: string;
+};
+
+type ScheduleConfig = {
+  date: string;
+  quantity: string;
 };
 
 const initial: TotalAchievementResponse = {
   passed: "",
   uninspection: "",
   allAchievement: [],
+  schedule: [],
+  unit: "",
 };
 
 const AchievementCalendar = ({ plan, newHandle, correctHandle, returnTop }: CorrectCalendarProps) => {
@@ -69,6 +78,14 @@ const AchievementCalendar = ({ plan, newHandle, correctHandle, returnTop }: Corr
         borderColor: "transparent",
         textColor: "#000000",
         backgroundColor: { ALL_DAY: "#FFB4B4", MORNING: "#FFE6E6", AFTERNOON: "#FFE6E6" }[i.code] ?? "#3788d8",
+        extendedProps: { existsClickHandle: false, index: index++ },
+      })),
+      ...achievement.schedule.map((i) => ({
+        title: `予定: ${i.quantity}${achievement.unit}`,
+        start: i.date,
+        borderColor: "transparent",
+        textColor: "#000000",
+        backgroundColor: "#B2D1F0",
         extendedProps: { existsClickHandle: false, index: index++ },
       })),
       ...achievement.allAchievement.map((i) => ({

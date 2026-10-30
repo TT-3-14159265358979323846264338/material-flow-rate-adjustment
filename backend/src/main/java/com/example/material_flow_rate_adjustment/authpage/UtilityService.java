@@ -1,5 +1,6 @@
 package com.example.material_flow_rate_adjustment.authpage;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,13 +10,18 @@ import org.springframework.util.StringUtils;
 import com.example.material_flow_rate_adjustment.errorhandling.DataBaseException;
 import com.example.material_flow_rate_adjustment.errorhandling.NotFindException;
 import com.example.material_flow_rate_adjustment.errorhandling.SentenceException;
+import com.example.material_flow_rate_adjustment.savedata.historydata.AchievementHistorySQL;
 import com.example.material_flow_rate_adjustment.savedata.historydata.BaseHistorySQL;
+import com.example.material_flow_rate_adjustment.savedata.historydata.BaseMaterialHistory;
 import com.example.material_flow_rate_adjustment.savedata.historydata.HistoryEnum;
+import com.example.material_flow_rate_adjustment.savedata.historydata.PlanHistoryRepository;
+import com.example.material_flow_rate_adjustment.savedata.historydata.PlanHistorySQL;
 import com.example.material_flow_rate_adjustment.savedata.maindata.AccountRepository;
 import com.example.material_flow_rate_adjustment.savedata.maindata.AccountSQL;
 import com.example.material_flow_rate_adjustment.savedata.maindata.AchievementRepository;
 import com.example.material_flow_rate_adjustment.savedata.maindata.AchievementSQL;
 import com.example.material_flow_rate_adjustment.savedata.maindata.BaseSQL;
+import com.example.material_flow_rate_adjustment.savedata.maindata.Inspection;
 import com.example.material_flow_rate_adjustment.savedata.maindata.MaterialRepository;
 import com.example.material_flow_rate_adjustment.savedata.maindata.MaterialSQL;
 import com.example.material_flow_rate_adjustment.savedata.maindata.MonthPlanRepository;
@@ -30,6 +36,7 @@ public class UtilityService {
 	private final AccountRepository accountRepository;
 	private final MaterialRepository materialRepository;
 	private final MonthPlanRepository monthPlanRepository;
+	private final PlanHistoryRepository planHistoryRepository;
 	private final AchievementRepository achievementRepository;
 	
 	public AccountSQL getAccountSQL(String loginUser) {
@@ -123,5 +130,60 @@ public class UtilityService {
 		newHistory.setActionId(loginAccount.getId());
 		newHistory.setActionUser(loginAccount.getDisplayedUser());
 		historyRepository.save(newHistory);
+	}
+	
+	public void correctPlanAchievement(MonthPlanSQL plan, AchievementHistorySQL achievementHistory, AccountSQL loginAccount) {
+		if(!existsCorrect(achievementHistory)) {
+			return;
+		}
+		BigDecimal allAchievement = allAchievementCalculation(plan);
+		if(plan.getAchievement().equals(allAchievement)) {
+			return;
+		}
+		correctPlan(plan, achievementHistory, allAchievement, loginAccount);
+	}
+	
+	boolean existsCorrect(AchievementHistorySQL achievementHistory) {
+		if(achievementHistory.getNewInspection().equals(Inspection.PASSED.name())) {
+			return true;
+		}
+		if(achievementHistory.getOldInspection().equals(Inspection.PASSED.name()) && 
+				(achievementHistory.getNewInspection().equals(Inspection.FAILED.name()) || achievementHistory.getNewInspection().equals(Inspection.UNINSPECTION.name()))) {
+			return true;
+		}
+		return achievementHistory.getNewFlow() != null && achievementHistory.getOldInspection().equals(Inspection.PASSED.name());
+	}
+	
+	BigDecimal allAchievementCalculation(MonthPlanSQL plan) {
+		return achievementRepository.findByPlanAndInspectionAndHasDeletedFalse(plan, Inspection.PASSED)
+									.stream()
+									.map(AchievementSQL::getFlow)
+									.reduce(BigDecimal.ZERO, BigDecimal::add);
+	}
+	
+	void correctPlan(MonthPlanSQL plan, AchievementHistorySQL achievementHistory, BigDecimal allAchievement, AccountSQL loginAccount) {
+		PlanHistorySQL planHistory = createPlanHistorySQL(plan);
+		plan.setAchievement(allAchievement);
+		setTargetId(plan, planHistory);
+		planHistory.setNewAchievement(allAchievement);
+		changeData(loginAccount, plan, monthPlanRepository, planHistory, planHistoryRepository);
+	}
+	
+	public PlanHistorySQL createPlanHistorySQL(MonthPlanSQL plan) {
+		return PlanHistorySQL.builder()
+				.baseMaterialHistory(BaseMaterialHistory.builder()
+						.oldMaterialId(plan.getMaterial().getId())
+						.oldName(plan.getMaterial().getName())
+						.oldDestination(plan.getMaterial().getDestination())
+						.build())
+				.oldYear(plan.getYear())
+				.oldMonth(plan.getMonth())
+				.oldFlow(plan.getFlow())
+				.oldAchievement(plan.getAchievement())
+				.oldShipping(plan.getShipping())
+				.oldAdjustment(plan.getAdjustment())
+				.oldRemaining(plan.getRemaining())
+				.hasDeletedOld(plan.getHasDeleted())
+				.build();
 	}
 }

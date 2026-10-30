@@ -12,5 +12,6 @@ public interface AchievementRepository extends BaseJpaRepository<AchievementSQL,
 	@EntityGraph(attributePaths = {"plan", "plan.material"})
 	Optional<AchievementSQL> findWithEntityGraphById(int id);
 	List<AchievementSQL> findByPlanAndHasDeletedFalse(MonthPlanSQL plan);
+	List<AchievementSQL> findByPlanAndInspectionAndHasDeletedFalse(MonthPlanSQL plan, Inspection inspection);
 	boolean existsByLotAndDateBetweenAndHasDeletedFalse(String lot, LocalDate minDate, LocalDate maxDate);
 }

@@ -51,6 +51,7 @@ public class MonthPlanSQL extends BaseSQL{
 	@Column(precision = 12, scale = 3, nullable = false)
 	private BigDecimal flow;
 	
+	//対象のMonthPlanと紐づいたAchievement.flowの合計値。
 	@Column(precision = 12, scale = 3, nullable = false)
 	private BigDecimal achievement;
 	

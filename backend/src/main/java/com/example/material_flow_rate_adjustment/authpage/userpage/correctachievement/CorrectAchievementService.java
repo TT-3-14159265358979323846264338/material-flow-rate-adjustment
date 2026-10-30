@@ -40,6 +40,7 @@ public class CorrectAchievementService {
 		setFlow(achievement, newHistory, data.flow());
 		setInspection(achievement, newHistory, data.inspection());
 		saveData(account, achievement, newHistory);
+		utility.correctPlanAchievement(achievement.getPlan(), newHistory, account);
 		return "実績を修正しました";
 	}
 	

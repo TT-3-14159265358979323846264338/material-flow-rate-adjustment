@@ -33,6 +33,7 @@ public class NewAchievementService {
 		achievementRepository.save(newAchievement);
 		AchievementHistorySQL newHistory = createHistory(account, newAchievement);
 		historyRepository.save(newHistory);
+		utility.correctPlanAchievement(plan, newHistory, account);
 		return "新規実績を登録しました";
 	}
 	

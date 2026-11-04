@@ -54,10 +54,11 @@ public class GetPlanService {
 				monthPlan.getYear(),
 				monthPlan.getMonth(),
 				monthPlan.getFlow(),
-				monthPlan.getAchievement(),
+				monthPlan.getAchievement()
+				/* いずれ追加するかも
 				monthPlan.getShipping(),
 				monthPlan.getAdjustment(),
-				monthPlan.getRemaining()
+				monthPlan.getRemaining()*/
 				);
 	}
 	
@@ -66,9 +67,11 @@ public class GetPlanService {
 			Integer year,
 			Integer month,
 			BigDecimal flow,
-			BigDecimal achievement,
+			BigDecimal achievement
+			/*
 			BigDecimal shipping,
 			BigDecimal adjustment,
 			BigDecimal remaining
+			*/
 			) {}
 }

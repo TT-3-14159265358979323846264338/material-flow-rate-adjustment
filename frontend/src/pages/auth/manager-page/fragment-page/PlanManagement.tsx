@@ -70,9 +70,11 @@ const PlanManagement = () => {
           <span className="w-35">向け先</span>
           <span className="w-15">予定数量</span>
           <span className="w-15">実績</span>
+          {/*　いずれ追加するかも
           <span className="w-20">月間出荷量</span>
           <span className="w-20">在庫調整分</span>
           <span className="flex-1">月末在庫</span>
+          */}
         </>
       }
       data={(item: PlanResponse) => (
@@ -83,9 +85,11 @@ const PlanManagement = () => {
           <span className="w-35">{item.material.destination}</span>
           <span className="w-15">{item.flow}</span>
           <span className="w-15">{item.achievement}</span>
+          {/*
           <span className="w-20">{item.shipping}</span>
           <span className="w-20">{item.adjustment}</span>
           <span className="flex-1">{item.remaining}</span>
+          */}
         </>
       )}
       sortModal={

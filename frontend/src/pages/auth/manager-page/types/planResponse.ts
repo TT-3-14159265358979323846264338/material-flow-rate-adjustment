@@ -7,7 +7,9 @@ export type PlanResponse = {
   month: string;
   flow: string;
   achievement: string;
+  /* いずれ追加するかも
   shipping: string;
   adjustment: string;
   remaining: string;
+  */
 };

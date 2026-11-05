@@ -3,6 +3,7 @@ package com.example.material_flow_rate_adjustment.savedata.maindata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +12,7 @@ import com.example.material_flow_rate_adjustment.savedata.historydata.AccountHis
 import com.example.material_flow_rate_adjustment.savedata.historydata.HistoryEnum;
 
 @Component
+@Profile("!test")
 public class AccountInitializer implements CommandLineRunner{
 	@Autowired
 	private AccountRepository accountRepository;

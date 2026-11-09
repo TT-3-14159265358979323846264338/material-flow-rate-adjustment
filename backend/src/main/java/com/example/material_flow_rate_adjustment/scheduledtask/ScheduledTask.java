@@ -4,9 +4,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class ScheduledTask {
 	private final CreateAllDefaultCalendar createAllDefaultCalendar;
 	
@@ -15,7 +17,7 @@ public class ScheduledTask {
 		try {
 			createAllDefaultCalendar.createCalendar();
 		}catch(Exception e) {
-			System.err.println("月初処理中にエラーが発生しました: " + e);
+			log.error("月初処理中にエラーが発生しました", e);
 		}
 	}
 }

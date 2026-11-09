@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestControllerAdvice
+@Slf4j
 public class ExceptionController {
 	/**
 	 * Javaに送られたデータに不備がある場合、エラー番号422を返却
@@ -21,7 +24,8 @@ public class ExceptionController {
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<Map<String, String>> handleHttpMessageNotReadable(HttpMessageNotReadableException e) {
 		Map<String, String> error = new HashMap<>();
-		error.put("error", "不適切な値が入力されました");
+		error.put("error", "不適切なボディが送られました");
+		log.warn("不適切なボディが送られました: {}", e.getMessage());
 		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(error);
 	}
 	
@@ -31,7 +35,8 @@ public class ExceptionController {
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
 	public ResponseEntity<Map<String, String>> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException e) {
 		Map<String, String> error = new HashMap<>();
-		error.put("error", "不適切なパラメータが入力されました");
+		error.put("error", "不適切なパラメータが送られました");
+		log.warn("不適切なパラメータが送られました。変数: {}, 値: {})", e.getName(), e.getValue());
 		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(error);
 	}
 	
@@ -46,6 +51,7 @@ public class ExceptionController {
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
+        log.info("不適切な値が送られました: {}", errors);
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(errors);
 	}
     
@@ -54,6 +60,7 @@ public class ExceptionController {
 	 */
 	@ExceptionHandler(SentenceException.class)
 	public ResponseEntity<Map<String, String>> handleSentenceException(SentenceException e) {
+		log.info("不適切な値が送られました: {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(createErrorMap(e));
 	}
 	
@@ -62,6 +69,7 @@ public class ExceptionController {
 	 */
 	@ExceptionHandler(DataBaseException.class)
 	public ResponseEntity<Map<String, String>> handleDataBaseException(DataBaseException e) {
+		log.warn("DB規則に反するため処理を停止しました: {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(createErrorMap(e));
 	}
 	
@@ -70,6 +78,7 @@ public class ExceptionController {
 	 */
 	@ExceptionHandler(NotFindException.class)
 	public ResponseEntity<Map<String, String>> handleNotFindException(NotFindException e) {
+		log.info("対象データが見つかりませんでした: {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(createErrorMap(e));
 	}
 	

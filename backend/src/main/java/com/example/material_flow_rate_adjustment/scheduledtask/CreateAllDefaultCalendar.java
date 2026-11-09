@@ -11,9 +11,11 @@ import com.example.material_flow_rate_adjustment.savedata.maindata.MaterialRepos
 import com.example.material_flow_rate_adjustment.savedata.maindata.MaterialSQL;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CreateAllDefaultCalendar {
 	private static final int PLUS_MONTH = 2;
 	private final MaterialRepository materialRepository;
@@ -25,8 +27,7 @@ public class CreateAllDefaultCalendar {
 			YearMonth targetMonth = YearMonth.now().plusMonths(PLUS_MONTH);
 			materialRepository.findByHasDeletedFalse().forEach(i -> handle(i.getId(), i.getName(), targetMonth));
 		}catch(Exception e) {
-			System.err.println("月初処理中に製品の取り込みに失敗しました: " + e);
-			//後で@Slf4jに切り替える
+			log.error("月初処理中に製品の取り込みに失敗しました", e);
 		}
 	}
 	
@@ -34,7 +35,7 @@ public class CreateAllDefaultCalendar {
 		try {
 			createDefaultCalendar.createCalendarRollback(materialId, targetMonth);
 		}catch(Exception e) {
-			System.err.println("月初処理中に" + name + "の休日登録に失敗しました: " + e);
+			log.error("月初処理中に休日登録に失敗しました。製品名: {}", name, e);
 		}
 	}
 	

@@ -6,7 +6,6 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +22,9 @@ import jakarta.annotation.PostConstruct;
 public class TokenProvider {
 	@Autowired
 	private AccountRepository accountRepository;
+	
+	@Autowired
+	private NotFindComponent notFindComponent;
 	
 	@Value("${jwt.password}")
 	private String password;
@@ -41,7 +43,7 @@ public class TokenProvider {
 	public Token createToken(Authentication authentication) {
 		Date nowDate = new Date();
 		AccountSQL account = accountRepository.findByLoginUserAndHasDeletedFalse(authentication.getName())
-				.orElseThrow(() -> new UsernameNotFoundException("アカウントIDの取り込みに失敗しました"));
+				.orElseThrow(() -> notFindComponent.userNotFind(authentication.getName()));
 		String token = Jwts.builder()
 				.subject(account.getId().toString())
 				.issuedAt(nowDate)
@@ -61,7 +63,7 @@ public class TokenProvider {
 	public String getRole(String token) {
 		int id = Integer.parseInt(getUser(token));
 		AccountSQL account = accountRepository.findById(id)
-				.orElseThrow(() -> new UsernameNotFoundException("アカウントはあるのにIDの取り込みに失敗しました"));
+				.orElseThrow(() -> notFindComponent.userNotFind(id));
 		return account.getRole().name();
 	}
 	

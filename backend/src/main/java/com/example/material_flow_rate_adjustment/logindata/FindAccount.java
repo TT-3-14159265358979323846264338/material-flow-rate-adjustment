@@ -15,11 +15,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FindAccount implements UserDetailsService {
 	private final AccountRepository accountRepository;
+	private final NotFindComponent notFindComponent;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		AccountSQL account = accountRepository.findByLoginUserAndHasDeletedFalse(username)
-				.orElseThrow(() -> new UsernameNotFoundException(username + "が登録されていません"));
+				.orElseThrow(() -> notFindComponent.userNotFind(username));
 		return User.withUsername(account.getLoginUser())
 				.password(account.getPassword())
 				.roles(account.getRole().name())

@@ -17,6 +17,8 @@ services:
       FRONT_BASE_API: ${FRONT_BASE_API}
       JAVA_TOOL_OPTIONS: "-Djava.awt.headless=true"
       TZ: Asia/Tokyo
+    volumes:
+      - ./logs:/app/logs
 
   frontend:
     build: ./frontend

@@ -38,6 +38,7 @@ React+TypeScript+Javaでシステム開発を勉強するために、新規作�
 ├─ docker-compose.yml　　　　　　　　　　　　　　　　　　　　　:Dockerコンテナ設定ファイル
 ├─ env.example　　　　　　　　　　　　　　　　　　　　　　　　　:システム設定ファイル (必要事項を記載して.envで保存すること)
 ├─ bat/　　　　　　　　　　　　　　　　　　　　　　　　　　　　 :Docker用バッチファイル
+├─ logs/　　　　　　　　　　　　　　　　　　　　　　　　　　　　:Java用ログ(@Slf4jの出力先)
 │
 └─ other/　　　　　　　　　　　　　　　　　　　　　　　　　　　 :設計メモなど (なくても影響なし)
 ```

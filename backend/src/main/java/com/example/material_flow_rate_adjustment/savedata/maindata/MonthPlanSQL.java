@@ -24,7 +24,7 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Table(name = "month_plan", indexes = {
 		@Index(name = "idx_plan_date", columnList = "plan_date, has_deleted"),
-		@Index(name = "idx_plan_material_year_month", columnList = "material_id, year, month, has_deleted")
+		@Index(name = "idx_plan_material_year_month", columnList = "material_id, `year`, `month`, has_deleted")
 })
 @Data
 @ToString(callSuper = true)
@@ -34,14 +34,14 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class MonthPlanSQL extends BaseSQL{
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "material_id", referencedColumnName = "id", columnDefinition = "INT UNSIGNED", nullable = false)
+    @JoinColumn(name = "material_id", referencedColumnName = "id", nullable = false)
 	@OnDelete(action = OnDeleteAction.RESTRICT)
 	private MaterialSQL material;
 	
-	@Column(columnDefinition = "INT UNSIGNED", nullable = false)
+	@Column(name = "`year`",nullable = false)
 	private Integer year;
 	
-	@Column(columnDefinition = "INT UNSIGNED", nullable = false)
+	@Column(name = "`month`", nullable = false)
 	private Integer month;
 	
 	//year, monthから作成したLocalDate。Integerで使用したいときとLocalDateで使用したいときが多々あるので、2重にカラムを作っている。

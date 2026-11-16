@@ -25,7 +25,7 @@ import lombok.experimental.SuperBuilder;
 public abstract class BaseHistorySQL {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(columnDefinition = "INT UNSIGNED AUTO_INCREMENT", updatable = false)
+	@Column(updatable = false)
 	@Setter(AccessLevel.NONE)
 	private Integer id;
 	
@@ -41,7 +41,7 @@ public abstract class BaseHistorySQL {
 	@Column(length = 10, nullable = false, updatable = false)
 	private String action;
 	
-	@Column(name = "action_id", columnDefinition = "INT UNSIGNED", nullable = false, updatable = false)
+	@Column(name = "action_id", nullable = false, updatable = false)
 	private Integer actionId;
 	
 	@Column(name = "action_user", length = 10, nullable = false, updatable = false)

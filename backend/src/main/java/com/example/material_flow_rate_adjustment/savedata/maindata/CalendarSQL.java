@@ -34,7 +34,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class CalendarSQL extends BaseSQL{
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "material_id", referencedColumnName = "id", columnDefinition = "INT UNSIGNED", nullable = false)
+    @JoinColumn(name = "material_id", referencedColumnName = "id", nullable = false)
 	@OnDelete(action = OnDeleteAction.RESTRICT)
 	private MaterialSQL material;
 	

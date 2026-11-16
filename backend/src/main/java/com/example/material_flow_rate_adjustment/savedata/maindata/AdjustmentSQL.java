@@ -28,9 +28,9 @@ import lombok.ToString;
 @AllArgsConstructor
 public class AdjustmentSQL extends BaseSQL{
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "adjustment_id", referencedColumnName = "id", columnDefinition = "INT UNSIGNED", nullable = false)
+    @JoinColumn(name = "month_plan_id", referencedColumnName = "id", nullable = false)
 	@OnDelete(action = OnDeleteAction.RESTRICT)
-	private MonthPlanSQL monthAdjustment;
+	private MonthPlanSQL monthPlan;
 	
 	@Column(columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP", nullable = false, insertable = false, updatable = false)
 	private LocalDateTime date;
@@ -38,7 +38,7 @@ public class AdjustmentSQL extends BaseSQL{
 	@Column(precision = 12, scale = 3, nullable = false)
 	private BigDecimal quantity;
 	
-	@Column(length = 10, nullable = false)
+	@Column(name = "`user`", length = 10, nullable = false)
 	private String user;
 	
 	@Column(length = 50, nullable = false)

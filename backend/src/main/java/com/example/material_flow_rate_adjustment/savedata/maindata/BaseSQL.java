@@ -26,7 +26,7 @@ import lombok.experimental.SuperBuilder;
 public abstract class BaseSQL {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(columnDefinition = "INT UNSIGNED AUTO_INCREMENT", updatable = false)
+	@Column(updatable = false)
 	@Setter(AccessLevel.NONE)
 	private Integer id;
 	

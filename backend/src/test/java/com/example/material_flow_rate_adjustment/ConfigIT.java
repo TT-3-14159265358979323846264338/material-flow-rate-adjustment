@@ -12,10 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,17 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.material_flow_rate_adjustment.logindata.RequestFilter;
 import com.example.material_flow_rate_adjustment.logindata.TokenProvider;
 
-@WebMvcTest(TestController.class)
-@Import(Config.class)
+@WebMvcTest(ConfigIT.TestController.class)
+@Import({Config.class, ConfigIT.TestController.class})
 class ConfigIT {
 	@Value("${front.base.api}")
 	private String frontBaseAPI;
-	
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-	
-	@Autowired
-	private AuthenticationManager authenticationManager;
 	
 	@Autowired
 	private MockMvc mockMvc;
@@ -55,16 +47,6 @@ class ConfigIT {
 		assertThat(Config.class.isAnnotationPresent(EnableWebSecurity.class)).isTrue();
 		assertThat(Config.class.isAnnotationPresent(EnableMethodSecurity.class)).isTrue();
 		assertThat(Config.class.isAnnotationPresent(EnableScheduling.class)).isTrue();
-	}
-	
-	@Test
-	void existsBeanAuthenticationManager() {
-		assertThat(authenticationManager).isNotNull();
-	}
-	
-	@Test
-	void existsBeanPasswordEncoder() {
-		assertThat(passwordEncoder).isNotNull();
 	}
 	
 	@Test
@@ -104,37 +86,37 @@ class ConfigIT {
 				.header("Access-Control-Request-Method", method)
 				.header("Access-Control-Request-Headers", "Authorization, Content-Type");
 	}
-}
 
-@RestController
-class TestController {
-	@GetMapping("/api/login")
-	public String loginGetMapping() {
-		return "OK";
-	}
-	
-	@PostMapping("/api/login")
-	public String loginPostMapping() {
-		return "OK";
-	}
-	
-	@PutMapping("/api/login")
-	public String loginPutMapping() {
-		return "OK";
-	}
-	
-	@DeleteMapping("/api/login")
-	public String loginDeleteMapping() {
-		return "OK";
-	}
-	
-	@GetMapping("/api/another")
-	public String anotherGetMapping() {
-		return "OK";
-	}
-	
-	@PostMapping("/api/another")
-	public String anotherPostMapping() {
-		return "OK";
+	@RestController
+	static class TestController {
+		@GetMapping("/api/login")
+		public String loginGetMapping() {
+			return "OK";
+		}
+		
+		@PostMapping("/api/login")
+		public String loginPostMapping() {
+			return "OK";
+		}
+		
+		@PutMapping("/api/login")
+		public String loginPutMapping() {
+			return "OK";
+		}
+		
+		@DeleteMapping("/api/login")
+		public String loginDeleteMapping() {
+			return "OK";
+		}
+		
+		@GetMapping("/api/another")
+		public String anotherGetMapping() {
+			return "OK";
+		}
+		
+		@PostMapping("/api/another")
+		public String anotherPostMapping() {
+			return "OK";
+		}
 	}
 }

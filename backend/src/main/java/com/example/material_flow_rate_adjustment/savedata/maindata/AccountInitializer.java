@@ -2,18 +2,18 @@ package com.example.material_flow_rate_adjustment.savedata.maindata;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Profile;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.material_flow_rate_adjustment.savedata.historydata.AccountHistoryRepository;
 import com.example.material_flow_rate_adjustment.savedata.historydata.AccountHistorySQL;
 import com.example.material_flow_rate_adjustment.savedata.historydata.HistoryEnum;
 
 @Component
-@Profile("!test")
-public class AccountInitializer implements CommandLineRunner{
+public class AccountInitializer{
 	@Autowired
 	private AccountRepository accountRepository;
 	
@@ -29,8 +29,9 @@ public class AccountInitializer implements CommandLineRunner{
 	@Value("${admin.password}")
 	private String password;
 	
-	@Override
-	public void run(String... args) throws Exception {
+	@EventListener(ApplicationReadyEvent.class)
+    @Transactional
+    public void initAdminAccount() {
 		if (!accountRepository.existsByRoleAndHasDeletedFalse(AccountRole.ADMIN)) {
 			AccountSQL newAccount = createAdminAccount();
 			accountRepository.save(newAccount);

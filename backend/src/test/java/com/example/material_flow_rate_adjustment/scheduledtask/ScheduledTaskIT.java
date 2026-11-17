@@ -37,7 +37,7 @@ class ScheduledTaskIT{
 	
 	@Test
 	@Transactional
-	void test() {
+	void scheduledComit() {
 		defaultMaterialTransaction.saveDefaultMaterial();
 		scheduledTask.beginningOfMonthTask();
 		int expected = holidayCount() * materialCount();

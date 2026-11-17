@@ -33,7 +33,7 @@ class ScheduledTaskTest extends LoggerSetUp{
 	@Test
 	void callMethod() {
 		scheduledTask.beginningOfMonthTask();
-		verify(createAllDefaultCalendar, times(1)).createCalendar();
+		verify(createAllDefaultCalendar).createCalendar();
 	}
 	
 	@Test

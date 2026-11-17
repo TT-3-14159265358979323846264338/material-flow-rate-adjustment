@@ -20,6 +20,10 @@ public enum DefaultMaterial {
 	private final String unit;
 	private final boolean hasDeleted;
 	
+	public static List<MaterialSQL> getMaterialList(){
+		return Stream.of(DefaultMaterial.values()).map(DefaultMaterial::getMaterial).toList();
+	}
+	
 	public MaterialSQL getMaterial() {
 		return MaterialSQL.builder()
 				.name(name)
@@ -28,9 +32,5 @@ public enum DefaultMaterial {
 				.unit(unit)
 				.hasDeleted(hasDeleted)
 				.build();
-	}
-	
-	public static List<MaterialSQL> getMaterialList(){
-		return Stream.of(DefaultMaterial.values()).map(DefaultMaterial::getMaterial).toList();
 	}
 }

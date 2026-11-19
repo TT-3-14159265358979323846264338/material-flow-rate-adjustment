@@ -26,6 +26,10 @@ public enum DefaultMaterial {
 		return Stream.of(DefaultMaterial.values()).map(DefaultMaterial::getMaterial).toList();
 	}
 	
+	public static List<MaterialSQL> getMaterialList(DefaultMaterial ...part){
+		return Stream.of(part).map(DefaultMaterial::getMaterial).toList();
+	}
+	
 	public MaterialSQL getMaterial() {
 		return MaterialSQL.builder()
 				.name(name)

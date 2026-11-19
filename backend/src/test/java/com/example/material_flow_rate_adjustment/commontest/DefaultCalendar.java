@@ -46,6 +46,10 @@ public enum DefaultCalendar {
 		return Stream.of(DefaultCalendar.values()).map(i -> i.getCalendar(material)).toList();
 	}
 	
+	public static List<CalendarSQL> getCalendarList(MaterialSQL material, DefaultCalendar ...part){
+		return Stream.of(part).map(i -> i.getCalendar(material)).toList();
+	}
+	
 	public CalendarSQL getCalendar(MaterialSQL material) {
 		return CalendarSQL.builder()
 				.material(material)

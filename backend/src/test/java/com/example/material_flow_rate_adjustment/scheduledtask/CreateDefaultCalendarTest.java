@@ -105,9 +105,9 @@ class CreateDefaultCalendarTest {
 	
 	List<CalendarSQL> expectedSavedCalendar(){
 		return List.of(
-				createCalendarSQL(15, HolidayType.ALL_DAY, false),
-				createCalendarSQL(21, HolidayType.MORNING, false),
-				createCalendarSQL(22, HolidayType.WORKING, false),
+				createCalendarSQL(DefaultCalendar.DUMMY_4.getDay(), DefaultCalendar.DUMMY_4.getType(), false),
+				createCalendarSQL(DefaultCalendar.DUMMY_5.getDay(), DefaultCalendar.DUMMY_5.getType(), false),
+				createCalendarSQL(DefaultCalendar.DUMMY_6.getDay(), DefaultCalendar.DUMMY_6.getType(), false),
 				createCalendarSQL(28, HolidayType.ALL_DAY, false),
 				createCalendarSQL(29, HolidayType.ALL_DAY, false)
 				);
@@ -126,9 +126,9 @@ class CreateDefaultCalendarTest {
 		int id = account == null? -1: 1;
 		String name = account == null? "システム自動": "dummyAccont";
 		return List.of(
-				createChangeCalendarHistory(15, HolidayType.ALL_DAY, id, name),
-				createChangeCalendarHistory(21, HolidayType.MORNING, id, name),
-				createChangeCalendarHistory(22, HolidayType.WORKING, id, name),
+				createChangeCalendarHistory(DefaultCalendar.DUMMY_4.getDay(), DefaultCalendar.DUMMY_4.getType(), id, name),
+				createChangeCalendarHistory(DefaultCalendar.DUMMY_5.getDay(), DefaultCalendar.DUMMY_5.getType(), id, name),
+				createChangeCalendarHistory(DefaultCalendar.DUMMY_6.getDay(), DefaultCalendar.DUMMY_6.getType(), id, name),
 				createNewCalendarHistory(28, HolidayType.ALL_DAY, id, name),
 				createNewCalendarHistory(29, HolidayType.ALL_DAY, id, name)
 				);

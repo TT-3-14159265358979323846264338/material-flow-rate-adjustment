@@ -6,9 +6,11 @@ import java.util.stream.Stream;
 
 import com.example.material_flow_rate_adjustment.savedata.maindata.MaterialSQL;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
+@Getter
 public enum DefaultMaterial {
 	DUMMY_0("name0", "desti0", null, "g", false),
 	DUMMY_1("name1", "desti1", new BigDecimal("1.05"), "kg", false),

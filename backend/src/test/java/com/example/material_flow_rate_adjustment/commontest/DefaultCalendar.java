@@ -9,9 +9,11 @@ import com.example.material_flow_rate_adjustment.savedata.maindata.CalendarSQL;
 import com.example.material_flow_rate_adjustment.savedata.maindata.HolidayType;
 import com.example.material_flow_rate_adjustment.savedata.maindata.MaterialSQL;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
+@Getter
 public enum DefaultCalendar {
 	//休日系
 	DUMMY_0(1, HolidayType.ALL_DAY, false),

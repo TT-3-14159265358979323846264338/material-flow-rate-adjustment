@@ -37,8 +37,6 @@ class AchievementRepositoryIT {
 	@Transactional
 	void findById() {
 		int id = saveTestData().achievement.get(0).getId();
-		entityManager.flush();
-		entityManager.clear();
 		Optional<AchievementSQL> result = achievementRepository.findWithEntityGraphById(id);
 		PersistenceUnitUtil unitUtil = entityManager.getEntityManagerFactory().getPersistenceUnitUtil();
 		assertThat(result)
@@ -111,6 +109,8 @@ class AchievementRepositoryIT {
 		MaterialSQL material = materialRepository.save(DefaultMaterial.DUMMY_0.getMaterial());
 		MonthPlanSQL plan = planRepository.save(DefaultMonthPlan.DUMMY_0.getPlan(material));
 		List<AchievementSQL> achievement = achievementRepository.saveAll(DefaultAchievement.getAchievementList(plan));
+		entityManager.flush();
+		entityManager.clear();
 		return new SavedData(achievement, plan);
 	}
 }

@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.persistence.EntityManager;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +22,9 @@ import com.example.material_flow_rate_adjustment.commontest.DefaultAccount;
 class AccountRepositoryIT {
 	@Autowired
 	private AccountRepository accountRepository;
+	
+	@Autowired
+	private EntityManager entityManager;
 	
 	@Test
 	@Transactional
@@ -49,6 +54,7 @@ class AccountRepositoryIT {
 	@Transactional
 	void existsByRoleUser() {
 		accountRepository.saveAll(DefaultAccount.getAccountList(DefaultAccount.DUMMY_0, DefaultAccount.DUMMY_8));
+		clear();
 		boolean findResult = accountRepository.existsByRoleAndHasDeletedFalse(AccountRole.ADMIN);
 		boolean notFindRoleResult = accountRepository.existsByRoleAndHasDeletedFalse(AccountRole.USER);
 		boolean notFindDeletedResult = accountRepository.existsByRoleAndHasDeletedFalse(AccountRole.MANAGER);
@@ -101,5 +107,11 @@ class AccountRepositoryIT {
 	
 	void saveTestData() {
 		accountRepository.saveAll(DefaultAccount.getAccountList());
+		clear();
+	}
+	
+	void clear() {
+		entityManager.flush();
+		entityManager.clear();
 	}
 }

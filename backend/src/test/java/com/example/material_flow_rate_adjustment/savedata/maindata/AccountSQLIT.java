@@ -3,7 +3,10 @@ package com.example.material_flow_rate_adjustment.savedata.maindata;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
+
+import jakarta.persistence.EntityManager;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +23,27 @@ class AccountSQLIT extends BaseSQLIT<AccountRepository, AccountSQL>{
 	@Autowired
 	private AccountRepository accountRepository;
 	
+	@Autowired
+	private EntityManager entityManager;
+	
 	@Test
 	@Transactional
 	void saveAndLoad() {
 		int id = saveTestData().getId();
-		AccountSQL account = accountRepository.findById(id).get();
-		assertThat(account.getLoginUser()).isEqualTo(DefaultAccount.DUMMY_0.getLoginUser());
-		assertThat(account.getDisplayedUser()).isEqualTo(DefaultAccount.DUMMY_0.getDisplayedUser());
-		assertThat(account.getPassword()).isEqualTo(DefaultAccount.DUMMY_0.getPassword());
-		assertThat(account.getRole()).isEqualTo(DefaultAccount.DUMMY_0.getRole());
-		assertThat(account.getHasDeleted()).isEqualTo(DefaultAccount.DUMMY_0.isHasDeleted());
-		assertThat(account.getUpdatedDate()).isNotNull();
-		assertThat(account.getCreatedDate()).isNotNull();
+		clear();
+		Optional<AccountSQL> result = accountRepository.findById(id);
+		assertThat(result)
+			.isPresent()
+			.get()
+			.satisfies(account -> {
+				assertThat(account.getLoginUser()).isEqualTo(DefaultAccount.DUMMY_0.getLoginUser());
+				assertThat(account.getDisplayedUser()).isEqualTo(DefaultAccount.DUMMY_0.getDisplayedUser());
+				assertThat(account.getPassword()).isEqualTo(DefaultAccount.DUMMY_0.getPassword());
+				assertThat(account.getRole()).isEqualTo(DefaultAccount.DUMMY_0.getRole());
+				assertThat(account.getHasDeleted()).isEqualTo(DefaultAccount.DUMMY_0.isHasDeleted());
+				assertThat(account.getUpdatedDate()).isNotNull();
+				assertThat(account.getCreatedDate()).isNotNull();
+			});
 	}
 
 	@Override
@@ -42,6 +54,11 @@ class AccountSQLIT extends BaseSQLIT<AccountRepository, AccountSQL>{
 	@Override
 	protected AccountSQL entity() {
 		return DefaultAccount.DUMMY_0.getAccount();
+	}
+
+	@Override
+	protected EntityManager entityManager() {
+		return entityManager;
 	}
 
 	@Override
@@ -71,5 +88,20 @@ class AccountSQLIT extends BaseSQLIT<AccountRepository, AccountSQL>{
 				"displayedUser",
 				"password",
 				"role");
+	}
+	
+	@Override
+	protected List<String> grantBigDecimalParams(){
+		return null;
+	}
+	
+	@Override
+	protected List<String> grantLazyFetch() {
+		return null;
+	}
+
+	@Override
+	protected List<DeleteData<?, ?>> grantOnDelete() {
+		return null;
 	}
 }

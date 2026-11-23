@@ -5,11 +5,14 @@ import static org.assertj.core.api.Assertions.*;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceUnitUtil;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIf;
@@ -24,10 +27,16 @@ import com.example.material_flow_rate_adjustment.savedata.maindata.BaseSQL;
 public abstract class BaseSQLIT<T extends JpaRepository<U, Integer>, U extends BaseSQL> {
 	protected abstract T repository();
 	protected abstract U entity();
+	protected abstract EntityManager entityManager();
 	protected abstract Consumer<U> changeMethod();
 	
 	protected U saveTestData() {
 		return repository().save(entity());
+	}
+	
+	protected void clear() {
+		entityManager().flush();
+		entityManager().clear();
 	}
 	
 	@Test
@@ -122,6 +131,73 @@ public abstract class BaseSQLIT<T extends JpaRepository<U, Integer>, U extends B
 			setValue(entity, variableName, _ -> null);
 			assertThrowError(entity);
 		});
+	}
+	
+	protected abstract List<String> grantBigDecimalParams();
+	
+	@Test
+	@Transactional
+	@DisabledIf("existsBigDecimalParams")
+	void limitationBigDecimalParams() {
+		grantBigDecimalParams().forEach(this::validBigDecimalParams);
+	}
+	
+	boolean existsBigDecimalParams() {
+		return CollectionUtils.isEmpty(grantBigDecimalParams());
+	}
+	
+	void validBigDecimalParams(String variableName) {
+		errorFail(variableName, () -> {
+			Field field = entity().getClass().getDeclaredField(variableName);
+			Column column = AnnotatedElementUtils.findMergedAnnotation(field, Column.class);
+			assertThat(column.precision()).isGreaterThan(0);
+			assertThat(column.scale())
+				.isGreaterThan(0)
+				.isLessThan(column.precision());
+		});
+	}
+
+	protected abstract List<String> grantLazyFetch();
+	
+	@Test
+	@Transactional
+	@DisabledIf("existsLazyFetch")
+	void lazyFetch() {
+		int id = saveTestData().getId();
+		clear();
+		Optional<U> data = repository().findById(id);
+		PersistenceUnitUtil unitUtil = entityManager().getEntityManagerFactory().getPersistenceUnitUtil();
+		assertThat(data)
+			.isPresent()
+			.get()
+			.satisfies(entity -> grantLazyFetch().forEach(name -> assertThat(unitUtil.isLoaded(entity, name)).isFalse()));
+	}
+	
+	boolean existsLazyFetch() {
+		return CollectionUtils.isEmpty(grantLazyFetch());
+	}
+	
+	protected abstract List<DeleteData<?, ?>> grantOnDelete();
+	
+	public record DeleteData<V extends JpaRepository<W, Integer>, W extends BaseSQL> (V repository, W entity) {}
+	
+	@Test
+	@Transactional
+	@DisabledIf("existsOnDelete")
+	void onDeleteAction() {
+		grantOnDelete().forEach(this::validOnDelete);
+	}
+	
+	boolean existsOnDelete() {
+		return CollectionUtils.isEmpty(grantOnDelete());
+	}
+	
+	<V extends JpaRepository<W, Integer>, W extends BaseSQL> void validOnDelete(DeleteData<V, W> deleteData) {
+		int id = saveTestData().getId();
+		deleteData.repository.delete(deleteData.entity);
+		clear();
+		Optional<U> result = repository().findById(id);
+		assertThat(result).isNotPresent();
 	}
 	
 	@FunctionalInterface

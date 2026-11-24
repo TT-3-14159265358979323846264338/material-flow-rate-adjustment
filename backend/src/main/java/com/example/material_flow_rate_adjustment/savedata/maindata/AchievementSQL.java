@@ -40,7 +40,7 @@ public class AchievementSQL extends BaseSQL{
 	
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plan_id", referencedColumnName = "id", nullable = false)
-	@OnDelete(action = OnDeleteAction.CASCADE)
+	@OnDelete(action = OnDeleteAction.RESTRICT)
 	private MonthPlanSQL plan;
 	
 	@Column(nullable = false)

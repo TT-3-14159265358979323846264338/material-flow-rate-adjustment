@@ -30,8 +30,6 @@ public abstract class BaseSQLIT<T extends JpaRepository<U, Integer>, U extends B
 	protected abstract T repository();
 	protected abstract U entity();
 	protected abstract EntityManager entityManager();
-	protected abstract ThrowingConsumer<U> assertLoad();
-	protected abstract Consumer<U> changeMethod();
 	
 	protected U saveTestData() {
 		return repository().save(entity());
@@ -41,6 +39,8 @@ public abstract class BaseSQLIT<T extends JpaRepository<U, Integer>, U extends B
 		entityManager().flush();
 		entityManager().clear();
 	}
+	
+	protected abstract ThrowingConsumer<U> assertLoad();
 	
 	@Test
 	@Transactional
@@ -53,6 +53,8 @@ public abstract class BaseSQLIT<T extends JpaRepository<U, Integer>, U extends B
 			.get()
 			.satisfies(assertLoad());
 	}
+	
+	protected abstract Consumer<U> changeMethod();
 	
 	@Test
 	@Transactional

@@ -3,13 +3,12 @@ package com.example.material_flow_rate_adjustment.savedata.maindata;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 import jakarta.persistence.EntityManager;
 
+import org.assertj.core.api.ThrowingConsumer;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -43,25 +42,6 @@ class AchievementSQLIT extends BaseSQLIT<AchievementRepository, AchievementSQL>{
 		MaterialSQL material = materialRepository.save(DefaultMaterial.DUMMY_0.getMaterial());
 		plan = planRepository.save(DefaultMonthPlan.DUMMY_0.getPlan(material));
 	}
-	
-	@Test
-	@Transactional
-	void saveAndLoad() {
-		int id = saveTestData().getId();
-		clear();
-		Optional<AchievementSQL> result = achievementRepository.findById(id);
-		assertThat(result)
-			.isPresent()
-			.get()
-			.satisfies(achievement -> {
-				assertThat(achievement.getUserName()).isEqualTo(DefaultAchievement.DUMMY_0.getUserName());
-				assertThat(achievement.getPlan().getId()).isEqualTo(plan.getId());
-				assertThat(achievement.getDate()).isEqualTo(DefaultAchievement.DUMMY_0.getDate());
-				assertThat(achievement.getLot()).isEqualTo(DefaultAchievement.DUMMY_0.getLot());
-				assertThat(achievement.getFlow()).isEqualByComparingTo(DefaultAchievement.DUMMY_0.getFlow());
-				assertThat(achievement.getInspection()).isEqualTo(DefaultAchievement.DUMMY_0.getInspection());
-			});
-	}
 
 	@Override
 	protected AchievementRepository repository() {
@@ -76,6 +56,18 @@ class AchievementSQLIT extends BaseSQLIT<AchievementRepository, AchievementSQL>{
 	@Override
 	protected EntityManager entityManager() {
 		return entityManager;
+	}
+	
+	@Override
+	protected ThrowingConsumer<AchievementSQL> assertLoad(){
+		return achievement -> {
+			assertThat(achievement.getUserName()).isEqualTo(DefaultAchievement.DUMMY_0.getUserName());
+			assertThat(achievement.getPlan().getId()).isEqualTo(plan.getId());
+			assertThat(achievement.getDate()).isEqualTo(DefaultAchievement.DUMMY_0.getDate());
+			assertThat(achievement.getLot()).isEqualTo(DefaultAchievement.DUMMY_0.getLot());
+			assertThat(achievement.getFlow()).isEqualByComparingTo(DefaultAchievement.DUMMY_0.getFlow());
+			assertThat(achievement.getInspection()).isEqualTo(DefaultAchievement.DUMMY_0.getInspection());
+		};
 	}
 
 	@Override

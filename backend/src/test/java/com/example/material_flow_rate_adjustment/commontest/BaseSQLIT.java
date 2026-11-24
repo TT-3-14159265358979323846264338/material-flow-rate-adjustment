@@ -14,6 +14,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceUnitUtil;
 
+import org.assertj.core.api.ThrowingConsumer;
+import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIf;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -28,6 +30,7 @@ public abstract class BaseSQLIT<T extends JpaRepository<U, Integer>, U extends B
 	protected abstract T repository();
 	protected abstract U entity();
 	protected abstract EntityManager entityManager();
+	protected abstract ThrowingConsumer<U> assertLoad();
 	protected abstract Consumer<U> changeMethod();
 	
 	protected U saveTestData() {
@@ -37,6 +40,18 @@ public abstract class BaseSQLIT<T extends JpaRepository<U, Integer>, U extends B
 	protected void clear() {
 		entityManager().flush();
 		entityManager().clear();
+	}
+	
+	@Test
+	@Transactional
+	void saveAndLoad() {
+		int id = saveTestData().getId();
+		clear();
+		Optional<U> result = repository().findById(id);
+		assertThat(result)
+			.isPresent()
+			.get()
+			.satisfies(assertLoad());
 	}
 	
 	@Test
@@ -193,11 +208,12 @@ public abstract class BaseSQLIT<T extends JpaRepository<U, Integer>, U extends B
 	}
 	
 	<V extends JpaRepository<W, Integer>, W extends BaseSQL> void validOnDelete(DeleteData<V, W> deleteData) {
-		int id = saveTestData().getId();
-		deleteData.repository.delete(deleteData.entity);
+		saveTestData();
 		clear();
-		Optional<U> result = repository().findById(id);
-		assertThat(result).isNotPresent();
+		assertThatThrownBy(() -> {
+			deleteData.repository.delete(deleteData.entity);
+			entityManager().flush();
+		}).isInstanceOf(ConstraintViolationException.class);
 	}
 	
 	@FunctionalInterface

@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import jakarta.persistence.EntityManager;
 
@@ -15,11 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.material_flow_rate_adjustment.authpage.OrderSortEnum;
 import com.example.material_flow_rate_adjustment.authpage.adminpage.getuser.UserSortEnum;
+import com.example.material_flow_rate_adjustment.commontest.BaseRepositoryIT;
 import com.example.material_flow_rate_adjustment.commontest.DefaultAccount;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class AccountRepositoryIT {
+class AccountRepositoryIT extends BaseRepositoryIT<AccountRepository, AccountSQL>{
 	@Autowired
 	private AccountRepository accountRepository;
 	
@@ -105,13 +107,25 @@ class AccountRepositoryIT {
 									DefaultAccount.DUMMY_2.getLoginUser());
 	}
 	
-	void saveTestData() {
-		accountRepository.saveAll(DefaultAccount.getAccountList());
-		clear();
+	@Override
+	protected AccountRepository repository() {
+		return accountRepository;
+	}
+
+	@Override
+	protected List<AccountSQL> entity() {
+		return DefaultAccount.getAccountList();
+	}
+
+	@Override
+	protected EntityManager entityManager() {
+		return entityManager;
 	}
 	
-	void clear() {
-		entityManager.flush();
-		entityManager.clear();
+	@Override
+	protected List<Integer> savedIdHasDeletedFalse(List<AccountSQL> saveData) {
+		List<Integer> savedId = super.savedIdHasDeletedFalse(saveData);
+		//AccountInitializerで必ず最初に登録される(id = 1)
+		return Stream.concat(Stream.of(1), savedId.stream()).toList();
 	}
 }

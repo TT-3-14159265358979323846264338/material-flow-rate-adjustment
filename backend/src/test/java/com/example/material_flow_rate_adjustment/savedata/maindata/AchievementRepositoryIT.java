@@ -14,13 +14,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.material_flow_rate_adjustment.commontest.BaseRepositoryIT;
 import com.example.material_flow_rate_adjustment.commontest.DefaultAchievement;
 import com.example.material_flow_rate_adjustment.commontest.DefaultMaterial;
 import com.example.material_flow_rate_adjustment.commontest.DefaultMonthPlan;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class AchievementRepositoryIT {
+class AchievementRepositoryIT extends BaseRepositoryIT<AchievementRepository, AchievementSQL>{
 	@Autowired
 	private MaterialRepository materialRepository;
 	
@@ -33,12 +34,16 @@ class AchievementRepositoryIT {
 	@Autowired
 	private EntityManager entityManager;
 	
+	private MaterialSQL material;
+	
+	private MonthPlanSQL plan;
+	
 	@Test
 	@Transactional
 	void findById() {
-		int id = saveTestData().achievement.get(0).getId();
+		int id = saveTestData().get(0).getId();
 		Optional<AchievementSQL> result = achievementRepository.findWithEntityGraphById(id);
-		PersistenceUnitUtil unitUtil = entityManager.getEntityManagerFactory().getPersistenceUnitUtil();
+		PersistenceUnitUtil unitUtil = unitUtil();
 		assertThat(result)
 			.isPresent()
 			.get()
@@ -52,7 +57,8 @@ class AchievementRepositoryIT {
 	@Test
 	@Transactional
 	void findByPlan() {
-		MonthPlanSQL plan = saveTestData().plan;
+		saveTestData();
+		saveDummyData();
 		List<AchievementSQL> result = achievementRepository.findByPlanAndHasDeletedFalse(plan);
 		assertThat(result)
 			.extracting(AchievementSQL::getUserName)
@@ -68,13 +74,20 @@ class AchievementRepositoryIT {
 	@Test
 	@Transactional
 	void findByPlanAndInspection() {
-		MonthPlanSQL plan = saveTestData().plan;
+		saveTestData();
+		saveDummyData();
 		List<AchievementSQL> result = achievementRepository.findByPlanAndInspectionAndHasDeletedFalse(plan, Inspection.UNINSPECTION);
 		assertThat(result)
 			.extracting(AchievementSQL::getUserName)
 			.containsExactlyInAnyOrder(
 					DefaultAchievement.DUMMY_4.getUserName(),
 					DefaultAchievement.DUMMY_5.getUserName());
+	}
+	
+	void saveDummyData() {
+		MonthPlanSQL dummyPlan = planRepository.save(DefaultMonthPlan.DUMMY_1.getPlan(material));
+		achievementRepository.save(DefaultAchievement.DUMMY_0.getAchievement(dummyPlan));
+		clear();
 	}
 	
 	@Test
@@ -103,14 +116,25 @@ class AchievementRepositoryIT {
 		assertThat(notFindDeleted).isFalse();
 	}
 	
-	record SavedData(List<AchievementSQL> achievement, MonthPlanSQL plan) {}
-	
-	SavedData saveTestData() {
-		MaterialSQL material = materialRepository.save(DefaultMaterial.DUMMY_0.getMaterial());
-		MonthPlanSQL plan = planRepository.save(DefaultMonthPlan.DUMMY_0.getPlan(material));
-		List<AchievementSQL> achievement = achievementRepository.saveAll(DefaultAchievement.getAchievementList(plan));
-		entityManager.flush();
-		entityManager.clear();
-		return new SavedData(achievement, plan);
+	@Override
+	protected List<AchievementSQL> saveTestData() {
+		material = materialRepository.save(DefaultMaterial.DUMMY_0.getMaterial());
+		plan = planRepository.save(DefaultMonthPlan.DUMMY_0.getPlan(material));
+		return super.saveTestData();
+	}
+
+	@Override
+	protected AchievementRepository repository() {
+		return achievementRepository;
+	}
+
+	@Override
+	protected List<AchievementSQL> entity() {
+		return DefaultAchievement.getAchievementList(plan);
+	}
+
+	@Override
+	protected EntityManager entityManager() {
+		return entityManager;
 	}
 }

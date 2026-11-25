@@ -21,7 +21,8 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 import com.example.material_flow_rate_adjustment.authpage.UtilityService;
-import com.example.material_flow_rate_adjustment.commontest.DefaultCalendar;
+import com.example.material_flow_rate_adjustment.defaulttestdata.BaseSQLJoinColumn;
+import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultCalendar;
 import com.example.material_flow_rate_adjustment.savedata.historydata.BaseMaterialHistory;
 import com.example.material_flow_rate_adjustment.savedata.historydata.CalendarHistoryRepository;
 import com.example.material_flow_rate_adjustment.savedata.historydata.CalendarHistorySQL;
@@ -70,7 +71,7 @@ class CreateDefaultCalendarTest {
 	@MethodSource("defaultData")
 	void saveCalendarRepository(AccountSQL account) {
 		mockMaterial();
-		doReturn(DefaultCalendar.getCalendarList(material)).when(calendarRepository).findWithEntityGraphByHolidayBetweenAndMaterial(any(), any(), any());
+		doReturn(BaseSQLJoinColumn.getSQLList(material, DefaultCalendar.values())).when(calendarRepository).findWithEntityGraphByHolidayBetweenAndMaterial(any(), any(), any());
 		@SuppressWarnings("unchecked")
 		ArgumentCaptor<List<CalendarSQL>> savedCalendar = ArgumentCaptor.forClass(List.class);
 		@SuppressWarnings("unchecked")

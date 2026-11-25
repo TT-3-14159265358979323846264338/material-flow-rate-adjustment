@@ -1,4 +1,4 @@
-package com.example.material_flow_rate_adjustment.commontest;
+package com.example.material_flow_rate_adjustment.defaulttestdata;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,6 +18,6 @@ public class DefaultMaterialTransaction {
 	 */
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void saveDefaultMaterial() {
-		materialRepository.saveAll(DefaultMaterial.getMaterialList());
+		materialRepository.saveAll(BaseSQLNoJoinColumn.getSQLList(DefaultMaterial.values()));
 	}
 }

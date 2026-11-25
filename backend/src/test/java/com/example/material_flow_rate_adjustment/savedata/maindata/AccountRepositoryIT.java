@@ -16,12 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.material_flow_rate_adjustment.authpage.OrderSortEnum;
 import com.example.material_flow_rate_adjustment.authpage.adminpage.getuser.UserSortEnum;
-import com.example.material_flow_rate_adjustment.commontest.BaseRepositoryIT;
-import com.example.material_flow_rate_adjustment.commontest.DefaultAccount;
+import com.example.material_flow_rate_adjustment.commontest.BaseMainRepositoryIT;
+import com.example.material_flow_rate_adjustment.defaulttestdata.BaseSQLNoJoinColumn;
+import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultAccount;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class AccountRepositoryIT extends BaseRepositoryIT<AccountRepository, AccountSQL>{
+class AccountRepositoryIT extends BaseMainRepositoryIT<AccountRepository, AccountSQL>{
 	@Autowired
 	private AccountRepository accountRepository;
 	
@@ -55,7 +56,7 @@ class AccountRepositoryIT extends BaseRepositoryIT<AccountRepository, AccountSQL
 	@Test
 	@Transactional
 	void existsByRoleUser() {
-		accountRepository.saveAll(DefaultAccount.getAccountList(DefaultAccount.DUMMY_0, DefaultAccount.DUMMY_8));
+		accountRepository.saveAll(BaseSQLNoJoinColumn.getSQLList(DefaultAccount.DUMMY_0, DefaultAccount.DUMMY_8));
 		clear();
 		boolean findResult = accountRepository.existsByRoleAndHasDeletedFalse(AccountRole.ADMIN);
 		boolean notFindRoleResult = accountRepository.existsByRoleAndHasDeletedFalse(AccountRole.USER);
@@ -114,7 +115,7 @@ class AccountRepositoryIT extends BaseRepositoryIT<AccountRepository, AccountSQL
 
 	@Override
 	protected List<AccountSQL> entity() {
-		return DefaultAccount.getAccountList();
+		return BaseSQLNoJoinColumn.getSQLList(DefaultAccount.values());
 	}
 
 	@Override

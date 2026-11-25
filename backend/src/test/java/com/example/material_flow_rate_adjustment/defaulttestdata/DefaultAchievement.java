@@ -1,9 +1,7 @@
-package com.example.material_flow_rate_adjustment.commontest;
+package com.example.material_flow_rate_adjustment.defaulttestdata;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Stream;
 
 import com.example.material_flow_rate_adjustment.savedata.maindata.AchievementSQL;
 import com.example.material_flow_rate_adjustment.savedata.maindata.Inspection;
@@ -14,7 +12,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum DefaultAchievement {
+public enum DefaultAchievement implements BaseSQLJoinColumn<AchievementSQL, MonthPlanSQL>{
 	DUMMY_0("dummy_0", LocalDate.of(2026, 11, 2), "dummy_lot_0", BigDecimal.ONE, Inspection.PASSED, false),
 	DUMMY_1("dummy_1", LocalDate.of(2026, 11, 3), "dummy_lot_1", BigDecimal.TWO, Inspection.PASSED, false),
 	DUMMY_2("dummy_2", LocalDate.of(2026, 11, 4), "dummy_lot_2", BigDecimal.TEN, Inspection.FAILED, false),
@@ -32,15 +30,8 @@ public enum DefaultAchievement {
 	private final Inspection inspection;
 	private final boolean hasDeleted;
 	
-	public static List<AchievementSQL> getAchievementList(MonthPlanSQL plan){
-		return Stream.of(DefaultAchievement.values()).map(i ->i.getAchievement(plan)).toList();
-	}
-	
-	public static List<AchievementSQL> getAchievementList(MonthPlanSQL plan, DefaultAchievement ...part){
-		return Stream.of(part).map(i -> i.getAchievement(plan)).toList();
-	}
-	
-	public AchievementSQL getAchievement(MonthPlanSQL plan) {
+	@Override
+	public AchievementSQL getSQL(MonthPlanSQL plan) {
 		return AchievementSQL.builder()
 						.userName(userName)
 						.plan(plan)

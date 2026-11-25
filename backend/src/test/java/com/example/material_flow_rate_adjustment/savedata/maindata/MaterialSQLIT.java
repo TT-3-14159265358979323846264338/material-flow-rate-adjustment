@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.example.material_flow_rate_adjustment.commontest.BaseSQLIT;
-import com.example.material_flow_rate_adjustment.commontest.DefaultMaterial;
+import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultMaterial;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -31,7 +31,7 @@ class MaterialSQLIT extends BaseSQLIT<MaterialRepository, MaterialSQL>{
 
 	@Override
 	protected MaterialSQL entity() {
-		return DefaultMaterial.DUMMY_1.getMaterial();
+		return DefaultMaterial.DUMMY_1.getSQL();
 	}
 
 	@Override

@@ -15,8 +15,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.material_flow_rate_adjustment.commontest.BaseSQLIT;
-import com.example.material_flow_rate_adjustment.commontest.DefaultMaterial;
-import com.example.material_flow_rate_adjustment.commontest.DefaultPlan;
+import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultMaterial;
+import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultPlan;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -35,7 +35,7 @@ class MonthPlanSQLIT extends BaseSQLIT<MonthPlanRepository, MonthPlanSQL>{
 	@BeforeEach
 	@Transactional
 	void setUp() {
-		material = materialRepository.save(DefaultMaterial.DUMMY_0.getMaterial());
+		material = materialRepository.save(DefaultMaterial.DUMMY_0.getSQL());
 	}
 
 	@Override
@@ -45,7 +45,7 @@ class MonthPlanSQLIT extends BaseSQLIT<MonthPlanRepository, MonthPlanSQL>{
 
 	@Override
 	protected MonthPlanSQL entity() {
-		return DefaultPlan.DUMMY_0.getPlan(material);
+		return DefaultPlan.DUMMY_0.getSQL(material);
 	}
 
 	@Override

@@ -15,9 +15,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.material_flow_rate_adjustment.commontest.BaseSQLIT;
-import com.example.material_flow_rate_adjustment.commontest.DefaultAchievement;
-import com.example.material_flow_rate_adjustment.commontest.DefaultMaterial;
-import com.example.material_flow_rate_adjustment.commontest.DefaultMonthPlan;
+import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultAchievement;
+import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultMaterial;
+import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultPlan;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -39,8 +39,8 @@ class AchievementSQLIT extends BaseSQLIT<AchievementRepository, AchievementSQL>{
 	@BeforeEach
 	@Transactional
 	void setUp() {
-		MaterialSQL material = materialRepository.save(DefaultMaterial.DUMMY_0.getMaterial());
-		plan = planRepository.save(DefaultMonthPlan.DUMMY_0.getPlan(material));
+		MaterialSQL material = materialRepository.save(DefaultMaterial.DUMMY_0.getSQL());
+		plan = planRepository.save(DefaultPlan.DUMMY_0.getSQL(material));
 	}
 
 	@Override
@@ -50,7 +50,7 @@ class AchievementSQLIT extends BaseSQLIT<AchievementRepository, AchievementSQL>{
 
 	@Override
 	protected AchievementSQL entity() {
-		return DefaultAchievement.DUMMY_0.getAchievement(plan);
+		return DefaultAchievement.DUMMY_0.getSQL(plan);
 	}
 
 	@Override

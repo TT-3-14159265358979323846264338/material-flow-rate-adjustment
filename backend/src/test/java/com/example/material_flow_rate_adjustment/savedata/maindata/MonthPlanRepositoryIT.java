@@ -18,13 +18,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.material_flow_rate_adjustment.authpage.OrderSortEnum;
-import com.example.material_flow_rate_adjustment.commontest.BaseRepositoryIT;
-import com.example.material_flow_rate_adjustment.commontest.DefaultMaterial;
-import com.example.material_flow_rate_adjustment.commontest.DefaultPlan;
+import com.example.material_flow_rate_adjustment.commontest.BaseMainRepositoryIT;
+import com.example.material_flow_rate_adjustment.defaulttestdata.BaseSQLJoinColumn;
+import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultMaterial;
+import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultPlan;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class MonthPlanRepositoryIT extends BaseRepositoryIT<MonthPlanRepository, MonthPlanSQL>{
+class MonthPlanRepositoryIT extends BaseMainRepositoryIT<MonthPlanRepository, MonthPlanSQL>{
 	@Autowired
 	private MaterialRepository materialRepository;
 	
@@ -119,13 +120,13 @@ class MonthPlanRepositoryIT extends BaseRepositoryIT<MonthPlanRepository, MonthP
 
 	@Override
 	protected MonthPlanRepository repository() {
-		material = materialRepository.save(DefaultMaterial.DUMMY_0.getMaterial());
+		material = materialRepository.save(DefaultMaterial.DUMMY_0.getSQL());
 		return planRepository;
 	}
 
 	@Override
 	protected List<MonthPlanSQL> entity() {
-		return DefaultPlan.getPlanList(material);
+		return BaseSQLJoinColumn.getSQLList(material, DefaultPlan.values());
 	}
 
 	@Override

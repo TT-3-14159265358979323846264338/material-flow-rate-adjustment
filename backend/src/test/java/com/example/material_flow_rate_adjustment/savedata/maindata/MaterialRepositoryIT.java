@@ -12,12 +12,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.material_flow_rate_adjustment.commontest.BaseRepositoryIT;
-import com.example.material_flow_rate_adjustment.commontest.DefaultMaterial;
+import com.example.material_flow_rate_adjustment.commontest.BaseMainRepositoryIT;
+import com.example.material_flow_rate_adjustment.defaulttestdata.BaseSQLNoJoinColumn;
+import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultMaterial;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class MaterialRepositoryIT extends BaseRepositoryIT<MaterialRepository, MaterialSQL>{
+class MaterialRepositoryIT extends BaseMainRepositoryIT<MaterialRepository, MaterialSQL>{
 	@Autowired
 	private MaterialRepository materialRepository;
 	
@@ -43,7 +44,7 @@ class MaterialRepositoryIT extends BaseRepositoryIT<MaterialRepository, Material
 
 	@Override
 	protected List<MaterialSQL> entity() {
-		return DefaultMaterial.getMaterialList();
+		return BaseSQLNoJoinColumn.getSQLList(DefaultMaterial.values());
 	}
 
 	@Override

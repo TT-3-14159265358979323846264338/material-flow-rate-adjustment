@@ -14,14 +14,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.material_flow_rate_adjustment.commontest.BaseRepositoryIT;
-import com.example.material_flow_rate_adjustment.commontest.DefaultAchievement;
-import com.example.material_flow_rate_adjustment.commontest.DefaultMaterial;
-import com.example.material_flow_rate_adjustment.commontest.DefaultMonthPlan;
+import com.example.material_flow_rate_adjustment.commontest.BaseMainRepositoryIT;
+import com.example.material_flow_rate_adjustment.defaulttestdata.BaseSQLJoinColumn;
+import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultAchievement;
+import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultMaterial;
+import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultPlan;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class AchievementRepositoryIT extends BaseRepositoryIT<AchievementRepository, AchievementSQL>{
+class AchievementRepositoryIT extends BaseMainRepositoryIT<AchievementRepository, AchievementSQL>{
 	@Autowired
 	private MaterialRepository materialRepository;
 	
@@ -85,8 +86,8 @@ class AchievementRepositoryIT extends BaseRepositoryIT<AchievementRepository, Ac
 	}
 	
 	void saveDummyData() {
-		MonthPlanSQL dummyPlan = planRepository.save(DefaultMonthPlan.DUMMY_1.getPlan(material));
-		achievementRepository.save(DefaultAchievement.DUMMY_0.getAchievement(dummyPlan));
+		MonthPlanSQL dummyPlan = planRepository.save(DefaultPlan.DUMMY_1.getSQL(material));
+		achievementRepository.save(DefaultAchievement.DUMMY_0.getSQL(dummyPlan));
 		clear();
 	}
 	
@@ -118,8 +119,8 @@ class AchievementRepositoryIT extends BaseRepositoryIT<AchievementRepository, Ac
 	
 	@Override
 	protected List<AchievementSQL> saveTestData() {
-		material = materialRepository.save(DefaultMaterial.DUMMY_0.getMaterial());
-		plan = planRepository.save(DefaultMonthPlan.DUMMY_0.getPlan(material));
+		material = materialRepository.save(DefaultMaterial.DUMMY_0.getSQL());
+		plan = planRepository.save(DefaultPlan.DUMMY_0.getSQL(material));
 		return super.saveTestData();
 	}
 
@@ -130,7 +131,7 @@ class AchievementRepositoryIT extends BaseRepositoryIT<AchievementRepository, Ac
 
 	@Override
 	protected List<AchievementSQL> entity() {
-		return DefaultAchievement.getAchievementList(plan);
+		return BaseSQLJoinColumn.getSQLList(plan, DefaultAchievement.values());
 	}
 
 	@Override

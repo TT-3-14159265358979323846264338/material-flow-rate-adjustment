@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.example.material_flow_rate_adjustment.commontest.DefaultAccount;
 import com.example.material_flow_rate_adjustment.commontest.BaseSQLIT;
+import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultAccount;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -31,7 +31,7 @@ class AccountSQLIT extends BaseSQLIT<AccountRepository, AccountSQL>{
 
 	@Override
 	protected AccountSQL entity() {
-		return DefaultAccount.DUMMY_0.getAccount();
+		return DefaultAccount.DUMMY_0.getSQL();
 	}
 
 	@Override

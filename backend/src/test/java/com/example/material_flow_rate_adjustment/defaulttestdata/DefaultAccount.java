@@ -1,7 +1,4 @@
-package com.example.material_flow_rate_adjustment.commontest;
-
-import java.util.List;
-import java.util.stream.Stream;
+package com.example.material_flow_rate_adjustment.defaulttestdata;
 
 import com.example.material_flow_rate_adjustment.savedata.maindata.AccountRole;
 import com.example.material_flow_rate_adjustment.savedata.maindata.AccountSQL;
@@ -11,7 +8,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum DefaultAccount {
+public enum DefaultAccount implements BaseSQLNoJoinColumn<AccountSQL>{
 	DUMMY_0("dummy_pass_0", "dummy_login_0", "dummy_0", AccountRole.ADMIN, false),
 	DUMMY_1("dummy_pass_1", "dummy_login_1", "dummy_1", AccountRole.ADMIN, false),
 	DUMMY_2("dummy_pass_2", "dummy_login_2", "dummy_2", AccountRole.USER, false),
@@ -28,15 +25,8 @@ public enum DefaultAccount {
 	private final AccountRole role;
 	private final boolean hasDeleted;
 	
-	public static List<AccountSQL> getAccountList(){
-		return Stream.of(DefaultAccount.values()).map(DefaultAccount::getAccount).toList();
-	}
-	
-	public static List<AccountSQL> getAccountList(DefaultAccount ...part){
-		return Stream.of(part).map(DefaultAccount::getAccount).toList();
-	}
-	
-	public AccountSQL getAccount() {
+	@Override
+	public AccountSQL getSQL() {
 		return AccountSQL.builder()
 						.password(password)
 						.loginUser(loginUser)

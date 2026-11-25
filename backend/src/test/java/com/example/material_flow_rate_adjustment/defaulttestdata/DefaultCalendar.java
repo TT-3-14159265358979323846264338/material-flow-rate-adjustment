@@ -1,9 +1,7 @@
-package com.example.material_flow_rate_adjustment.commontest;
+package com.example.material_flow_rate_adjustment.defaulttestdata;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.List;
-import java.util.stream.Stream;
 
 import com.example.material_flow_rate_adjustment.savedata.maindata.CalendarSQL;
 import com.example.material_flow_rate_adjustment.savedata.maindata.HolidayType;
@@ -14,7 +12,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum DefaultCalendar {
+public enum DefaultCalendar implements BaseSQLJoinColumn<CalendarSQL, MaterialSQL>{
 	//休日系
 	DUMMY_0(1, HolidayType.ALL_DAY, false),
 	DUMMY_1(7, HolidayType.MORNING, false),
@@ -42,15 +40,8 @@ public enum DefaultCalendar {
 		return MONTH.atDay(day);
 	}
 	
-	public static List<CalendarSQL> getCalendarList(MaterialSQL material){
-		return Stream.of(DefaultCalendar.values()).map(i -> i.getCalendar(material)).toList();
-	}
-	
-	public static List<CalendarSQL> getCalendarList(MaterialSQL material, DefaultCalendar ...part){
-		return Stream.of(part).map(i -> i.getCalendar(material)).toList();
-	}
-	
-	public CalendarSQL getCalendar(MaterialSQL material) {
+	@Override
+	public CalendarSQL getSQL(MaterialSQL material) {
 		return CalendarSQL.builder()
 				.material(material)
 				.holiday(MONTH.atDay(day))

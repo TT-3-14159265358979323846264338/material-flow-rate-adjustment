@@ -16,8 +16,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.material_flow_rate_adjustment.commontest.BaseSQLIT;
-import com.example.material_flow_rate_adjustment.commontest.DefaultCalendar;
-import com.example.material_flow_rate_adjustment.commontest.DefaultMaterial;
+import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultCalendar;
+import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultMaterial;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -36,7 +36,7 @@ class CalendarSQLIT extends BaseSQLIT<CalendarRepository, CalendarSQL>{
 	@BeforeEach
 	@Transactional
 	void setUp() {
-		material = materialRepository.save(DefaultMaterial.DUMMY_0.getMaterial());
+		material = materialRepository.save(DefaultMaterial.DUMMY_0.getSQL());
 	}
 
 	@Override
@@ -46,7 +46,7 @@ class CalendarSQLIT extends BaseSQLIT<CalendarRepository, CalendarSQL>{
 
 	@Override
 	protected CalendarSQL entity() {
-		return DefaultCalendar.DUMMY_0.getCalendar(material);
+		return DefaultCalendar.DUMMY_0.getSQL(material);
 	}
 
 	@Override

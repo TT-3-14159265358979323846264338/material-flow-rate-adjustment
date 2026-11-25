@@ -14,13 +14,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.material_flow_rate_adjustment.authpage.OrderSortEnum;
-import com.example.material_flow_rate_adjustment.commontest.BaseRepositoryIT;
-import com.example.material_flow_rate_adjustment.commontest.DefaultCalendar;
-import com.example.material_flow_rate_adjustment.commontest.DefaultMaterial;
+import com.example.material_flow_rate_adjustment.commontest.BaseMainRepositoryIT;
+import com.example.material_flow_rate_adjustment.defaulttestdata.BaseSQLJoinColumn;
+import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultCalendar;
+import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultMaterial;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class CalendarRepositoryIT extends BaseRepositoryIT<CalendarRepository, CalendarSQL>{
+class CalendarRepositoryIT extends BaseMainRepositoryIT<CalendarRepository, CalendarSQL>{
 	@Autowired
 	private MaterialRepository materialRepository;
 	
@@ -90,8 +91,8 @@ class CalendarRepositoryIT extends BaseRepositoryIT<CalendarRepository, Calendar
 	}
 	
 	void saveDummyData() {
-		MaterialSQL dummyMaterial = materialRepository.save(DefaultMaterial.DUMMY_1.getMaterial());
-		calendarRepository.save(DefaultCalendar.DUMMY_1.getCalendar(dummyMaterial));
+		MaterialSQL dummyMaterial = materialRepository.save(DefaultMaterial.DUMMY_1.getSQL());
+		calendarRepository.save(DefaultCalendar.DUMMY_1.getSQL(dummyMaterial));
 		clear();
 	}
 	
@@ -103,7 +104,7 @@ class CalendarRepositoryIT extends BaseRepositoryIT<CalendarRepository, Calendar
 	
 	@Override
 	protected List<CalendarSQL> saveTestData() {
-		material = materialRepository.save(DefaultMaterial.DUMMY_0.getMaterial());
+		material = materialRepository.save(DefaultMaterial.DUMMY_0.getSQL());
 		return super.saveTestData();
 	}
 
@@ -114,7 +115,7 @@ class CalendarRepositoryIT extends BaseRepositoryIT<CalendarRepository, Calendar
 
 	@Override
 	protected List<CalendarSQL> entity() {
-		return DefaultCalendar.getCalendarList(material);
+		return BaseSQLJoinColumn.getSQLList(material, DefaultCalendar.values());
 	}
 
 	@Override

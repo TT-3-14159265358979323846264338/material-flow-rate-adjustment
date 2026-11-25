@@ -13,8 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.material_flow_rate_adjustment.commontest.DefaultMaterial;
-import com.example.material_flow_rate_adjustment.commontest.DefaultMaterialTransaction;
+import com.example.material_flow_rate_adjustment.defaulttestdata.BaseSQLNoJoinColumn;
+import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultMaterial;
+import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultMaterialTransaction;
 import com.example.material_flow_rate_adjustment.savedata.historydata.CalendarHistoryRepository;
 import com.example.material_flow_rate_adjustment.savedata.historydata.CalendarHistorySQL;
 import com.example.material_flow_rate_adjustment.savedata.maindata.CalendarRepository;
@@ -55,6 +56,6 @@ class ScheduledTaskIT{
 	}
 	
 	int materialCount() {
-		return (int) DefaultMaterial.getMaterialList().stream().filter(i -> !i.getHasDeleted()).count();
+		return (int) BaseSQLNoJoinColumn.getSQLList(DefaultMaterial.values()).stream().filter(i -> !i.getHasDeleted()).count();
 	}
 }

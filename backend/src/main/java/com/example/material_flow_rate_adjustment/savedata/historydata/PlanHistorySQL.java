@@ -20,7 +20,7 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "plan_history", indexes = {
-		@Index(name = "idx_plan_history_date", columnList = "date")
+		@Index(name = "idx_plan_history_date", columnList = "created_date")
 })
 @Data
 @ToString(callSuper = true)

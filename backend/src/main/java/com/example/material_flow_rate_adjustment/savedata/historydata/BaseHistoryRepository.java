@@ -7,5 +7,5 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BaseHistoryRepository<T extends BaseHistorySQL, U> extends JpaRepository<T, U>{
-	List<T> findByDateBetween(LocalDateTime minDate, LocalDateTime maxDate, Sort sort);
+	List<T> findByCreatedDateBetween(LocalDateTime minDate, LocalDateTime maxDate, Sort sort);
 }

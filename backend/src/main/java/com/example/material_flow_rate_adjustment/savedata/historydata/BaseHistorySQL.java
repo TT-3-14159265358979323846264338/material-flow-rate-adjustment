@@ -10,6 +10,8 @@ import jakarta.persistence.MappedSuperclass;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.example.material_flow_rate_adjustment.savedata.BaseId;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +24,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public abstract class BaseHistorySQL {
+public abstract class BaseHistorySQL implements BaseId{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(updatable = false)
@@ -48,7 +50,7 @@ public abstract class BaseHistorySQL {
 	private String actionUser;
 	
 	@CreationTimestamp
-	@Column(nullable = false, updatable = false)
+	@Column(name = "created_date", nullable = false, updatable = false)
 	@Setter(AccessLevel.NONE)
-	private LocalDateTime date;
+	private LocalDateTime createdDate;
 }

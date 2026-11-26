@@ -15,13 +15,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.material_flow_rate_adjustment.commontest.BaseSQLIT;
+import com.example.material_flow_rate_adjustment.commontest.BaseMainSQLIT;
 import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultCalendar;
 import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultMaterial;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class CalendarSQLIT extends BaseSQLIT<CalendarRepository, CalendarSQL>{
+class CalendarSQLIT extends BaseMainSQLIT<CalendarRepository, CalendarSQL>{
 	@Autowired
 	private MaterialRepository materialRepository;
 	

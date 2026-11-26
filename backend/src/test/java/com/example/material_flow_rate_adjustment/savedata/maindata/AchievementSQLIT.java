@@ -14,14 +14,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.material_flow_rate_adjustment.commontest.BaseSQLIT;
+import com.example.material_flow_rate_adjustment.commontest.BaseMainSQLIT;
 import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultAchievement;
 import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultMaterial;
 import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultPlan;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class AchievementSQLIT extends BaseSQLIT<AchievementRepository, AchievementSQL>{
+class AchievementSQLIT extends BaseMainSQLIT<AchievementRepository, AchievementSQL>{
 	@Autowired
 	private MaterialRepository materialRepository;
 	

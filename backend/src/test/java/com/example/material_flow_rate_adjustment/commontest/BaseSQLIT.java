@@ -3,30 +3,27 @@ package com.example.material_flow_rate_adjustment.commontest;
 import static org.assertj.core.api.Assertions.*;
 
 import java.lang.reflect.Field;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.IntStream;
+import java.util.function.BiFunction;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceUnitUtil;
 
 import org.assertj.core.api.ThrowingConsumer;
-import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIf;
+import org.springframework.beans.BeanUtils;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ReflectionUtils;
 
-import com.example.material_flow_rate_adjustment.savedata.maindata.BaseSQL;
+import com.example.material_flow_rate_adjustment.savedata.BaseId;
 
-public abstract class BaseSQLIT<T extends JpaRepository<U, Integer>, U extends BaseSQL> {
+public abstract class BaseSQLIT<T extends JpaRepository<U, Integer>, U extends BaseId> {
 	protected abstract T repository();
 	protected abstract U entity();
 	protected abstract EntityManager entityManager();
@@ -54,31 +51,17 @@ public abstract class BaseSQLIT<T extends JpaRepository<U, Integer>, U extends B
 			.satisfies(assertLoad());
 	}
 	
-	protected abstract Consumer<U> changeMethod();
-	
 	@Test
 	@Transactional
-	void updateDate() {
-		U data = saveTestData();
-		LocalDateTime updatedDate = data.getUpdatedDate();
-		LocalDateTime createdDate = data.getCreatedDate();
-		try {
-			Thread.sleep(10);
-		} catch (InterruptedException e) {
-			fail(e);
-		}
-		changeMethod().accept(data);
-		repository().saveAndFlush(data);
-		assertThat(data.getUpdatedDate()).isNotEqualTo(updatedDate);
-		assertThat(data.getCreatedDate()).isEqualTo(createdDate);
-	}
-	
-	@Test
-	@Transactional
-	void notNullHasDeleted() {
-		U entity = entity();
-		entity.setHasDeleted(null);
-		assertThrowError(entity);
+	void createdDate() {
+		int id = saveTestData().getId();
+		clear();
+		Optional<U> result = repository().findById(id);
+		assertThat(result)
+			.isPresent()
+			.get()
+			.extracting(U::getCreatedDate)
+			.isNotNull();
 	}
 	
 	protected abstract List<String> grantLengthVariableName();
@@ -97,34 +80,7 @@ public abstract class BaseSQLIT<T extends JpaRepository<U, Integer>, U extends B
 	void validLength(String variableName) {
 		errorFail(variableName, () -> {
 			U entity = entity();
-			setValue(entity, variableName, column -> "i".repeat(column.length() + 1));
-			assertThrowError(entity);
-		});
-	}
-	
-	protected abstract List<String> grantUniqueVariableName();
-	
-	@Test
-	@Transactional
-	@DisabledIf("existsUnique")
-	void limitationUnique() {
-		saveTestData();
-		IntStream.range(0, grantUniqueVariableName().size()).forEach(i -> validUnique(i, grantUniqueVariableName().get(i)));
-	}
-	
-	boolean existsUnique() {
-		return CollectionUtils.isEmpty(grantUniqueVariableName());
-	}
-	
-	void validUnique(int number, String variableName) {
-		errorFail(variableName, () -> {
-			U entity = entity();
-			for(String i: grantUniqueVariableName()) {
-				if(i.equals(variableName)) {
-					continue;
-				}
-				setValue(entity, i, _ -> "change" + number);
-			}
+			setValue(entity, variableName, (_, column) -> "i".repeat(column.length() + 1));
 			assertThrowError(entity);
 		});
 	}
@@ -145,7 +101,7 @@ public abstract class BaseSQLIT<T extends JpaRepository<U, Integer>, U extends B
 	void validNotNull(String variableName) {
 		errorFail(variableName, () -> {
 			U entity = entity();
-			setValue(entity, variableName, _ -> null);
+			setValue(entity, variableName, (_, _) -> null);
 			assertThrowError(entity);
 		});
 	}
@@ -165,57 +121,13 @@ public abstract class BaseSQLIT<T extends JpaRepository<U, Integer>, U extends B
 	
 	void validBigDecimalParams(String variableName) {
 		errorFail(variableName, () -> {
-			Field field = entity().getClass().getDeclaredField(variableName);
+			Field field = ReflectionUtils.findField(entity().getClass(), variableName);
 			Column column = AnnotatedElementUtils.findMergedAnnotation(field, Column.class);
 			assertThat(column.precision()).isGreaterThan(0);
 			assertThat(column.scale())
 				.isGreaterThan(0)
 				.isLessThan(column.precision());
 		});
-	}
-
-	protected abstract List<String> grantLazyFetch();
-	
-	@Test
-	@Transactional
-	@DisabledIf("existsLazyFetch")
-	void lazyFetch() {
-		int id = saveTestData().getId();
-		clear();
-		Optional<U> data = repository().findById(id);
-		PersistenceUnitUtil unitUtil = entityManager().getEntityManagerFactory().getPersistenceUnitUtil();
-		assertThat(data)
-			.isPresent()
-			.get()
-			.satisfies(entity -> grantLazyFetch().forEach(name -> assertThat(unitUtil.isLoaded(entity, name)).isFalse()));
-	}
-	
-	boolean existsLazyFetch() {
-		return CollectionUtils.isEmpty(grantLazyFetch());
-	}
-	
-	protected abstract List<DeleteData<?, ?>> grantOnDelete();
-	
-	public record DeleteData<V extends JpaRepository<W, Integer>, W extends BaseSQL> (V repository, W entity) {}
-	
-	@Test
-	@Transactional
-	@DisabledIf("existsOnDelete")
-	void onDeleteAction() {
-		grantOnDelete().forEach(this::validOnDelete);
-	}
-	
-	boolean existsOnDelete() {
-		return CollectionUtils.isEmpty(grantOnDelete());
-	}
-	
-	<V extends JpaRepository<W, Integer>, W extends BaseSQL> void validOnDelete(DeleteData<V, W> deleteData) {
-		saveTestData();
-		clear();
-		assertThatThrownBy(() -> {
-			deleteData.repository.delete(deleteData.entity);
-			entityManager().flush();
-		}).isInstanceOf(ConstraintViolationException.class);
 	}
 	
 	@FunctionalInterface
@@ -227,15 +139,17 @@ public abstract class BaseSQLIT<T extends JpaRepository<U, Integer>, U extends B
 		try{
 			method.run();
 		}catch(Exception e) {
-			fail(variableName + "でエラー", e);
+			fail(variableName + "フィールド操作ができませんでした", e);
 		}
 	}
 	
-	void setValue(U entity, String variableName, Function<Column, ?> setValue) throws Exception {
-		Field field = entity.getClass().getDeclaredField(variableName);
+	void setValue(U entity, String variableName, BiFunction<Object, Column, Object> valueMethod) throws Exception {
+		Field field = ReflectionUtils.findField(entity.getClass(), variableName);
+		field.setAccessible(true);
 		Column column = AnnotatedElementUtils.findMergedAnnotation(field, Column.class);
-		String setterName = "set" + Character.toUpperCase(variableName.charAt(0)) + variableName.substring(1);
-		entity.getClass().getMethod(setterName, field.getType()).invoke(entity, setValue.apply(column));
+		BeanUtils.getPropertyDescriptor(entity.getClass(), variableName)
+				.getWriteMethod()
+				.invoke(entity, valueMethod.apply(field.get(entity), column));
 	}
 	
 	void assertThrowError(U entity) {

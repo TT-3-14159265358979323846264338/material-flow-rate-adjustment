@@ -14,13 +14,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.material_flow_rate_adjustment.commontest.BaseSQLIT;
+import com.example.material_flow_rate_adjustment.commontest.BaseMainSQLIT;
 import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultMaterial;
 import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultPlan;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class MonthPlanSQLIT extends BaseSQLIT<MonthPlanRepository, MonthPlanSQL>{
+class MonthPlanSQLIT extends BaseMainSQLIT<MonthPlanRepository, MonthPlanSQL>{
 	@Autowired
 	private MaterialRepository materialRepository;
 	

@@ -12,12 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.example.material_flow_rate_adjustment.commontest.BaseSQLIT;
+import com.example.material_flow_rate_adjustment.commontest.BaseMainSQLIT;
 import com.example.material_flow_rate_adjustment.defaulttestdata.DefaultAccount;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class AccountSQLIT extends BaseSQLIT<AccountRepository, AccountSQL>{
+class AccountSQLIT extends BaseMainSQLIT<AccountRepository, AccountSQL>{
 	@Autowired
 	private AccountRepository accountRepository;
 	

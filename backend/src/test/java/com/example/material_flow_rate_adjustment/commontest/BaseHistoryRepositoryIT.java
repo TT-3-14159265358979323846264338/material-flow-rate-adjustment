@@ -33,10 +33,10 @@ extends BaseRepositoryIT<T, U>{
 	
 	@Test
 	@Transactional
-	void findByDateBetween() {
+	void findByyCreatedDateBetween() {
 		List<Integer> expected = savedIdBetween(saveTestData()).toList();
 		clear();
-		List<U> result = repository().findByDateBetween(minTime(), maxTime(), Sort.by(OrderSortEnum.DESCENDING.getOrderSort(), "id"));
+		List<U> result = repository().findByCreatedDateBetween(minTime(), maxTime(), Sort.by(OrderSortEnum.DESCENDING.getOrderSort(), "id"));
 		assertThat(result)
 			.extracting(U::getId)
 			.containsExactlyElementsOf(expected);
@@ -44,7 +44,7 @@ extends BaseRepositoryIT<T, U>{
 	
 	protected Stream<Integer> savedIdBetween(List<U> saveData){
 		List<LocalDateTime> createDateList = BaseHistorySQLNoJoinColumn.getTimeList(targetEnum()).stream().map(i -> i.atStartOfDay()).toList();
-		String sql = "UPDATE " + targetEnum()[0].tableName() + " SET date = ? WHERE id = ?";
+		String sql = "UPDATE " + targetEnum()[0].tableName() + " SET created_date = ? WHERE id = ?";
 		LocalDateTime minTime = minTime();
 		LocalDateTime maxTime = maxTime();
 		return IntStream.range(0, saveData.size())
